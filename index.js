@@ -86,6 +86,11 @@ function getIndexByIDFromList(objArray, id){
   return -1;
 }
 
+function removeSongFromPlaylistByID(playlist, songID){
+  const indexInPlaylist = playlist.songs.indexOf(songID);
+  if(indexInPlaylist >= 0) playlist.songs.splice(indexInPlaylist, 1); //Delete song from playlist
+}
+
 
 function playSong(id) {
   const index = getIndexByIDFromList(player.songs, id);
@@ -100,8 +105,7 @@ function removeSong(id) {
   player.songs.splice(indexInSongs, 1); //Delete from songs
 
   for (const playlist of player.playlists){
-    const indexInPlaylist = playlist.songs.indexOf(id);
-    if(indexInPlaylist >= 0) playlist.songs.splice(indexInPlaylist, 1); //Delete song from playlist
+    removeSongFromPlaylistByID(playlist, id)
   }
 }
 
@@ -127,11 +131,16 @@ function createPlaylist(name, id) {
 }
 
 function playPlaylist(id) {
-  // your code here
+  const playListIndex = getIndexByIDFromList(player.playlists, id);
+  if(playListIndex === -1) throw "Playlist not found!";
+  const playlist = player.playlists[playListIndex];
+  for (const song of playlist.songs){
+    player.playSong(song);
+  }
 }
 
 function editPlaylist(playlistId, songId) {
-  // your code here
+ // your code here
 }
 
 function playlistDuration(id) {
