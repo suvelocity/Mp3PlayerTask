@@ -91,6 +91,10 @@ function removeSongFromPlaylistByID(playlist, songID){
   if(indexInPlaylist >= 0) playlist.songs.splice(indexInPlaylist, 1); //Delete song from playlist
 }
 
+function sortObjectByKey(objArr, key){
+  //Sort given object by its key
+  objArr.sort((a, b) => a[key].localeCompare(b[key]));
+}
 
 function playSong(id) {
   const index = getIndexByIDFromList(player.songs, id);
@@ -169,10 +173,18 @@ function playlistDuration(id) {
   return duration;
 }
 
-console.log(playlistDuration(1))
-
 function searchByQuery(query) {
-  // your code here
+  let results = {songs: [], playlists: []}
+
+  for (const song of player.songs){
+    if(song.title.includes(query) || song.album.includes(query) || song.artist.includes(query)) results.songs.push({...song});
+  }
+  for (const playlist of player.playlists){
+    if(playlist.name.includes(query)) results.playlists.push({...playlist});
+  }
+  sortObjectByKey(results.songs, "title")
+  sortObjectByKey(results.playlists, 'name')
+  return results;
 }
 
 function searchByDuration(duration) {
