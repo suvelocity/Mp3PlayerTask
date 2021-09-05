@@ -87,7 +87,21 @@ function searchByQuery(query) {
 }
 
 function searchByDuration(duration) {
-  // your code here
+  const seconds = durationToSeconds(duration);
+  const best = { time: seconds, obj: null };
+  player.playlists.forEach(({ id }) => {
+    if (Math.abs(seconds - playlistDuration(id)) < best.time) {
+      best.time = Math.abs(playlistDuration(id) - seconds);
+      best.obj = getPlaylistById(id);
+    }
+  });
+  player.songs.forEach((song) => {
+    if (Math.abs(seconds - song.duration) < best.time) {
+      best.time = Math.abs(song.duration - seconds);
+      best.obj = song;
+    }
+  });
+  return best.obj;
 }
 
 module.exports = {
