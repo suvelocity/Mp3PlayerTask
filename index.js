@@ -84,7 +84,7 @@ function removeSong(id) {
 
 
 function addSong(title, album, artist, duration, id) {
-  // your code here
+
 }
 
 function removePlaylist(id) {
@@ -110,8 +110,26 @@ function editPlaylist(playlistId, songId) {
 }
 
 function playlistDuration(id) {
-  // your code here
+  // 
+    let songsId=[];
+    let plSongsId=new Set();
+    totalDuration=0;
+    // loop for define a set with the songs id
+  for(let i = 0 ; i<player.playlists.length ; i++){
+    if(player.playlists[i].id===id){
+      songsId=player.playlists[i].songs;
+      plSongsId=new Set(songsId)
+    }
+  }
+  // loop for evaluate the total duration of the playlist using "totalDuration" as a paremeter. 
+  for(let song of player.songs){
+    if(plSongsId.has(song.id)){
+      totalDuration+=song.duration;
+    }
+  }
+  return totalDuration;
 }
+
 
 function searchByQuery(query) {
   // your code here
@@ -135,11 +153,6 @@ module.exports = {
   searchByDuration,
 }
 
-for(let i=0 ; i<player.songs.length ; i++){
-  
-  console.log(player.songs[i].title);
-  
-}
-console.log(player.playlists);
+
 
   
