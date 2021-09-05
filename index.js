@@ -140,7 +140,20 @@ function playPlaylist(id) {
 }
 
 function editPlaylist(playlistId, songId) {
- // your code here
+  const playListIndex = getIndexByIDFromList(player.playlists, playlistId);
+  if(playListIndex === -1) throw "Playlist not found!";
+  const playlist = player.playlists[playListIndex];
+
+  const indexInSongs = getIndexByIDFromList(player.songs, songId);
+  if (indexInSongs === -1) throw "ID not found";
+  const song = player.songs[indexInSongs];
+
+  if(playlist.songs.indexOf(songId) === -1){ //If song not in playlist add it to the end
+    playlist.songs.push(songId)
+  }else{
+    removeSongFromPlaylistByID(playlist, songId) //If song is in playlist remove the song
+    if (playlist.songs.length === 0) removePlaylist(playlistId); //If the playlist is empty delete it
+  }
 }
 
 function playlistDuration(id) {
