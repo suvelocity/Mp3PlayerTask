@@ -48,14 +48,32 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    const formatTime = (num) => {
-      //This arrow function adds a 0 if the time value is a single digit
-      if(num<10) return "0" + num;
-      else return num;
-    };
-    const duration = formatTime(Math.floor(song.duration / 60)) + ":" + formatTime(song.duration % 60);
+    const duration = formatDuration(song.duration);
     console.log(`Playing ${song.title} from ${song.album} by ${song.artist} | ${duration}.`)
   },
+}
+
+function formatDuration(duration){
+  const formatTime = (num) => {
+  //This arrow function adds a 0 if the time value is a single digit
+  if(num<10) return "0" + num;
+  else return num;
+  };
+  return formatTime(Math.floor(duration/60)) + ":" + formatTime(duration%60);
+}
+
+function unformatDuration(duration){
+  const durationSplit = duration.split(":");
+  return Number(durationSplit[0]) * 60 + Number(durationSplit[1]);
+}
+
+function getUnusedID(objArray){
+  //This function works by finding largest id in objArray by value and adding 1
+  let maxID = 0;
+  for (let i = 0; i < objArray.length; i++){
+    if (objArray[i].id > maxID) maxID = objArray[i].id;
+  }
+  return maxID + 1;
 }
 
 function getSongIndexByID(id){
@@ -86,9 +104,13 @@ function removeSong(id) {
   }
 }
 
-removeSong(1)
-function addSong(title, album, artist, duration, id) {
-  // your code here
+function addSong(title, album, artist, duration, id=undefined) {
+  if(id === undefined) id = getUnusedID(player.songs); //Get id if id not given
+  if(getSongIndexByID(id) !== -1) throw "ID Already Exists";
+  duration = unformatDuration(duration);
+  const newSong = {title, album, artist, duration, id}
+  player.songs.push(newSong);
+  return id;
 }
 
 function removePlaylist(id) {
