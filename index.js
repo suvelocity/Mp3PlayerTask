@@ -18,7 +18,7 @@ function playSong(id) {
 }
 
 function removeSong(id) {
-  // your code here
+  player.songs = player.songs.filter((song) => song.id !== id)
 }
 
 function addSong(title, album, artist, duration, id) {
