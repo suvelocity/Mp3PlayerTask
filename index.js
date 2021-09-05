@@ -45,7 +45,12 @@ function createPlaylist(name, id) {
 }
 
 function playPlaylist(id) {
-  // your code here
+  const toPlay = getPlaylistById(id);
+  if (!toPlay) throw new Error('Bad ID');
+
+  toPlay.songs.forEach((song) => {
+    playSong(song);
+  });
 }
 
 function editPlaylist(playlistId, songId) {
