@@ -48,13 +48,44 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    console.log(/* your code here */)
-  },
+      console.log("Playing " + song.title + " from " + song.album + " by " + song.artist + " | " + timeConventor(song.duration) + ".");
+  }
+}
+// this help function gets time in seconds and return it by minutes in this style => min:sec (for example, 04:19)
+function timeConventor(duration){
+  if (duration/60 < 10){
+    return "0"+Math.floor(duration/60)+ ":" + duration%60;
+  }else{
+    return Math.floor(duration/60)+ ":" + duration%60;
+  }
+
+}
+// this is help function that return boolean value of the exist of id in list of songs
+function isIdExist(songs , id){
+  for(let i = 0; i < songs.length; i++){
+    if (songs[i].id === id){
+      return true;
+    }
+  }
+  return false;
+}
+//this is help function that return song from the player object by given Id
+function getSongFromId(songs , id){
+  for(let i = 0; i < songs.length; i++){
+    if (songs[i].id === id){
+      return songs[i];
+    }
+  }
 }
 
 function playSong(id) {
-  // your code here
+  if(isIdExist(player.songs , id)){
+    player.playSong(getSongFromId(player.songs , id));
+  }else{
+    throw "non exist Id";
+  } 
 }
+
 
 function removeSong(id) {
   // your code here
