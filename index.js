@@ -48,12 +48,35 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    console.log(/* your code here */)
+    console.log(`Playing ${song.title} from ${song.album} by ${song.artist} | ${song.duration}.`)
   },
+}
+
+//the function below returns a given song duration in the mm:ss template
+function songDuration(id){
+  let totalTime = findSongById(id).duration;
+  let minutes = 0;
+  let seconds = 0;
+
+  while(totalTime >= 60){
+    minutes++;
+    totalTime -= 60;
+  }
+  seconds = totalTime;
+  
+  return "0" + minutes + ":" + seconds
+}
+
+//the function below return a song object by id
+function findSongById(id){
+  return player.songs.find(song => {return song.id === id});
 }
 
 function playSong(id) {
   // your code here
+  const song = findSongById(id);
+  song.duration = songDuration(id);
+  player.playSong(song);
 }
 
 function removeSong(id) {
