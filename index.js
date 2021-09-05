@@ -164,34 +164,37 @@ function editPlaylist(playlistId, songId) {
 
 function playlistDuration(id) {
   const playlist = getPlaylistObjbyID(id);
-
+  //loop over all songs in playlist and append duration
   let duration = 0;
   for (const songId of playlist.songs){
-    const song = player.songs[getIndexByIDFromList(player.songs, songId)];
+    const song = player.songs[getIndexByIDFromList(player.songs, songId)]; //get song object from id
     duration += song.duration;
   }
   return duration;
 }
 
 function searchByQuery(query) {
-  let results = {songs: [], playlists: []}
-
-  for (const song of player.songs){
-    if(song.title.includes(query) || song.album.includes(query) || song.artist.includes(query)) results.songs.push({...song});
+  let results = {songs: [], playlists: []} //Create result obj
+  
+  for (const song of player.songs){ //Loop over all songs and add ones that include query in title, album or artist
+    if(song.title.includes(query) || song.album.includes(query) || song.artist.includes(query)) results.songs.push(song); 
   }
-  for (const playlist of player.playlists){
-    if(playlist.name.includes(query)) results.playlists.push({...playlist});
+  for (const playlist of player.playlists){ //Loop over all playlists and add ones that include query in name
+    if(playlist.name.includes(query)) results.playlists.push(playlist);
   }
-  sortObjectByKey(results.songs, "title")
+  //Sort results by key
+  sortObjectByKey(results.songs, "title") 
   sortObjectByKey(results.playlists, 'name')
   return results;
 }
 
 function searchByDuration(duration) {
   duration = unformatDuration(duration) //Get seconds
-  let closestDuration;
-  let closestDurationObj;
-  for (const song of player.songs){
+  let closestDuration; //Number of highest duration
+  let closestDurationObj; //Object with highest duration
+
+  //The next two for loops loop over all songs and playlists and check which one has a closer duration to the given one
+  for (const song of player.songs){ //This loop goes over the songs
     let dur = Math.abs(song.duration - duration)
     if (closestDuration === undefined || dur < closestDuration){
       closestDuration = dur;
@@ -199,7 +202,7 @@ function searchByDuration(duration) {
     }
   }
 
-  for (const playlist of player.playlists){
+  for (const playlist of player.playlists){ //This loop goes over the playlists
     let playListDuration = playlistDuration(playlist.id);
     let dur = Math.abs(playListDuration - duration)
     if (closestDuration === undefined || dur < closestDuration){
