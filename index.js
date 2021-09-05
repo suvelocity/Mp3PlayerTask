@@ -1,7 +1,7 @@
 const player = require('./data');
 
 player.playSong = (songId) => {
-  const resultSong = player.songs.find((song) => song.id === songId);
+  const resultSong = getById(songId);
   if (!resultSong) throw new Error('Bad ID');
 
   const { title, album, artist, duration } = resultSong;
@@ -13,18 +13,20 @@ player.playSong = (songId) => {
   );
 };
 
+const getById = (songId) => player.songs.find((song) => song.id === songId);
+
 function playSong(id) {
   player.playSong(id);
 }
 
 function removeSong(id) {
+  if (!getById(id)) throw new Error('Bad ID');
+
   player.songs = player.songs.filter((song) => song.id !== id);
   player.playlists.forEach((playlist) => {
     playlist.songs = playlist.songs.filter((songId) => songId !== id);
   });
 }
-
-removeSong(1);
 
 function addSong(title, album, artist, duration, id) {
   id = id ?? player.generateSongsId();
