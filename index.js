@@ -188,7 +188,25 @@ function searchByQuery(query) {
 }
 
 function searchByDuration(duration) {
-  // your code here
+  duration = unformatDuration(duration) //Get seconds
+  let closestDuration;
+  let closestDurationObj;
+  for (const song of player.songs){
+    let dur = Math.abs(song.duration - duration)
+    if (closestDuration === undefined || dur < closestDuration){
+      closestDuration = dur;
+      closestDurationObj = song;
+    }
+  }
+  for (const playlist of player.playlists){
+    let playListDuration = playlistDuration(playlist.id);
+    let dur = Math.abs(playListDuration - duration)
+    if (closestDuration === undefined || dur < closestDuration){
+      closestDuration = dur;
+      closestDurationObj = playlist;
+    }
+  }
+  return closestDurationObj;
 }
 
 module.exports = {
