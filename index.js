@@ -37,7 +37,14 @@ const player = {
     },
     {
       id: 5,
-      title: 'As a Rock',
+      title: 'As a Stone',
+      album: 'Show Us What You Got',
+      artist: 'Full Trunk',
+      duration: 259,
+    },
+    {
+      id: 8,
+      title: '',
       album: 'Show Us What You Got',
       artist: 'Full Trunk',
       duration: 259,
@@ -57,8 +64,24 @@ function playSong(id) {
 }
 
 function removeSong(id) {
-  // your code here
+  // removes the song from the songs list
+  for(let i=0 ; i<player.songs.length ; i++){
+    if(player.songs[i].id===id){
+      player.songs.splice(i,1);
+    }
+    
+  }
+  // removes the song from all playlist it appears in
+  for(let playlist of player.playlists){
+    for(let i=0 ; i<playlist.songs.length ; i++){
+      if(playlist.songs[i]===id){
+        playlist.songs.splice(i,1);
+      }
+    }
+
+  }
 }
+
 
 function addSong(title, album, artist, duration, id) {
   // your code here
@@ -105,3 +128,11 @@ module.exports = {
   searchByQuery,
   searchByDuration,
 }
+
+for(let i=0 ; i<player.songs.length ; i++){
+  
+  console.log(player.songs[i].title);
+  
+}
+console.log(player.playlists);
+  
