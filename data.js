@@ -1,4 +1,4 @@
-module.exports.data = {
+module.exports = {
   songs: [
     {
       id: 1,
@@ -47,7 +47,4 @@ module.exports.data = {
     { id: 1, name: 'Metal', songs: [1, 7, 4] },
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
-  playSong(song) {
-    console.log(/* your code here */)
-  },
 }

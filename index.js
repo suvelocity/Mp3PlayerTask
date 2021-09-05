@@ -1,7 +1,20 @@
 const player = require('./data')
 
+player.playSong = (songId) => {
+  const resultSong = player.songs.find((song) => song.id === songId)
+  if (!resultSong) throw new Error('Bad ID')
+
+  const { title, album, artist, duration } = resultSong
+
+  console.log(
+    `Playing ${title} from ${album} by ${artist} | ${(
+      '00' + Math.floor(duration / 60)
+    ).slice(-2)}:${('00' + (duration % 60)).slice(-2)}.`
+  )
+}
+
 function playSong(id) {
-  // your code here
+  player.playSong(id)
 }
 
 function removeSong(id) {
