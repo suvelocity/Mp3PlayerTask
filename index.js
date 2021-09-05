@@ -262,8 +262,31 @@ function playlistDuration(id) {
 
 
 function searchByQuery(query) {
-  // your code here
+  query=query.toLowerCase()
+  let songsFound=[];
+  let playlistsFound=[];
+  
+//making songs array
+  for(let song of player.songs){
+    if(song.title.toLowerCase().includes(query) || song.album.toLowerCase().includes(query) || song.artist.toLowerCase().includes(query) ){
+      songsFound.push(song);
+    }
+  }
+  // making playlists array
+  for(let playlist of player.playlists){
+    if(playlist.name.toLowerCase().includes(query)){
+      playlistsFound.push(playlist);
+    }
+  }
+  // sort the array by object string key(alphabetical order)
+  songsFound.sort((a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0))
+  playlistsFound.sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0))
+  
+//  define the final result object
+  let queryResult={songs: songsFound,playlists:playlistsFound};
+  return queryResult;
 }
+
 
 function searchByDuration(duration) {
   // your code here
