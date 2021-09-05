@@ -77,7 +77,7 @@ function getUnusedID(objArray){
 }
 
 function getIndexByIDFromList(objArray, id){
-  //Returns index by ID, returns -1 if not found
+  //Returns index in objArray by ID, returns -1 if not found
   for (let i = 0; i < objArray.length; i++){
     if (objArray[i].id === id){
       return i;
@@ -105,12 +105,11 @@ function removeSong(id) {
   }
 }
 
-function addSong(title, album, artist, duration, id=undefined) {
+function addSong(title, album, artist, duration, id) {
   if(id === undefined) id = getUnusedID(player.songs); //Get id if id not given
   if(getIndexByIDFromList(player.songs, id) !== -1) throw "ID Already Exists";
   duration = unformatDuration(duration);
-  const newSong = {title, album, artist, duration, id}
-  player.songs.push(newSong);
+  player.songs.push({title, album, artist, duration, id});
   return id;
 }
 
@@ -121,7 +120,10 @@ function removePlaylist(id) {
 }
 
 function createPlaylist(name, id) {
-  // your code here
+  if(id === undefined) id = getUnusedID(player.songs); //Get id if not given
+  if(getIndexByIDFromList(player.playlists, id) !== -1) throw "ID Already Exists";
+  player.playlists.push({name, id, songs:[]}) //Create new empty playlist
+  return id;
 }
 
 function playPlaylist(id) {
