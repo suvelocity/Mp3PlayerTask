@@ -78,7 +78,12 @@ function playlistDuration(id) {
 }
 
 function searchByQuery(query) {
-  // your code here
+  return {
+    songs: getSongByQuery(query).sort((a, b) => a.title.localeCompare(b.title)),
+    playlists: getPlaylistByQuery(query).sort((a, b) =>
+      a.title.localeCompare(b.title)
+    ),
+  };
 }
 
 function searchByDuration(duration) {
@@ -100,8 +105,20 @@ module.exports = {
 };
 
 const getSongById = (songId) => player.songs.find(({ id }) => id === songId);
+const getSongByQuery = (query) =>
+  player.songs.filter(
+    ({ title, album, artist }) =>
+      title.toUpperCase().includes(query.toUpperCase()) ||
+      album.toUpperCase().includes(query.toUpperCase()) ||
+      artist.toUpperCase().includes(query.toUpperCase())
+  );
+
 const getPlaylistById = (playlistId) =>
   player.playlists.find(({ id }) => id === playlistId);
+const getPlaylistByQuery = (query) =>
+  player.playlists.filter(({ name }) =>
+    name.toUpperCase().includes(query.toUpperCase())
+  );
 
 const formatDuration = (duration) =>
   ('00' + Math.floor(parseInt(duration) / 60)).slice(-2) +
