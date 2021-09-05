@@ -96,6 +96,12 @@ function sortObjectByKey(objArr, key){
   objArr.sort((a, b) => a[key].localeCompare(b[key]));
 }
 
+function getPlaylistObjbyID(id){
+  const playListIndex = getIndexByIDFromList(player.playlists, id);
+  if(playListIndex === -1) throw "Playlist not found!";
+  return player.playlists[playListIndex];
+}
+
 function playSong(id) {
   const index = getIndexByIDFromList(player.songs, id);
   if(index === -1) throw "ID not found";
@@ -135,18 +141,14 @@ function createPlaylist(name, id) {
 }
 
 function playPlaylist(id) {
-  const playListIndex = getIndexByIDFromList(player.playlists, id);
-  if(playListIndex === -1) throw "Playlist not found!";
-  const playlist = player.playlists[playListIndex];
+  const playlist = getPlaylistObjbyID(id);
   for (const song of playlist.songs){
     player.playSong(song);
   }
 }
 
 function editPlaylist(playlistId, songId) {
-  const playListIndex = getIndexByIDFromList(player.playlists, playlistId);
-  if(playListIndex === -1) throw "Playlist not found!";
-  const playlist = player.playlists[playListIndex];
+  const playlist = getPlaylistObjbyID(playlistId);
 
   const indexInSongs = getIndexByIDFromList(player.songs, songId);
   if (indexInSongs === -1) throw "ID not found";
@@ -161,9 +163,7 @@ function editPlaylist(playlistId, songId) {
 }
 
 function playlistDuration(id) {
-  const playListIndex = getIndexByIDFromList(player.playlists, id);
-  if(playListIndex === -1) throw "Playlist not found!";
-  const playlist = player.playlists[playListIndex];
+  const playlist = getPlaylistObjbyID(id);
 
   let duration = 0;
   for (const songId of playlist.songs){
@@ -198,6 +198,7 @@ function searchByDuration(duration) {
       closestDurationObj = song;
     }
   }
+
   for (const playlist of player.playlists){
     let playListDuration = playlistDuration(playlist.id);
     let dur = Math.abs(playListDuration - duration)
