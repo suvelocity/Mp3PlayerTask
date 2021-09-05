@@ -85,10 +85,49 @@ function playSong(id) {
     throw "non exist Id";
   } 
 }
-
+// this is help function that get id and remove the song from the player songs list
+function removeSongFromPlayerById(songs , id){
+  if (songs.length === 0){
+    return [];
+  }else if(songs[0].id === id){
+    return removeSongFromPlayerById(songs.slice(1) , id);
+  }else{
+    return [songs[0]].concat(removeSongFromPlayerById(songs.slice(1) , id));
+  }
+} 
+// this is help function that get id and list of playlists and return if song by the given id is exist in the playlists
+function isExistOnPlaylist(playlists, id){
+  for (let i = 0 ; i < playlists.length ; i++ ){
+    for (let j = 0 ; j < playlists[i].songs.length ;j++){
+      if (playlists[i].songs[j] === id){
+        return true;
+      }
+    }
+  }
+  return false;
+}
+//this is help function that get one playlist and id and remove the id if exist
+function removeFromPlaylistSongsList(songs , id){
+  if(songs.length === 0){
+    return [];
+  }else if (songs[0] === id){
+    return removeFromPlaylistSongsList(songs.slice(1) , id);
+  }else{
+    return [songs[0]].concat(removeFromPlaylistSongsList(songs.slice(1) , id));
+  }
+} 
 
 function removeSong(id) {
-  // your code here
+  if (isIdExist(player.songs , id)){
+    player.songs=removeSongFromPlayerById(player.songs , id)
+    if (isExistOnPlaylist(player.playlists, id)){
+      for (let i = 0 ; i < player.playlists.length ; i++){
+        player.playlists[i].songs=removeFromPlaylistSongsList(player.playlists[i].songs, id);
+      }
+    }
+  }else{
+    throw "non exist Id";
+  }
 }
 
 function addSong(title, album, artist, duration, id) {
