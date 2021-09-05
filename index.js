@@ -125,9 +125,40 @@ function removeSong(id) {
 
 
 
-function addSong(title, album, artist, duration, id) {
+function addSong(title, album, artist, duration, id=-1) {
+  // auto generate func for original and reasonable id for the new song.
+  let idSet= new Set();
+  for(let song of player.songs){
+    idSet.add(song.id);
+  }
+  if(id===-1){
+    let i=1;
+    while(true){
+      if(!idSet.has(i)){
+        break;
+      }
+      i++
+    }
+    id=i;
+  }
+    
+    
+  if(idSet.has(id)){
+    throw("Taken ID");
+  }
 
+  let newSong={
+    id: id,
+    title: title,
+    album: album,
+    artist: artist,
+    duration: duration
+    
+  };
+  player.songs.push(newSong);
+  return newSong.id;
 }
+
 
 function removePlaylist(id) {
   let found=false
@@ -144,10 +175,41 @@ function removePlaylist(id) {
 }
 
 
-function createPlaylist(name, id) {
-  // your code here
+function createPlaylist(name, id=-1) {
+  let idSet= new Set();
+  for(let playlist of player.playlists){
+    idSet.add(playlist.id);
+  }
+  if(id===-1){
+    let i=1;
+    while(true){
+      if(!idSet.has(i)){
+        break;
+      }
+      i++
+    }
+    id=i;
+  }
+    
+    
+  if(idSet.has(id)){
+    throw("Taken ID");
+  }
+
+  let newPlaylist={
+    id:id,
+    name:name,
+    songs:[]
+    
+  };
+  player.playlists.push(newPlaylist);
+  
+  return newPlaylist.id;
+  
 }
-// need to add tothrow option ......
+
+
+
 function playPlaylist(id) {
   let songsId=[];
   let songsIdSet = new Set();
@@ -220,8 +282,4 @@ module.exports = {
   searchByQuery,
   searchByDuration,
 }
-console.log('hi')
 
-player.playSong(player.songs[0])
-
-  
