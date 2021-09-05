@@ -88,8 +88,14 @@ function addSong(title, album, artist, duration, id) {
 }
 
 function removePlaylist(id) {
-  // your code here
+  for(let i = 0 ; i<player.playlists.length ; i++){
+    if (player.playlists[i].id===id){
+      player.playlists.splice(i,1);
+    }
+  }
+
 }
+
 
 function createPlaylist(name, id) {
   // your code here
@@ -135,4 +141,5 @@ for(let i=0 ; i<player.songs.length ; i++){
   
 }
 console.log(player.playlists);
+
   
