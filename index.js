@@ -58,14 +58,19 @@ const player = {
   },
 }
 
-function playSong(id) {
-  for (const song of player.songs){
-    if (song.id === id){
-      player.playSong(song);
-      return;
+function getSongIndexByID(id){
+  //Returns song index by ID, returns -1 if not found
+  for (let i = 0; i < player.songs.length; i++){
+    if (player.songs[i].id === id){
+      return i;
     }
   }
-  throw "ID not found!"
+  return -1;
+}
+
+function playSong(id) {
+  const index = getSongIndexByID(id);
+  (index !== -1) ? player.playSong(player.songs[index]) : (() => {throw "ID not found"});
 }
 
 function removeSong(id) {
