@@ -7,17 +7,19 @@ player.playSong = (songId) => {
   const { title, album, artist, duration } = resultSong;
 
   console.log(
-    `Playing ${title} from ${album} by ${artist} | ${(
-      '00' + Math.floor(duration / 60)
-    ).slice(-2)}:${('00' + (duration % 60)).slice(-2)}.`
+    `Playing ${title} from ${album} by ${artist} | ${formatDuration(duration)}.`
   );
 };
 
 const getById = (songId) => player.songs.find((song) => song.id === songId);
+const formatDuration = (duration) =>
+  ('00' + Math.floor(parseInt(duration) / 60)).slice(-2) +
+  ':' +
+  ('00' + (parseInt(duration) % 60)).slice(-2);
+const durationToSeconds = (duration, [min, sec] = duration.split(':')) =>
+  parseInt(min) * 60 + parseInt(sec);
 
-function playSong(id) {
-  player.playSong(id);
-}
+const playSong = player.playSong;
 
 function removeSong(id) {
   if (!getById(id)) throw new Error('Bad ID');
@@ -29,7 +31,12 @@ function removeSong(id) {
 }
 
 function addSong(title, album, artist, duration, id) {
+  if (getById(id)) throw new Error('Bad ID');
   id = id ?? player.generateSongsId();
+  duration = durationToSeconds(duration);
+
+  player.songs.push({ title, album, artist, duration, id });
+  return id;
 }
 
 function removePlaylist(id) {
