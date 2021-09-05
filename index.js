@@ -1,7 +1,7 @@
 const player = require('./data');
 
 player.playSong = (songId) => {
-  const resultSong = getById(songId);
+  const resultSong = getSongById(songId);
   if (!resultSong) throw new Error('Bad ID');
 
   const { title, album, artist, duration } = resultSong;
@@ -11,18 +11,10 @@ player.playSong = (songId) => {
   );
 };
 
-const getById = (songId) => player.songs.find((song) => song.id === songId);
-const formatDuration = (duration) =>
-  ('00' + Math.floor(parseInt(duration) / 60)).slice(-2) +
-  ':' +
-  ('00' + (parseInt(duration) % 60)).slice(-2);
-const durationToSeconds = (duration, [min, sec] = duration.split(':')) =>
-  parseInt(min) * 60 + parseInt(sec);
-
 const playSong = player.playSong;
 
 function removeSong(id) {
-  if (!getById(id)) throw new Error('Bad ID');
+  if (!getSongById(id)) throw new Error('Bad ID');
 
   player.songs = player.songs.filter((song) => song.id !== id);
   player.playlists.forEach((playlist) => {
@@ -31,7 +23,7 @@ function removeSong(id) {
 }
 
 function addSong(title, album, artist, duration, id) {
-  if (getById(id)) throw new Error('Bad ID');
+  if (getSongById(id)) throw new Error('Bad ID');
   id = id ?? player.generateSongsId();
   duration = durationToSeconds(duration);
 
@@ -39,8 +31,9 @@ function addSong(title, album, artist, duration, id) {
   return id;
 }
 
-function removePlaylist(id) {
-  // your code here
+function removePlaylist(playlistId) {
+  if (!getPlaylistById(playlistId)) throw new Error('Bad ID');
+  player.playlists = player.playlists.filter(({ id }) => id !== playlistId);
 }
 
 function createPlaylist(name, id) {
@@ -80,3 +73,15 @@ module.exports = {
   searchByQuery,
   searchByDuration,
 };
+
+const getSongById = (songId) => player.songs.find(({ id }) => id === songId);
+const getPlaylistById = (playlistId) =>
+  player.playlists.find(({ id }) => id === playlistId);
+
+const formatDuration = (duration) =>
+  ('00' + Math.floor(parseInt(duration) / 60)).slice(-2) +
+  ':' +
+  ('00' + (parseInt(duration) % 60)).slice(-2);
+
+const durationToSeconds = (duration, [min, sec] = duration.split(':')) =>
+  parseInt(min) * 60 + parseInt(sec);
