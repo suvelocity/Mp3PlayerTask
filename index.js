@@ -68,7 +68,13 @@ function editPlaylist(playlistId, songId) {
 }
 
 function playlistDuration(id) {
-  // your code here
+  const playlist = getPlaylistById(id);
+  if (!playlist) throw new Error('Bad ID');
+
+  return playlist.songs.reduce(
+    (sum, songId) => sum + getSongById(songId).duration,
+    0
+  );
 }
 
 function searchByQuery(query) {
