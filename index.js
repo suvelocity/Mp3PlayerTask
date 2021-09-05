@@ -73,14 +73,28 @@ function findSongById(id){
 }
 
 function playSong(id) {
-  // your code here
   const song = findSongById(id);
   song.duration = songDuration(id);
   player.playSong(song);
 }
 
 function removeSong(id) {
-  // your code here
+  let playList, indexInPlayList, indexOfPlayList;
+  const indexOfSong = player.songs.findIndex(song => {return song.id === id}); console.log(indexOfSong)
+  
+  if(indexOfSong === -1){
+    throw 'id not found';
+  }
+
+  player.songs.splice(indexOfSong, 1);
+  while(player.playlists.find(PL => {return PL.songs.find(x => x === id)})){
+    playList = player.playlists.find(PL => {return PL.songs.find(x => x === id)}); 
+    indexOfPlayList = player.playlists.findIndex(PL => {return PL.songs.find(x => x === id)});
+    indexInPlayList = playList.songs.findIndex(x => x === id);
+    playList.songs.splice(indexInPlayList, 1);
+    player.playlists[indexOfPlayList].songs.splice(indexInPlayList, 0);
+    
+  }
 }
 
 function addSong(title, album, artist, duration, id) {
