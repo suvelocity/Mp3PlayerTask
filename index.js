@@ -70,13 +70,23 @@ function getSongIndexByID(id){
 
 function playSong(id) {
   const index = getSongIndexByID(id);
-  (index !== -1) ? player.playSong(player.songs[index]) : (() => {throw "ID not found"});
+  if(index === -1) throw "ID not found";
+  player.playSong(player.songs[index])
 }
 
 function removeSong(id) {
-  // your code here
+  const indexInSongs = getSongIndexByID(id);
+  if (indexInSongs === -1) throw "ID not found";
+
+  player.songs.splice(indexInSongs, 1); //Delete from songs
+
+  for (const playlist of player.playlists){
+    const indexInPlaylist = playlist.songs.indexOf(id);
+    if(indexInPlaylist >= 0) playlist.songs.splice(indexInPlaylist, 1); //Delete song from playlist
+  }
 }
 
+removeSong(1)
 function addSong(title, album, artist, duration, id) {
   // your code here
 }
