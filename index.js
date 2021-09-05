@@ -45,16 +45,26 @@ function createPlaylist(name, id) {
 }
 
 function playPlaylist(id) {
-  const toPlay = getPlaylistById(id);
-  if (!toPlay) throw new Error('Bad ID');
+  const playlist = getPlaylistById(id);
+  if (!playlist) throw new Error('Bad ID');
 
-  toPlay.songs.forEach((song) => {
+  playlist.songs.forEach((song) => {
     playSong(song);
   });
 }
 
 function editPlaylist(playlistId, songId) {
-  // your code here
+  const { playlists } = player;
+  playlistId = playlists.findIndex(({ id }) => id === playlistId);
+  if (playlistId < 0) throw new Error('Bad playlist ID');
+  if (!getSongById(songId)) throw new Error('Bad song ID');
+
+  const indexInPlaylist = playlists[playlistId].songs.indexOf(songId);
+  if (indexInPlaylist < 0) playlists[playlistId].songs.push(songId);
+  else playlists[playlistId].songs.splice(indexInPlaylist, 1);
+
+  if (playlists[playlistId].songs.length === 0)
+    removePlaylist(playlists[playlistId].id);
 }
 
 function playlistDuration(id) {
