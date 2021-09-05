@@ -1,3 +1,5 @@
+const { pipelinePrimaryTopicReference } = require("@babel/types");
+
 const player = {
   songs: [
     {
@@ -54,22 +56,36 @@ const player = {
 
 function durationConvert(duration) // converts duration value to mm/ss
 {
-  let durationArr=[];
-  while(duration>=1)
-  {
-    if(durationArr.length===2)
+  
+  if(duration>1000 || duration<=99) //if duration is not a suitable number
     {
-      durationArr.unshift(":");
+    throw "not a suitable number"; // an error leading to catch
     }
-    durationArr.unshift(duration%10);
-    duration=Math.floor(duration/10);
-  }
-  durationArr.unshift(0);
-  return durationArr.join("");
+  else
+    {
+    let durationArr=[];
+    while(duration>=1)
+      {
+        if(durationArr.length===2)
+        {
+          durationArr.unshift(":");
+        }
+        durationArr.unshift(duration%10);
+        duration=Math.floor(duration/10);
+      }
+      durationArr.unshift(0);
+      return durationArr.join("");
+    }
 }
-
-function playSong(id) {
-  // your code here
+  
+function playSong(id) 
+{
+  let songObj= player.songs.find(x=> x["id"]===id);
+  if(songObj===undefined) // if id is not found in the player an error will be thrown
+  {
+    throw "Not a Valid ID"
+  }
+  return player.playSong(songObj);
 }
 
 function removeSong(id) {
