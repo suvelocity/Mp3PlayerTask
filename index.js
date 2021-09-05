@@ -37,7 +37,11 @@ function removePlaylist(playlistId) {
 }
 
 function createPlaylist(name, id) {
-  // your code here
+  if (getPlaylistById(id)) throw Error('Bad ID');
+  id = id ?? player.generatePlaylistId();
+
+  player.playlists.push({ name, id, songs: [] });
+  return id;
 }
 
 function playPlaylist(id) {
