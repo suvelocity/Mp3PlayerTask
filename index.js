@@ -55,13 +55,22 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    console.log(/* your code here */)
+    console.log(playSong);
   },
 }
 
 function playSong(id) {
-  // your code here
+  // SELF /needs to work in a collab with the func playSong(song) , up!!
+  // actually prints the song(object) info into the console 
+  for(let i=0 ;i<player.songs.length ; i++){
+    if(player.songs[i].id===id){
+      return player.songs[i];
+    }
+    
+  }
+  
 }
+
 
 function removeSong(id) {
   // removes the song from the songs list
@@ -100,9 +109,13 @@ function removePlaylist(id) {
 function createPlaylist(name, id) {
   // your code here
 }
-
+// do i need to console log the playlist or the songs one by one in the order like in the playlist ?
 function playPlaylist(id) {
-  // your code here
+  for(let i = 0 ; i<playlists.length ; i++){
+    if(player.playlists[i].id===id){
+      console.log(playlists[i]);
+    }
+  }
 }
 
 function editPlaylist(playlistId, songId) {
