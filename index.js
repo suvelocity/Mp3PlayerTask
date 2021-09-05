@@ -37,7 +37,7 @@ const player = {
     },
     {
       id: 5,
-      title: 'As a Stone',
+      title: 'As a Rock',
       album: 'Show Us What You Got',
       artist: 'Full Trunk',
       duration: 259,
@@ -93,6 +93,7 @@ function searchByDuration(duration) {
 }
 
 module.exports = {
+  //Don't touch ben tipagach
   player,
   playSong,
   removeSong,
