@@ -157,8 +157,19 @@ function editPlaylist(playlistId, songId) {
 }
 
 function playlistDuration(id) {
-  // your code here
+  const playListIndex = getIndexByIDFromList(player.playlists, id);
+  if(playListIndex === -1) throw "Playlist not found!";
+  const playlist = player.playlists[playListIndex];
+
+  let duration = 0;
+  for (const songId of playlist.songs){
+    const song = player.songs[getIndexByIDFromList(player.songs, songId)];
+    duration += song.duration;
+  }
+  return duration;
 }
+
+console.log(playlistDuration(1))
 
 function searchByQuery(query) {
   // your code here
