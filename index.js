@@ -76,24 +76,25 @@ function getUnusedID(objArray){
   return maxID + 1;
 }
 
-function getSongIndexByID(id){
-  //Returns song index by ID, returns -1 if not found
-  for (let i = 0; i < player.songs.length; i++){
-    if (player.songs[i].id === id){
+function getIndexByIDFromList(objArray, id){
+  //Returns index by ID, returns -1 if not found
+  for (let i = 0; i < objArray.length; i++){
+    if (objArray[i].id === id){
       return i;
     }
   }
   return -1;
 }
 
+
 function playSong(id) {
-  const index = getSongIndexByID(id);
+  const index = getIndexByIDFromList(player.songs, id);
   if(index === -1) throw "ID not found";
   player.playSong(player.songs[index])
 }
 
 function removeSong(id) {
-  const indexInSongs = getSongIndexByID(id);
+  const indexInSongs = getIndexByIDFromList(player.songs, id);
   if (indexInSongs === -1) throw "ID not found";
 
   player.songs.splice(indexInSongs, 1); //Delete from songs
@@ -106,7 +107,7 @@ function removeSong(id) {
 
 function addSong(title, album, artist, duration, id=undefined) {
   if(id === undefined) id = getUnusedID(player.songs); //Get id if id not given
-  if(getSongIndexByID(id) !== -1) throw "ID Already Exists";
+  if(getIndexByIDFromList(player.songs, id) !== -1) throw "ID Already Exists";
   duration = unformatDuration(duration);
   const newSong = {title, album, artist, duration, id}
   player.songs.push(newSong);
@@ -114,7 +115,9 @@ function addSong(title, album, artist, duration, id=undefined) {
 }
 
 function removePlaylist(id) {
-  // your code here
+  const playListIndex = getIndexByIDFromList(player.playlists, id);
+  if (playListIndex === -1) throw "ID not found";
+  player.playlists.splice(playListIndex, 1);
 }
 
 function createPlaylist(name, id) {
