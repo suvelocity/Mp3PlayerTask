@@ -188,9 +188,16 @@ function createPlaylist(name, id) {
 }
 
 function playPlaylist(id) {
-  // your code here
+  if(GetPlaylistById(id)===undefined)
+  {
+    throw "playlist id doesn't exist";
+  }
+  const playlistObj=GetPlaylistById(id);
+  for(let i=0; i<playlistObj["songs"].length; i++)
+  {
+    playSong(playlistObj["songs"][i]);
+  }
 }
-
 function editPlaylist(playlistId, songId) {
   // your code here
 }
