@@ -72,6 +72,11 @@ const player = {
   // ===> Returns the song by the ID given <===
   fingObjectByID(id){
     return player.songs.find(songObj => songObj.id === id);
+  },
+
+  // ===> Returns the playlist by the ID given <===
+  fingObjectPlaylistByID(id){
+    return player.playlists.find(songObj => songObj.id === id);
   }
 }
 
@@ -143,16 +148,20 @@ function addSong(title, album, artist, duration, id) {
   }
 
   player.songs.push({
-    "title": title,
-    "album": album,
-    "duration": newDuration,    
-    "artist": artist, 
-    "id": id   
+    title: title,
+    album: album,
+    duration: newDuration,    
+    artist: artist, 
+    id: id   
   });
+  
+  // Return ID
+  return id;
 }
 
+
 function removePlaylist(id) {
-  // your code here
+  
 }
 
 function createPlaylist(name, id) {
