@@ -246,9 +246,29 @@ for(let i of playlistSongs) //goes through all song id in array
 }
 
 function searchByQuery(query) {
-  // your code here
+  const results={songs:[], playlists:[]};
+  let query2=query.toLowerCase(); //be case insensitive
+  for(let i of player.songs) //go through all the songs and see if the query contains the different keys
+  {
+    if(query2.includes(i["album"].toLowerCase())||query2.includes(i["artist"].toLowerCase()) ||query2.includes(i["title"].toLowerCase()))
+    {
+      results.songs.push(i);
+      results.songs.sort((a,b)=> {if(a["title"].toLowerCase()<b["title"].toLowerCase()) return -1;}); //sort by title
+    }
+  }
+
+  for(let j of player.playlists) //go throu all playlists
+  {
+    if(query2.includes(j["name"].toLowerCase()))
+    {
+      results.playlists.push(j);
+      results.playlists.sort((a,b)=> {if(a["name"].toLowerCase()<b["name"].toLowerCase()) return -1;}); //sort by name
+    }
+  }
+  return results;
 }
 
+console.log(searchByQuery("full trunk, israeli, metal, all is one, thunderstruck"))
 function searchByDuration(duration) {
   // your code here
 }
