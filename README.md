@@ -1,3 +1,7 @@
+This is my 2nd Weekend Assignment in the Cyber4S program:
+the task is the following:
+
+
 # MP3 Player - Second Weekend Assignment
 You are going to implement an MP3 player.
 
