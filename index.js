@@ -131,7 +131,10 @@ function removeSong(id) {
 }
 
 function addSong(title, album, artist, duration, id) {
-
+  if(GetsongById(id) !==undefined) //if the id already exists throw an error
+    {
+      throw "this is an existing ID";
+    }
   if(id===undefined)
   { 
     id= Math.floor(Math.random()*100); //generates a random id to the song
@@ -139,13 +142,9 @@ function addSong(title, album, artist, duration, id) {
     {
       id= Math.floor(Math.random()*100);
     }
-  if(GetsongById(id) !==undefined) //if the id already exists throw an error
-  {
-    throw "this is an existing ID";
   }
-  }
-  let newDuration =durationConvert(duration); 
-  const newSong = {id,title, album ,artist, duration:newDuration}; //create new song object
+  duration = parseInt(duration.slice(0,Math.floor(duration.length/2)))*60+parseInt(duration.slice(Math.ceil(duration.length/2)))
+  const newSong = {id,title, album ,artist, duration}; //create new song object
   player.songs.push(newSong)
   return newSong["id"];
 }
@@ -171,7 +170,21 @@ function removePlaylist(id) {
 }
 
 function createPlaylist(name, id) {
-  // your code here
+  if(GetPlaylistById(id) !==undefined) //if the id already exists throw an error
+  {
+    throw "this is an existing ID";
+  }
+  if(id===undefined)
+  { 
+    id= Math.floor(Math.random()*100); //generates a random id to the playlist
+    while(id === GetPlaylistById(id)) // if the genrated id exists generate a new one
+    {
+      id= Math.floor(Math.random()*100);
+    }
+  }
+  const newPlaylist = {id, name, songs:[]}; //create new playlist object
+  player.playlists.push(newPlaylist);
+  return newPlaylist["id"];
 }
 
 function playPlaylist(id) {
