@@ -119,9 +119,10 @@ function addSong(title, album, artist, duration, id) {
 function removePlaylist(id) {
   for(let i=0;i<player.playlists.length;i++){
     if(player.playlists[i].id===id){
-      player.playlists.splice(i,1);
+      return player.playlists.splice(i,1);
     }
   }
+  throw 'Enter valid id';
 }
 
 function createPlaylist(name, id) {
