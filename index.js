@@ -2,59 +2,56 @@ const player = {
   songs: [
     {
       id: 1,
-      title: 'chapter Four',
-      album: 'walkingTheFallen',
-      artist: 'avengedSevenfold',
-      duration: 342,
+      title: 'Vortex',
+      album: 'Wallflowers',
+      artist: 'Jinjer',
+      duration: 242,
     },
     {
       id: 2,
-      title: 'afterLife',
-      album: 'nightmare',
-      artist: 'avengedSevenfold',
-      duration: 352,
+      title: 'Vinda',
+      album: 'Godtfolk',
+      artist: 'Songleikr',
+      duration: 160,
     },
     {
       id: 7,
-      title: 'panic Station',
-      album: 'The 2nd Law',
-      artist: 'muse',
-      duration: 184,
+      title: 'Shiroyama',
+      album: 'The Last Stand',
+      artist: 'Sabaton',
+      duration: 213,
     },
     {
       id: 3,
-      title: 'uprising',
-      album: 'The resistence',
-      artist: 'muse',
-      duration: 304,
+      title: 'Thunderstruck',
+      album: 'The Razors Edge',
+      artist: 'AC/DC',
+      duration: 292,
     },
     {
       id: 4,
-      title: 'plug In Baby',
-      album: 'Origin Of Symmetry',
-      artist: 'muse',
-      duration: 221,
+      title: 'All is One',
+      album: 'All is One',
+      artist: 'Orphaned Land',
+      duration: 270,
     },
     {
       id: 5,
-      title: 'your Latest Trick',
-      album: 'brothers In Arms',
-      artist: 'Dire straits',
-      duration: 332,
+      title: 'As a Stone',
+      album: 'Show Us What You Got',
+      artist: 'Full Trunk',
+      duration: 259,
     },
-    {
-      id:6,
-      title:'The pretnder',
-      alubm:'Echos,Silence,Patience&Grace',
-      artist:'Foo Fighters',
-      duration: 279,
-    },
-  ]
-  
+  ],
+  playlists: [
+    { id: 1, name: 'Metal', songs: [1, 7, 4] },
+    { id: 5, name: 'Israeli', songs: [4, 5] },
+  ],
   playSong(song) {
     console.log(/* your code here */)
   },
 }
+
 
 function playSong(id) {
   // your code here
