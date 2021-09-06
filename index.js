@@ -101,6 +101,11 @@ function findSongById(id){
   return player.songs.find(song => {return song.id === id});
 }
 
+//the function below return a playlist object by id
+// function findPlaylistById(id){
+//   return player.playlists.find(PL => PL.id === id);
+// }
+
 function playSong(id) {
   const song = findSongById(id);
   song.duration = songDuration(id);
@@ -168,7 +173,20 @@ function playPlaylist(id) {
 }
 
 function editPlaylist(playlistId, songId) {
-  // your code here
+  const playlistIndex = player.playlists.findIndex(PL => PL.id === playlistId);
+  let songIndex = player.playlists[playlistIndex].songs.findIndex(song => song === songId);
+  if(!findPlaylistById(playlistId) || !findSongById(songId)){
+    throw 'id not found';
+  }
+  if(songIndex !== -1){
+    player.playlists[playlistIndex].songs.splice(songIndex, 1);
+  }
+  else if(songIndex === -1){
+    player.playlists[playlistIndex].songs.push(songId);
+  }
+  if(player.playlists[playlistIndex].songs.length === 0){
+    removePlaylist(playlistId);
+  }
 }
 
 function playlistDuration(id) {
