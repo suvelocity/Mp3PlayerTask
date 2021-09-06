@@ -135,10 +135,10 @@ function playPlaylist(id) {
 
 function editPlaylist(playlistId, songId) {
   let count = 0
-  // if (!checkId(player.songs, songId))
-  //   throw new Error('ID already isn\'t exist, change the ID or omit it')
-  // if (!checkId(player.playlists, playlistId))
-  //   throw new Error('ID already isn\'t exist, change the ID or omit it')
+  if (!checkId(player.songs, songId))
+    throw new Error("ID already isn't exist, change the ID or omit it")
+  if (!checkId(player.playlists, playlistId))
+    throw new Error("ID already isn't exist, change the ID or omit it")
   for (let i = 0; i < player.playlists.length; i++) {
     for (let j = 0; j < player.playlists[i].songs.length; j++) {
       if (player.playlists[i].songs[j] === songId) {
