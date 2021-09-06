@@ -51,29 +51,31 @@ const player = {
     console.log(/* your code here */)
   },
 }
-function getSongFromID(id){
-  for(let key of player.songs){
-    if(key.id===id){
-        return {title,album,artist,duration} = key;
+function getSongFromID(id) {
+  for (let i = 0; i < player.songs.length; i++) {
+    if (player.songs[i].id === id) {
+      return { title, album, artist, duration, } = player.songs[i], arrId = i;
     }
   }
   throw 'Please enter valid id';
 }
-function durationToMMSS(duration){
-let mm = Math.floor(duration / 60);
-let dd = duration % 60;
-if(mm<10){
-  mm = '0' + mm;
-}
-return `${mm}:${dd}`
+function durationToMMSS(duration) {
+  let mm = Math.floor(duration / 60);
+  let dd = duration % 60;
+  if (mm < 10) {
+    mm = '0' + mm;
+  }
+  return `${mm}:${dd}`
 }
 function playSong(id) {
-getSongFromID(id);
-console.log(`Playing ${title} from ${album} by ${artist} | ${durationToMMSS(duration)}.`) 
+  getSongFromID(id);
+  console.log(arrId)
+  console.log(`Playing ${title} from ${album} by ${artist} | ${durationToMMSS(duration)}.`)
 }
-playSong(5);
+
 function removeSong(id) {
-  // your code here
+  getSongFromID(id);
+  player.songs.splice(arrId,1);
 }
 
 function addSong(title, album, artist, duration, id) {
