@@ -111,7 +111,7 @@ function removeSong(id) {
 }
 
 function biggestId() {
-  //the function recieve array fo songs and return the biggest ID
+  //the function return the biggest ID
   let max = player.songs[0].id
   for (let i = 0; i < player.songs.length; i++) {
     if (max < player.songs[i].id) max = player.songs[i].id
@@ -119,7 +119,13 @@ function biggestId() {
   return max
 }
 
-function addSong(title, album, artist, duration, id) {
+function generateNewId() {
+  return biggestId() + 1
+}
+
+function addSong(title, album, artist, duration, id = generateNewId()) {
+  if (checkId(player.songs, id))
+    throw new Error('ID already exist, change the ID or ommit it')
   player.songs.push({
     title: title,
     album: album,
