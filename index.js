@@ -45,7 +45,7 @@ const player = {
   ],
   playlists: [
     { id: 1, name: 'Metal', songs: [1, 7, 4] },
-    { id: 5, name: 'Israeli', songs: [4, 5] },
+    { id: 5, name: 'Israeli', songs: [] },
   ],
   playSong(song) {
     console.log(
@@ -93,9 +93,16 @@ function removeSong(id) {
 }
 
 function addSong(title, album, artist, duration, id = generateNewId()) {
+  console.log(title)
+  console.log(album)
+  console.log(artist)
+  console.log(duration)
+  console.log(id)
+
   if (checkId(player.songs, id))
     throw new Error('ID already exist, change the ID or omit it')
-  duration = durationFormat(duration)
+  console.log(duration)
+  duration = oppositOfdurationFormat(duration)
   player.songs.push({
     title,
     album,
@@ -105,6 +112,9 @@ function addSong(title, album, artist, duration, id = generateNewId()) {
   })
   return id
 }
+
+addSong('Shugi', 'Booby', 'Kooky', '04:24', 22)
+console.log(player.songs[6])
 
 function removePlaylist(id) {
   if (!checkId(player.playlists, id)) throw new Error('ID is not found')
@@ -122,7 +132,7 @@ function createPlaylist(name, id = generateNewId()) {
 
 function playPlaylist(id) {
   if (!checkId(player.playlists, id))
-    throw new Error("ID already isn't exist, change the ID or omit it")
+    throw new Error("ID isn't exist, change the ID")
   for (let i = 0; i < player.playlists.length; i++) {
     if (player.playlists[i].id === id) {
       for (let j = 0; j < player.playlists[i].songs.length; j++) {
@@ -136,15 +146,17 @@ function playPlaylist(id) {
 function editPlaylist(playlistId, songId) {
   let count = 0
   if (!checkId(player.songs, songId))
-    throw new Error("ID already isn't exist, change the ID or omit it")
+    throw new Error("ID isn't exist, change the ID")
   if (!checkId(player.playlists, playlistId))
-    throw new Error("ID already isn't exist, change the ID or omit it")
+    throw new Error("ID isn't exist, change the ID")
   for (let i = 0; i < player.playlists.length; i++) {
     for (let j = 0; j < player.playlists[i].songs.length; j++) {
       if (player.playlists[i].songs[j] === songId) {
         count++
         removeSong(songId)
+        if (player.playlists[i].songs.length === 0) removePlaylist(playlistId)
       }
+      console.log(player.playlists[i].songs.length)
     }
     if (count === 0) {
       player.playlists[i].songs.push(songId)
@@ -152,6 +164,8 @@ function editPlaylist(playlistId, songId) {
     count = 0
   }
 }
+editPlaylist(5, 2)
+console.log(player.playlists[1].songs)
 
 function playlistDuration(id) {
   // your code here
@@ -175,6 +189,14 @@ function durationFormat(duration) {
   else if (minutes < 10) return '0' + minutes + ':' + seconds
   else if (seconds < 10) return minutes + ':' + '0' + seconds
   else return minutes + ':' + seconds
+}
+
+function oppositOfdurationFormat(duration) {
+  //converting mm:ss to seconds
+  duration = duration.split(':')
+  let minutes = parseInt(duration[0]) * 60
+  let seconds = parseInt(duration[1])
+  return minutes + seconds
 }
 
 function checkId(songs, id) {
