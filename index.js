@@ -60,6 +60,12 @@ function convertToMin(seconds) {
   return `${min}:${sec}`;
 }
 
+function convertToSec(minutes) {
+  let min = minutes.slice(0, 2) * 60
+  let sec = minutes.slice(3, 5)
+  return Number(min)+Number(sec);
+}
+
 function playSong(id) {
   player.playSong(player.songs.filter(song => song.id === id)[0]);
 }
@@ -71,7 +77,12 @@ function removeSong(id) {
 }
 
 function addSong(title, album, artist, duration, id) {
-  // your code here
+  if (player.songs.findIndex(song => song.id === id) > -1) throw 'That id already exists.'
+  while (id === undefined || player.songs.findIndex(song => song.id === id) > -1) {
+    id = (Math.floor(Math.random()*1000));
+  }
+  player.songs.push({title, album, artist, duration: convertToSec(duration), id});
+  return id;
 }
 
 function removePlaylist(id) {
