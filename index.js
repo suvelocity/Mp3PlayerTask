@@ -72,24 +72,6 @@ function playSong(id) {
   }
 }
 
-function durationFormat(duration) {
-  //converting to mm:ss format
-  let minutes = Math.floor(duration / 60)
-  let seconds = duration % 60
-  if (minutes < 10 && seconds < 10) return '0' + minutes + ':' + '0' + seconds
-  else if (minutes < 10) return '0' + minutes + ':' + seconds
-  else if (seconds < 10) return minutes + ':' + '0' + seconds
-  else return minutes + ':' + seconds
-}
-
-function checkId(songs, id) {
-  //Check if ID existed
-  for (let i = 0; i < songs.length; i++) {
-    if (songs[i].id === id) return true
-  }
-  return false
-}
-
 function removeSong(id) {
   //remove song by ID
   if (!checkId(player.songs, id)) throw new Error('ID is not found')
@@ -110,29 +92,18 @@ function removeSong(id) {
   }
 }
 
-function biggestId() {
-  //the function return the biggest ID
-  let max = player.songs[0].id
-  for (let i = 0; i < player.songs.length; i++) {
-    if (max < player.songs[i].id) max = player.songs[i].id
-  }
-  return max
-}
-
-function generateNewId() {
-  return biggestId() + 1
-}
-
 function addSong(title, album, artist, duration, id = generateNewId()) {
   if (checkId(player.songs, id))
-    throw new Error('ID already exist, change the ID or ommit it')
+    throw new Error('ID already exist, change the ID or omit it')
+  duration = durationFormat(duration)
   player.songs.push({
-    title: title,
-    album: album,
-    artist: artist,
-    duration: durationFormat(duration),
-    id: id,
+    title,
+    album,
+    artist,
+    duration,
+    id,
   })
+  return id
 }
 
 function removePlaylist(id) {
@@ -142,8 +113,11 @@ function removePlaylist(id) {
   }
 }
 
-function createPlaylist(name, id) {
-  // your code here
+function createPlaylist(name, id = generateNewId()) {
+  if (checkId(player.playlists, id))
+    throw new Error('ID already exist, change the ID or omit it')
+  player.playlists.push({ name, id })
+  return id
 }
 
 function playPlaylist(id) {
@@ -165,6 +139,42 @@ function searchByQuery(query) {
 function searchByDuration(duration) {
   // your code here
 }
+
+//////////////////////////////////////---  Helper Functions(Start) ---////////////////////////////////////////////////////
+
+function durationFormat(duration) {
+  //converting to mm:ss format
+  let minutes = Math.floor(duration / 60)
+  let seconds = duration % 60
+  if (minutes < 10 && seconds < 10) return '0' + minutes + ':' + '0' + seconds
+  else if (minutes < 10) return '0' + minutes + ':' + seconds
+  else if (seconds < 10) return minutes + ':' + '0' + seconds
+  else return minutes + ':' + seconds
+}
+
+function checkId(songs, id) {
+  //Check if ID existed
+  for (let i = 0; i < songs.length; i++) {
+    if (songs[i].id === id) return true
+  }
+  return false
+}
+
+function biggestId() {
+  //the function return the biggest ID
+  let max = player.songs[0].id
+  for (let i = 0; i < player.songs.length; i++) {
+    if (max < player.songs[i].id) max = player.songs[i].id
+  }
+  return max
+}
+
+function generateNewId() {
+  //generates6 new ID
+  return biggestId() + 1
+}
+
+//////////////////////////////////////---  Helper Functions(End) ---////////////////////////////////////////////////////
 
 module.exports = {
   //Don't touch ben tipagach
