@@ -52,6 +52,16 @@ const player = {
   },
 }
 
+//a function that returns an array with all the songs id
+function listOfId(){
+  const idList = [];
+  for(let i = 0; i < player.songs.length; i++){
+    idList.push(player.songs[i].id); 
+  }
+  idList.sort((a, b) => a - b);
+  return idList;
+}
+
 //the function below returns a given song duration in the mm:ss template
 function songDuration(id){
   let totalTime = findSongById(id).duration;
@@ -65,6 +75,15 @@ function songDuration(id){
   seconds = totalTime;
   
   return "0" + minutes + ":" + seconds
+}
+
+// convert the duration from 'mm:ss' template to seconds
+function convertToSeconds(duration){
+  let seconds;
+  let $duration = duration.split("");
+  $duration.shift(); console.log($duration);
+  seconds = ($duration[0] * 60) + ($duration[2] * 10)+ $duration[3] * 1;
+  return seconds;
 }
 
 //the function below return a song object by id
@@ -98,7 +117,16 @@ function removeSong(id) {
 }
 
 function addSong(title, album, artist, duration, id) {
-  // your code here
+  let idOfNewSong = id;
+  let list = listOfId();
+  if(!id){
+    idOfNewSong = list[list.length - 1] + 1;
+  }
+  else if(findSongById(id)){
+    throw 'the ID is taken';
+  }
+  player.songs.push({"id": idOfNewSong, "title": title, "album": album, "artist": artist, "duration": convertToSeconds(duration)});
+  return idOfNewSong;
 }
 
 function removePlaylist(id) {
