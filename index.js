@@ -63,6 +63,7 @@ const player = {
 }
 
 function playSong(id) {
+  //play the requested song by his ID
   if (!checkId(player.songs, id)) throw new Error('ID is not found')
   for (let i = 0; i < player.songs.length; i++) {
     if (player.songs[i].id === id) {
@@ -72,6 +73,7 @@ function playSong(id) {
 }
 
 function durationFormat(duration) {
+  //converting to mm:ss format
   let minutes = Math.floor(duration / 60)
   let seconds = duration % 60
   if (minutes < 10 && seconds < 10) return '0' + minutes + ':' + '0' + seconds
@@ -107,8 +109,24 @@ function removeSong(id) {
     }
   }
 }
+
+function biggestId() {
+  //the function recieve array fo songs and return the biggest ID
+  let max = player.songs[0].id
+  for (let i = 0; i < player.songs.length; i++) {
+    if (max < player.songs[i].id) max = player.songs[i].id
+  }
+  return max
+}
+
 function addSong(title, album, artist, duration, id) {
-  // your code here
+  player.songs.push({
+    title: title,
+    album: album,
+    artist: artist,
+    duration: durationFormat(duration),
+    id: id,
+  })
 }
 
 function removePlaylist(id) {
