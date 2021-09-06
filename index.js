@@ -51,11 +51,26 @@ const player = {
     console.log(/* your code here */)
   },
 }
-
-function playSong(id) {
-  // your code here
+function getSongFromID(id){
+  for(let key of player.songs){
+    if(key.id===id){
+        return {title,album,artist,duration} = key;
+    }
+  }
 }
-
+function durationToMMSS(duration){
+let mm = Math.floor(duration / 60);
+let dd = duration % 60;
+if(mm<10){
+  mm = '0' + mm;
+}
+return `${mm}:${dd}`
+}
+function playSong(id) {
+getSongFromID(id);
+console.log(`Playing ${title} from ${album} by ${artist} | ${durationToMMSS(duration)}.`) 
+}
+playSong(5);
 function removeSong(id) {
   // your code here
 }
