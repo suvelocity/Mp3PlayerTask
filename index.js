@@ -162,9 +162,27 @@ function playPlaylist(id) {
   }
   throw 'Enter valid id';
 }
-playPlaylist(5);
+
+function getPlaylistIndexFromID(playlistId){
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (player.playlists[i].id === playlistId) {
+      return playlistArrplace=i;
+    }
+  }
+  throw 'Enter valid id';
+}
+
+
 function editPlaylist(playlistId, songId) {
-  // your code here
+  getSongFromID(songId);
+  getPlaylistIndexFromID(playlistId);
+  indexOfSongInPlaylist = player.playlists[playlistArrplace].songs.indexOf(songId);
+  if(indexOfSongInPlaylist<0){
+    player.playlists[playlistArrplace].songs.push(songId);
+  }
+  else{
+    player.playlists[playlistArrplace].songs.splice(indexOfSongInPlaylist,1);
+  }
 }
 
 function playlistDuration(id) {
