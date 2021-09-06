@@ -250,7 +250,7 @@ function searchByQuery(query) {
   let query2=query.toLowerCase(); //be case insensitive
   for(let i of player.songs) //go through all the songs and see if the query contains the different keys
   {
-    if(query2.includes(i["album"].toLowerCase())||query2.includes(i["artist"].toLowerCase()) ||query2.includes(i["title"].toLowerCase()))
+    if(i["album"].toLowerCase().includes(query2)||i["artist"].toLowerCase().includes(query2) || i["title"].toLowerCase().includes(query2))
     {
       results.songs.push(i);
       results.songs.sort((a,b)=> {if(a["title"].toLowerCase()<b["title"].toLowerCase()) return -1;}); //sort by title
@@ -259,7 +259,7 @@ function searchByQuery(query) {
 
   for(let j of player.playlists) //go through all playlists
   {
-    if(query2.includes(j["name"].toLowerCase()))
+    if((j["name"].toLowerCase()).includes(query2))
     {
       results.playlists.push(j);
       results.playlists.sort((a,b)=> {if(a["name"].toLowerCase()<b["name"].toLowerCase()) return -1;}); //sort by name
@@ -268,7 +268,6 @@ function searchByQuery(query) {
   return results;
 }
 
-console.log(searchByQuery("full trunk, israeli, metal, all is one, thunderstruck"))
 function searchByDuration(duration) {
   let durationConverted = parseInt(duration.slice(0,Math.floor(duration.length/2)))*60+parseInt(duration.slice(Math.ceil(duration.length/2))); //duration string converted to a number
   let closestsong=100000;
