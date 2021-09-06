@@ -48,12 +48,20 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    console.log(/* your code here */)
+    console.log(`Playing ${song.title} from ${song.album} by ${song.artist} | ${timeConverter(song.duration)}.`);
   },
 }
 
+function timeConverter(seconds) {
+  let min = Math.floor(seconds/60);
+  min = min < 10 ? ('0' + min) : min;
+  let sec = seconds%60;
+  sec = sec < 10 ? ('0' + sec) : sec;
+  return `${min}:${sec}`;
+}
+
 function playSong(id) {
-  // your code here
+  player.playSong(player.songs.filter(obj => obj.id === id)[0]);
 }
 
 function removeSong(id) {
