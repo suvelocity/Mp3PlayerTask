@@ -37,7 +37,7 @@ const player = {
     },
     {
       id: 5,
-      title: 'As a Rock',
+      title: 'As a Stone',
       album: 'Show Us What You Got',
       artist: 'Full Trunk',
       duration: 259,
@@ -49,13 +49,26 @@ const player = {
   ],
   playSong(song) {
     console.log(
-      'Playing ${song.title} from ${song.album} by ${song.artist} | ${song.duration}.'
+      'Playing ' +
+        song.title +
+        ' from ' +
+        song.album +
+        ' by ' +
+        song.artist +
+        ' | ' +
+        durationFormat(song.duration) +
+        '.'
     )
   },
 }
 
 function playSong(id) {
-  // your code here
+  if (!checkId(player.songs, id)) throw new Error('ID is not found')
+  for (let i = 0; i < player.songs.length; i++) {
+    if (player.songs[i].id === id) {
+      player.playSong(player.songs[i])
+    }
+  }
 }
 
 function durationFormat(duration) {
