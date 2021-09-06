@@ -86,7 +86,7 @@ function removeSong(id) {
   }
 }
 
-function getBiggestID() {
+function getBiggestSongID() {
   let biggestID = 0;
   for (let key of player.songs) {
     if (key.id > biggestID) {
@@ -98,7 +98,7 @@ function getBiggestID() {
 
 function addSong(title, album, artist, duration, id) {
   if (!id) {
-    id = getBiggestID() + 1;
+    id = getBiggestSongID() + 1;
   }
   for (let key of player.songs) {
     if (key.id === id) {
@@ -112,21 +112,43 @@ function addSong(title, album, artist, duration, id) {
     'artist': artist,
     'duration': duration
   };
-  console.log(newArr);
   player.songs.push(newArr);
 }
 
 function removePlaylist(id) {
-  for(let i=0;i<player.playlists.length;i++){
-    if(player.playlists[i].id===id){
-      return player.playlists.splice(i,1);
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (player.playlists[i].id === id) {
+      return player.playlists.splice(i, 1);
     }
   }
   throw 'Enter valid id';
 }
 
+function getBiggestPlaylistID() {
+  let biggestID = 0;
+  for (let key of player.playlists) {
+    if (key.id > biggestID) {
+      biggestID = key.id;
+    }
+  }
+  return biggestID;
+}
+
 function createPlaylist(name, id) {
-  // your code here
+  if (!id) {
+    id = getBiggestPlaylistID() + 1;
+  }
+  for (let key of player.playlists) {
+    if (key.id === id) {
+      throw 'This ID is taken, pick another ID';
+    }
+  }
+  let newArr = {
+    'id' : id,
+    'name' : name,
+    'songs' : []
+  };
+  player.playlists.push(newArr);
 }
 
 function playPlaylist(id) {
