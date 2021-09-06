@@ -80,7 +80,27 @@ function playSong(id) {
 }
 
 function removeSong(id) {
-  
+  const songObj = player.fingObjectByID(id);
+  // If ID does not exists
+  if(songObj === undefined){
+    throw ("non existent ID");
+  }
+  // If ID does exists - remove
+  else{
+    // Remove from songs
+    player.songs.forEach((songObj, index) => {
+      if(songObj.id === id)
+        player.songs.splice(index, 1);
+    });    
+    
+    // Remove from playlist
+    player.playlists.forEach(playlistObj => {
+      const index = playlistObj.songs.indexOf(id)
+      if(index > -1){
+        playlistObj.songs.splice(index, 1);
+      }
+    });
+  }
 }
 
 
