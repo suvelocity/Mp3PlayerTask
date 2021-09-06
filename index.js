@@ -80,11 +80,13 @@ function GetsongById(id) //return song object by id
   let songObj= player.songs.find(x=> x["id"]===id);
   return songObj;
 }
+
 function GetSongIndexById(id) //get index of song in songs array
 {
   let songIndex= player.songs.indexOf(GetsongById(id));
   return songIndex;
 }
+
  function GetsongfromplaylistBysongId(id) //return playlist songs object by id- not used!
  {
    let songObj= player.playlists.find(x=>x["songs"].find(d=> d===id)===id);
@@ -97,6 +99,7 @@ function GetSongIndexById(id) //get index of song in songs array
      let indexPlaySong=songObj["songs"].filter(x=> x!=id);
      return indexPlaySong;
   }
+
 function playSong(id) 
 {
   let songObj= GetsongById(id);
@@ -106,6 +109,7 @@ function playSong(id)
   }
   console.log((player.playSong(songObj)));
 }
+
 function removeSong(id) {
   if(GetsongById(id)===undefined)
   {
@@ -198,8 +202,35 @@ function playPlaylist(id) {
     playSong(playlistObj["songs"][i]);
   }
 }
+
 function editPlaylist(playlistId, songId) {
-  // your code here
+  if(GetPlaylistById(playlistId)===undefined || GetsongById(songId) ===undefined) //checks if the id exists
+  {
+    throw "the given id doesn't exist";
+  }
+const playli= GetPlaylistById(playlistId) //a shortcut for later in the function
+const playliSongs= GetPlaylistById(playlistId)["songs"]; // the songs array in playlists 
+const song=GetsongById(songId)["id"]; //the song id in songs id
+if(!playliSongs.includes(song))  //if song is not in playlist
+{
+  playliSongs.push(song);
+}
+else{
+  for(let i=0; i<playliSongs.length; i++)
+  {
+    if(playliSongs[i]===song)
+    {
+      if(playliSongs.length===1)
+      {
+        const indexVal= player.playlists.indexOf(playli);
+        player.playlists.splice(indexVal,1);
+      }
+      else{
+        playliSongs.splice(i,1);
+      }
+    }
+  }
+}
 }
 
 function playlistDuration(id) {
