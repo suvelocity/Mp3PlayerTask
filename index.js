@@ -119,13 +119,23 @@ function from_Time_String_To_Seconds(duration){
   return parseInt(newDuration[0]) * 60 + parseInt(newDuration[1]);
 }
 
-// ===> Generate a new ID <===
-function generate_ID(){
+// ===> Generate a new ID to songs <===
+function generate_ID(songOrPlaylist){
   let i = 1
-  while(true){
+  while(songOrPlaylist === "song"){
     const songObj = player.fingObjectByID(i);
     // If ID does not exists
     if(songObj === undefined){      
+      return i;
+    } 
+    i++;
+  }
+
+  // ===> Generate a new ID to playlist <===
+  while(songOrPlaylist === "playlist"){
+    const playlistObj = player.fingObjectPlaylistByID(i);
+    // If ID does not exists
+    if(playlistObj === undefined){      
       return i;
     } 
     i++;
@@ -144,7 +154,7 @@ function addSong(title, album, artist, duration, id) {
 
   // If ID doesnt omitted - generate ID
   if(id === undefined){
-    id = generate_ID()
+    id = generate_ID("song")
   }
   else{
     // Checks If ID is a string
@@ -184,7 +194,30 @@ function removePlaylist(id) {
 }
 
 function createPlaylist(name, id) {
-  // your code here
+  //Check if ID is already exits
+  if(player.fingObjectPlaylistByID(id) !== undefined){
+    throw "That ID has been taken";   
+  };
+
+  // If ID doesnt omitted - generate ID
+  if(id === undefined){
+    id = generate_ID("playlist");
+  }
+  else{
+    // Checks If ID is a string
+    if(isNaN(id)){
+      throw "ID must be a number";
+    }
+  }
+
+  player.playlists.push({
+    id :id,
+    name: name,
+    songs: []
+  });
+
+  //Return ID
+  return id;
 }
 
 function playPlaylist(id) {
