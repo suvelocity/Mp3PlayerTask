@@ -1,3 +1,5 @@
+const { mixedTypeAnnotation } = require("@babel/types");
+
 const player = {
   songs: [
     {
@@ -60,10 +62,10 @@ function timeConventor(duration){
   }
 
 }
-// this is help function that return boolean value of the exist of id in list of songs
-function isIdExist(songs , id){
-  for(let i = 0; i < songs.length; i++){
-    if (songs[i].id === id){
+// this is help function that return boolean value of the exist of id in list (can be songs or playlists)
+function isIdExist(List , id){
+  for(let i = 0; i < List.length; i++){
+    if (List[i].id === id){
       return true;
     }
   }
@@ -129,13 +131,65 @@ function removeSong(id) {
     throw "non exist Id";
   }
 }
+//this function return id number based on the player songs list.
+function numberForId(player){
+  let arr=[];
+  for (let i = 0 ; i < player.songs.length ; i++){
+    arr.push(player.songs[i].id);
+  }
+  if (arr.length === 0){
+    return 1;
+  }
+  arr=arr.sort();
+  let id = 0;
+  for (let i = 0 ;  i < arr.length ; i++){
+    if(arr[i] > (i+1)){
+      return i+1;
+    }
+  }
+  id = arr.length+1;
+  return id;
+}
+//this functions get time by min:sec and return duration by sec
+function timeConventorToSeconds(time){
+  let arr = time.split('');
+  let min = (parseInt(arr[0])*10)+parseInt(arr[1]);
+  let sec = parseInt(arr[3]+arr[4]);
+  return (min * 60) + sec;
+}
 
 function addSong(title, album, artist, duration, id) {
-  // your code here
+  let newId=id;
+  if (isIdExist(player.songs , id)){
+    throw "this id is taken";
+  }else if(id=== undefined){
+    newId = numberForId(player);
+  }
+  console.log("this is id:"+newId);
+  player.songs.push(new Object());
+  player.songs[player.songs.length-1].id= newId;
+  player.songs[player.songs.length-1].duration= timeConventorToSeconds(duration);
+  player.songs[player.songs.length-1].title= title;
+  player.songs[player.songs.length-1].artist= artist;
+  player.songs[player.songs.length-1].album= album;
+  return newId;
+}
+
+//this function remove playlist/song from list of songs/playlists based on the id that given and based on that the id exist.
+function removeHelp(List,id){
+  if (List[0].id === id){
+    return List.slice(1)
+  }else{
+    return [List[0]].concat(removeHelp(List.slice(1),id));
+  }
 }
 
 function removePlaylist(id) {
-  // your code here
+  if (isIdExist(player.playlists, id)){
+    player.playlists  = removeHelp(player.playlists,id);
+  }else{
+    throw "non exist Id";
+  }
 }
 
 function createPlaylist(name, id) {
@@ -161,6 +215,7 @@ function searchByQuery(query) {
 function searchByDuration(duration) {
   // your code here
 }
+addSong("Heat Waves", "Blah", "Glass", "04:34");
 
 module.exports = {
   player,
