@@ -77,7 +77,7 @@ function removeSong(id) {
   }
 
   for (let j = 0; j < player.playlists.length; j++) {
-    // rmove from playlists
+    // remove from playlists
     for (let k = 0; k < player.playlists.songs.length; k++) {
       if (player.playlists[j].songs[k] === id) {
         player.playlists[j].songs.splice(k, 1)
@@ -90,6 +90,7 @@ function addSong(title, album, artist, duration, id) {
 }
 
 function removePlaylist(id) {
+  if (!checkId(player.playlists, id)) throw new Error('ID is not found')
   for (let i = 0; i < player.playlists.length; i++) {
     if (player.playlists[i].id === id) player.playlists.splice(i, 1)
   }
