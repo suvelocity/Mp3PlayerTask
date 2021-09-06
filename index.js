@@ -72,7 +72,7 @@ function playSong(id) {
 
 function removeSong(id) {
   if (player.songs.findIndex(song => song.id === id) === -1) throw 'That song does not exist.';
-  player.songs = player.songs.filter(obj => !(obj.id === id));
+  player.songs = player.songs.filter(song => !(song.id === id));
   player.playlists.forEach(playlist => playlist.songs = playlist.songs.filter(songId => !(songId === id)));
 }
 
@@ -86,7 +86,8 @@ function addSong(title, album, artist, duration, id) {
 }
 
 function removePlaylist(id) {
-  // your code here
+  if (player.playlists.findIndex(playlist => playlist.id === id) === -1) throw 'That playlist does not exist.';
+  player.playlists = player.playlists.filter(playlist => !(playlist.id === id));
 }
 
 function createPlaylist(name, id) {
