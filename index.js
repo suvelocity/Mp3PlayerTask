@@ -121,11 +121,26 @@ function createPlaylist(name, id = generateNewId()) {
 }
 
 function playPlaylist(id) {
-  // your code here
+  if (!checkId(player.playlists, id))
+    throw new Error('ID already exist, change the ID or omit it')
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (player.playlists[i].id === id) {
+      for (let j = 0; j < player.playlists[i].songs.length; j++) {
+        laySong(player.playlists[i].songs[j])
+      }
+    }
+  }
+  return id
 }
 
 function editPlaylist(playlistId, songId) {
-  // your code here
+  for (let i = 0; i < player.playlists.length; i++) {
+    for (let j = 0; j < player.playlists[i].songs.length; j++) {
+      if (player.playlists[i].songs[j] === songId) {
+        removeSong(songId)
+      }
+    }
+  }
 }
 
 function playlistDuration(id) {
