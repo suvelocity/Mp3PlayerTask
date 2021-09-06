@@ -115,8 +115,13 @@ function addSong(title, album, artist, duration, id) {
   console.log(newArr);
   player.songs.push(newArr);
 }
+
 function removePlaylist(id) {
-  // your code here
+  for(let i=0;i<player.playlists.length;i++){
+    if(player.playlists[i].id===id){
+      player.playlists.splice(i,1);
+    }
+  }
 }
 
 function createPlaylist(name, id) {
