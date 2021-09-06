@@ -51,6 +51,8 @@ const player = {
     console.log(/* your code here */)
   },
 }
+
+
 function getSongFromID(id) {
   for (let i = 0; i < player.songs.length; i++) {
     if (player.songs[i].id === id) {
@@ -75,9 +77,14 @@ function playSong(id) {
 
 function removeSong(id) {
   getSongFromID(id);
-  player.songs.splice(arrId,1);
+  player.songs.splice(arrId, 1);
+  for (let key of player.playlists) {
+    let indexInList = key.songs.indexOf(id);
+    if (indexInList >= 0) {
+     key.songs.splice(indexInList,1);
+    }
+  }
 }
-
 function addSong(title, album, artist, duration, id) {
   // your code here
 }
