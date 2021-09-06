@@ -58,6 +58,15 @@ function playSong(id) {
   // your code here
 }
 
+function durationFormat(duration) {
+  let minutes = Math.floor(duration / 60)
+  let seconds = duration % 60
+  if (minutes < 10 && seconds < 10) return '0' + minutes + ':' + '0' + seconds
+  else if (minutes < 10) return '0' + minutes + ':' + seconds
+  else if (seconds < 10) return minutes + ':' + '0' + seconds
+  else return minutes + ':' + seconds
+}
+
 function checkId(songs, id) {
   //Check if ID existed
   for (let i = 0; i < songs.length; i++) {
