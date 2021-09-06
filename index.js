@@ -50,31 +50,28 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    console.log("Playing "+song.title+ " from " +song.album+" by "+song.artist+" | "+durationConvert(song.duration)+".");
+     return ("Playing "+song.title+ " from " +song.album+" by "+song.artist+" | "+durationConvert(song.duration)+".")   
   },
 }
 
 function durationConvert(duration) // converts duration value to mm/ss
 {
   
-  if(duration>1000 || duration<=99) //if duration is not a suitable number
+  if(typeof(duration)!=="number") //if duration is not a number
     {
-    throw "not a suitable number"; // an error leading to catch
+    throw "not a suitable number"; 
     }
   else
     {
-    let durationArr=[];
-    while(duration>=1)
-      {
-        if(durationArr.length===2)
-        {
-          durationArr.unshift(":");
-        }
-        durationArr.unshift(duration%10);
-        duration=Math.floor(duration/10);
-      }
-      durationArr.unshift(0);
-      return durationArr.join("");
+      let min = "";
+    if (Math.floor(duration/60)>=10) min = `${Math.floor(duration/60)}`;
+    if (Math.floor(duration/60)>=1 && Math.floor(duration/60)<10) min = `0${Math.floor(duration/60)}`;
+    if (Math.floor(duration/60)==0) min = "00";
+    let sec = "";
+    if ((duration%60)>=10) sec = `${duration%60}`;
+    if ((duration%60)>=1 && (duration%60)<10) sec = `0${duration%60}`;
+    if ((duration%60)==0) sec = `00`;
+    return min+":"+sec;    
     }
 }
 
@@ -107,9 +104,8 @@ function playSong(id)
   {
     throw "Not a Valid ID"
   }
-  return player.playSong(songObj);
+  console.log((player.playSong(songObj)));
 }
-
 function removeSong(id) {
   if(GetsongById(id)===undefined)
   {
@@ -135,7 +131,23 @@ function removeSong(id) {
 }
 
 function addSong(title, album, artist, duration, id) {
-  // your code here
+
+  if(id===undefined)
+  { 
+    id= Math.floor(Math.random()*100); //generates a random id to the song
+    while(id === GetsongById(id)) // if the genrated id exists generate a new one
+    {
+      id= Math.floor(Math.random()*100);
+    }
+  if(GetsongById(id) !==undefined) //if the id already exists throw an error
+  {
+    throw "this is an existing ID";
+  }
+  }
+  let newDuration =durationConvert(duration); 
+  const newSong = {id,title, album ,artist, duration:newDuration}; //create new song object
+  player.songs.push(newSong)
+  return newSong["id"];
 }
 
 function removePlaylist(id) {
