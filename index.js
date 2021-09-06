@@ -69,6 +69,7 @@ function durationToMMSS(duration) {
   }
   return `${mm}:${dd}`
 }
+
 function playSong(id) {
   getSongFromID(id);
   console.log(`Playing ${title} from ${album} by ${artist} | ${durationToMMSS(duration)}.`)
@@ -80,34 +81,40 @@ function removeSong(id) {
   for (let key of player.playlists) {
     let indexInList = key.songs.indexOf(id);
     if (indexInList >= 0) {
-     key.songs.splice(indexInList,1);
+      key.songs.splice(indexInList, 1);
     }
   }
 }
-function getBiggestID(){
+
+function getBiggestID() {
   let biggestID = 0;
-  for(let key of player.songs){
-    if(key.id>biggestID){
-      biggestID=key.id;
+  for (let key of player.songs) {
+    if (key.id > biggestID) {
+      biggestID = key.id;
     }
   }
   return biggestID;
 }
 
 function addSong(title, album, artist, duration, id) {
-if(!id){
-  id = getBiggestID()+1;
-}
+  if (!id) {
+    id = getBiggestID() + 1;
+  }
+  for (let key of player.songs) {
+    if (key.id === id) {
+      throw 'This ID is taken, pick another ID';
+    }
+  }
   let newArr = {
-  'id':id,
-  'title':title,
-  'album':album,
-  'artist':artist,
-  'duration':duration
-};
-player.songs.push(newArr);
+    'id': id,
+    'title': title,
+    'album': album,
+    'artist': artist,
+    'duration': duration
+  };
+  console.log(newArr);
+  player.songs.push(newArr);
 }
-
 function removePlaylist(id) {
   // your code here
 }
