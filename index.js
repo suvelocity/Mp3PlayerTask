@@ -126,7 +126,7 @@ function playPlaylist(id) {
   for (let i = 0; i < player.playlists.length; i++) {
     if (player.playlists[i].id === id) {
       for (let j = 0; j < player.playlists[i].songs.length; j++) {
-        laySong(player.playlists[i].songs[j])
+        playSong(player.playlists[i].songs[j])
       }
     }
   }
