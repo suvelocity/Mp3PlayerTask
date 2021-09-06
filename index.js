@@ -104,9 +104,51 @@ function removeSong(id) {
 }
 
 
+// ===> Convert MM:SS to Seconds <===
+function from_Time_String_To_Seconds(duration){
+  const newDuration = duration.split(":")
+  return parseInt(newDuration[0]) * 60 + parseInt(newDuration[1]);
+}
+
+// ===> Generate a new ID <===
+function generate_ID(){
+  let i = 1
+  while(true){
+    const songObj = player.fingObjectByID(i);
+    // If ID does not exists
+    if(songObj === undefined){      
+      return i;
+    } 
+    i++;
+  }
+}
+
+
 // Params:      String  String String    MM:SS  Optional
 function addSong(title, album, artist, duration, id) {
-  
+  const newDuration = from_Time_String_To_Seconds(duration);  
+  //Check if ID is already exits
+  if(player.fingObjectByID(id) !== undefined){
+    throw "That ID has been taken";   
+  }  
+  // If ID doesnt omitted - generate ID
+  if(id === undefined){
+    id = generate_ID()
+  }
+  else{
+    // Checks If ID is a string
+    if(isNaN(id)){
+      throw "ID must be a number";
+    }
+  }
+
+  player.songs.push({
+    "title": title,
+    "album": album,
+    "duration": newDuration,    
+    "artist": artist, 
+    "id": id   
+  });
 }
 
 function removePlaylist(id) {
