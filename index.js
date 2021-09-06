@@ -234,7 +234,15 @@ else{
 }
 
 function playlistDuration(id) {
-  // your code here
+let sum=0;
+const playlistSongs=GetPlaylistById(id)["songs"]; //indicates songs array
+for(let i of playlistSongs) //goes through all song id in array
+{
+  let songduration= GetsongById(i)["duration"]; //gets the songs duration 
+  sum+=songduration;
+}
+
+  return sum;
 }
 
 function searchByQuery(query) {
