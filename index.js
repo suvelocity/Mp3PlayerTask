@@ -90,6 +90,10 @@ function removeSong(id) {
   if(songObj === undefined){
     throw ("non existent ID");
   }
+  // If ID is not a number
+  else if(isNaN(id)){
+    throw "ID must be a number";
+  }
   // If ID does exists - remove
   else{
     // Remove from songs
@@ -132,10 +136,12 @@ function generate_ID(){
 // Params:      String  String String    MM:SS  Optional
 function addSong(title, album, artist, duration, id) {
   const newDuration = from_Time_String_To_Seconds(duration);  
+
   //Check if ID is already exits
   if(player.fingObjectByID(id) !== undefined){
     throw "That ID has been taken";   
   }  
+
   // If ID doesnt omitted - generate ID
   if(id === undefined){
     id = generate_ID()
@@ -154,14 +160,27 @@ function addSong(title, album, artist, duration, id) {
     artist: artist, 
     id: id   
   });
-  
+
   // Return ID
   return id;
 }
 
 
 function removePlaylist(id) {
-  
+  if(player.fingObjectPlaylistByID(id) === undefined){
+    throw "non existent ID";
+  }
+  // If ID is not a number
+  else if(isNaN(id)){
+    throw "ID must be a number";
+  }
+  else{
+    // Removes from playlist
+    player.playlists.forEach((playlistObj, index) => {
+      if(playlistObj.id === id)
+        player.playlists.splice(index, 1);
+    });    
+  }   
 }
 
 function createPlaylist(name, id) {
