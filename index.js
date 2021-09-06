@@ -48,7 +48,9 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    console.log(/* your code here */)
+    console.log(
+      'Playing ${song.title} from ${song.album} by ${song.artist} | ${song.duration}.'
+    )
   },
 }
 
@@ -56,16 +58,41 @@ function playSong(id) {
   // your code here
 }
 
-function removeSong(id) {
-  // your code here
+function checkId(songs, id) {
+  //Check if ID existed
+  for (let i = 0; i < songs.length; i++) {
+    if (songs[i].id === id) return true
+  }
+  return false
 }
 
+function removeSong(id) {
+  //remove song by ID
+  if (!checkId(player.songs, id)) throw new Error('ID is not found')
+  for (let i = 0; i < player.songs.length; i++) {
+    //remove from songs
+    if (player.songs[i].id === id) {
+      player.songs.splice(i, 1)
+    }
+  }
+
+  for (let j = 0; j < player.playlists.length; j++) {
+    // rmove from playlists
+    for (let k = 0; k < player.playlists.songs.length; k++) {
+      if (player.playlists[j].songs[k] === id) {
+        player.playlists[j].songs.splice(k, 1)
+      }
+    }
+  }
+}
 function addSong(title, album, artist, duration, id) {
   // your code here
 }
 
 function removePlaylist(id) {
-  // your code here
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (player.playlists[i].id === id) player.playlists.splice(i, 1)
+  }
 }
 
 function createPlaylist(name, id) {
