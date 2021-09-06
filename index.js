@@ -62,9 +62,9 @@ function getSongById(id) {
 function convertDuration(num) {
   let mins = Math.floor(num / 60)
   let sec = num % 60
-  return `${mins}:${sec}`
-  
-}
+  return mins.toString().padStart(2, '0') + ':' + sec.toString().padStart(2, '0')
+} 
+
 function playSong(id) {
   
 }
@@ -91,12 +91,23 @@ function getListOfId() {
   }
   return arrayOfId;
 }
-
-function addSong(title, album, artist, duration, id) {
-  let newSong = {}
-  player.songs.push(newSong.id = id, )
+function generateId() {  //If the user does not give Id, the function produces independently.
+  newArrId = getListOfId().slice()
+  newArrId.sort((a,b) => a-b)
+  return newArrId[newArrId.length - 1] + 1
 }
-addSong()
+
+function addSong(title, album, artist, duration, id = generateId()) {
+  mmss = convertDuration(duration)
+  console.log(mmss)
+  let newSong = {id: id, title: title, album: album, artist: artist,duration: duration}
+  if (getListOfId().includes(id) === true) {
+    throw new Error("The id already exists");
+  }
+  player.songs.push(newSong);
+}
+
+console.log(addSong('a','b','c','120',))
 
 function removePlaylist(id) {
   // your code here
