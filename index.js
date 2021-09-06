@@ -144,17 +144,25 @@ function createPlaylist(name, id) {
     }
   }
   let newArr = {
-    'id' : id,
-    'name' : name,
-    'songs' : []
+    'id': id,
+    'name': name,
+    'songs': []
   };
   player.playlists.push(newArr);
 }
 
 function playPlaylist(id) {
-  // your code here
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (player.playlists[i].id === id) {
+      for (let j = 0; j < player.playlists[i].songs.length; j++) {
+       playSong( player.playlists[i].songs[j]);
+      }
+      return;
+    }
+  }
+  throw 'Enter valid id';
 }
-
+playPlaylist(5);
 function editPlaylist(playlistId, songId) {
   // your code here
 }
