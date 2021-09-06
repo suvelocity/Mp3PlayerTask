@@ -57,6 +57,7 @@ function getSongFromID(id){
         return {title,album,artist,duration} = key;
     }
   }
+  throw 'Please enter valid id';
 }
 function durationToMMSS(duration){
 let mm = Math.floor(duration / 60);
