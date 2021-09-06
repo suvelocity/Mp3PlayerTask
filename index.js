@@ -62,6 +62,16 @@ function listOfId(){
   return idList;
 }
 
+//this function do the same as listOfId but for playlists
+function listOfPlayListId(){
+  const idList = [];
+  for(let i = 0; i < player.playlists.length; i++){
+    idList.push(player.playlists[i].id); 
+  }
+  idList.sort((a, b) => a - b);
+  return idList;
+}
+
 //the function below returns a given song duration in the mm:ss template
 function songDuration(id){
   let totalTime = findSongById(id).duration;
@@ -81,7 +91,7 @@ function songDuration(id){
 function convertToSeconds(duration){
   let seconds;
   let $duration = duration.split("");
-  $duration.shift(); console.log($duration);
+  $duration.shift();
   seconds = ($duration[0] * 60) + ($duration[2] * 10)+ $duration[3] * 1;
   return seconds;
 }
@@ -99,7 +109,7 @@ function playSong(id) {
 
 function removeSong(id) {
   let playList, indexInPlayList, indexOfPlayList;
-  const indexOfSong = player.songs.findIndex(song => {return song.id === id}); console.log(indexOfSong)
+  const indexOfSong = player.songs.findIndex(song => {return song.id === id});
   
   if(indexOfSong === -1){
     throw 'id not found';
@@ -138,7 +148,16 @@ function removePlaylist(id) {
 }
 
 function createPlaylist(name, id) {
-  // your code here
+  let idOfNewPL = id;
+  const list = listOfPlayListId();
+  if(!id){
+    idOfNewPL = list[list.length - 1] + 1;
+  }
+  else if(player.playlists.find(PL => PL.id === id)){
+    throw 'id is taken';
+  }
+  player.playlists.push({"id": idOfNewPL, "name": name, "songs": []});
+  return idOfNewPL;
 }
 
 function playPlaylist(id) {
