@@ -48,11 +48,11 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    console.log(`Playing ${song.title} from ${song.album} by ${song.artist} | ${timeConverter(song.duration)}.`);
+    console.log(`Playing ${song.title} from ${song.album} by ${song.artist} | ${convertToMin(song.duration)}.`);
   },
 }
 
-function timeConverter(seconds) {
+function convertToMin(seconds) {
   let min = Math.floor(seconds/60);
   min = min < 10 ? ('0' + min) : min;
   let sec = seconds%60;
@@ -61,11 +61,13 @@ function timeConverter(seconds) {
 }
 
 function playSong(id) {
-  player.playSong(player.songs.filter(obj => obj.id === id)[0]);
+  player.playSong(player.songs.filter(song => song.id === id)[0]);
 }
 
 function removeSong(id) {
-  // your code here
+  if (player.songs.findIndex(song => song.id === id) === -1) throw 'That song does not exist.';
+  player.songs = player.songs.filter(obj => !(obj.id === id));
+  player.playlists.forEach(playlist => playlist.songs = playlist.songs.filter(songId => !(songId === id)));
 }
 
 function addSong(title, album, artist, duration, id) {
