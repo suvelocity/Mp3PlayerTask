@@ -47,21 +47,46 @@ const player = {
     { id: 1, name: 'Metal', songs: [1, 7, 4] },
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
+
   playSong(song) {
-    console.log(/* your code here */)
+    const songObj = this.fingObjectByID(song);
+    // If not exists
+    if(songObj === undefined){
+      throw ("non existent ID")
+    }
+    else{
+      console.log("Playing " + songObj.title + " from " + songObj.album + " by " + songObj.artist + " | " + player.calcPlayTime(songObj.duration) + ".");
+    }
   },
+
+  // ===> Reformat from seconds to MM:SS <===
+  calcPlayTime(durationTime) {
+    const min = Math.floor(durationTime / 60);
+    const sec = durationTime - min * 60;
+    // Should add 0 before the number?   numberS = number as string    
+    const numberS1 = (min < 10) ? "0" : "";
+    const numberS2 = (sec < 10) ? "0" : "";
+    return numberS1 + min + ":" + numberS2 + sec;
+  },
+
+  // ===> Returns the song by the ID given <===
+  fingObjectByID(id){
+    return player.songs.find(songObj => songObj.id === id);
+  }
 }
 
 function playSong(id) {
-  // your code here
+  player.playSong(id);
 }
 
 function removeSong(id) {
-  // your code here
+  
 }
 
+
+// Params:      String  String String    MM:SS  Optional
 function addSong(title, album, artist, duration, id) {
-  // your code here
+  
 }
 
 function removePlaylist(id) {
