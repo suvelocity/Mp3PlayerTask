@@ -48,21 +48,55 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    console.log(/* your code here */)
-  },
+    console.log(`Playing ${song.title} from ${song.album} by ${song.artist} | ${convertDuration(song.duration)}.`)
+  }
 }
 
-function playSong(id) {
-  // your code here
+function getSongById(id) {
+  for (let key of player.songs) {
+    if (key.id === id) {
+      return key
+    }
+  }
 }
+function convertDuration(num) {
+  let mins = Math.floor(num / 60)
+  let sec = num % 60
+  return `${mins}:${sec}`
+  
+}
+function playSong(id) {
+  
+}
+
 
 function removeSong(id) {
-  // your code here
+  const removeIndexSongs = player.songs.findIndex( item => item.id === id );
+  if (removeIndexSongs === -1)  {
+    throw new Error('id not found');
+  }
+  player.songs.splice( removeIndexSongs, 1 ); //remove from songs 
+  for (let i of player.playlists) {
+    let arr = i.songs;
+    if (arr.includes(id)){
+      i.songs.splice(arr.indexOf(id), 1); //remove from playlists
+    }
+  }
+}
+
+function getListOfId() {
+  let arrayOfId = [];
+  for (let i of player.songs) {
+    arrayOfId.push(i["id"]);
+  }
+  return arrayOfId;
 }
 
 function addSong(title, album, artist, duration, id) {
-  // your code here
+  let newSong = {}
+  player.songs.push(newSong.id = id, )
 }
+addSong()
 
 function removePlaylist(id) {
   // your code here
