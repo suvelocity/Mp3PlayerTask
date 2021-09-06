@@ -130,7 +130,11 @@ function addSong(title, album, artist, duration, id) {
 }
 
 function removePlaylist(id) {
-  // your code here
+  const indexOfPlayList = player.playlists.findIndex(PL => {return PL.id === id});
+  if(indexOfPlayList === -1){
+    throw 'id not found';
+  }
+  player.playlists.splice(indexOfPlayList, 1);
 }
 
 function createPlaylist(name, id) {
