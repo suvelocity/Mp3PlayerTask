@@ -58,7 +58,7 @@ const mockSong3Details = [
   mockSong3.title,
   mockSong3.album,
   mockSong3.artist,
-  '04:02',
+  mockSong3.duration,
   mockSong3.id,
 ]
 const mockPlaylist1Duration = mockSong1.duration + mockSong2.duration

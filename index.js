@@ -71,7 +71,6 @@ function durationToMMSS(duration) {
 }
 function playSong(id) {
   getSongFromID(id);
-  console.log(arrId)
   console.log(`Playing ${title} from ${album} by ${artist} | ${durationToMMSS(duration)}.`)
 }
 
@@ -85,8 +84,28 @@ function removeSong(id) {
     }
   }
 }
+function getBiggestID(){
+  let biggestID = 0;
+  for(let key of player.songs){
+    if(key.id>biggestID){
+      biggestID=key.id;
+    }
+  }
+  return biggestID;
+}
+
 function addSong(title, album, artist, duration, id) {
-  // your code here
+if(!id){
+  id = getBiggestID()+1;
+}
+  let newArr = {
+  'id':id,
+  'title':title,
+  'album':album,
+  'artist':artist,
+  'duration':duration
+};
+player.songs.push(newArr);
 }
 
 function removePlaylist(id) {
