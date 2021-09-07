@@ -46,7 +46,7 @@ const player = {
   playlists: [
     { id: 1, name: 'Metal', songs: [1, 7, 4] },
     { id: 5, name: 'Israeli', songs: [4, 5] },
-    { id: 3, name : 'EGZ', songs : []}
+    { id: 3, name: 'EGZ', songs: [] }
   ],
   playSong(song) {
     console.log(/* your code here */)
@@ -190,20 +190,41 @@ function editPlaylist(playlistId, songId) {
     }
   }
 }
+
 function playlistDuration(id) {
-let sum = 0;
-getPlaylistIndexFromID(id);
-for(let i = 0;i<player.playlists[playlistArrplace].songs.length;i++){
-  getSongFromID(player.playlists[playlistArrplace].songs[i]);
-  sum+=player.songs[songArrIndex].duration;
-}
-return sum;
+  let sum = 0;
+  getPlaylistIndexFromID(id);
+  for (let i = 0; i < player.playlists[playlistArrplace].songs.length; i++) {
+    getSongFromID(player.playlists[playlistArrplace].songs[i]);
+    sum += player.songs[songArrIndex].duration;
+  }
+  return sum;
 }
 
 function searchByQuery(query) {
-  // your code here
+  const queryRegex = new RegExp(`${query}`, 'i');
+  let answer = {
+    playlists: [],
+    songs: []
+  };
+  for (let i = 0; i < player.songs.length; i++) {
+    for (let prop in player.songs[i]) {
+      if (queryRegex.test(player.songs[i][prop])) {
+        answer.songs.push(player.songs[i]);
+        break;
+      }
+    }
+  }
+  answer.songs.sort(function (a, b) {
+    let x = a.title.toLowerCase();
+    let y = b.title.toLowerCase();
+    if (x < y) {return -1;}
+    if (x > y) {return 1;}
+    return 0;
+  })
+  return answer;
 }
-
+searchByQuery('ll');
 function searchByDuration(duration) {
   // your code here
 }
