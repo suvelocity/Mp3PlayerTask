@@ -52,13 +52,21 @@ const player = {
   },
 }
 
+// finds the index of a playlist in player.playlists
+function findIndexOfPlaylist(id){
+  return player.playlists.findIndex(PL => PL.id === id);
+}
+// finds the index of a song in player.songs
+function findIndexOfSong(id){
+  return player.songs.findIndex(song => song.id === id);
+}
+//finds the absolute difference in duration between a song or a playlist and agiven duration
 function absDiffInDuration(obj, time){
   if(obj.hasOwnProperty('songs')){
     return Math.abs(playlistDuration(obj.id) - time);
   }
   return Math.abs(obj.duration - time);
 }
-
 //helps to sort an array of songs alphabetically by title or name
 function sortArray(a, b){
   if(a.hasOwnProperty("title")){
@@ -68,7 +76,6 @@ function sortArray(a, b){
     return a.name.localeCompare(b.name);
   }
 }
-
 //a function that returns an array with all the songs id
 function listOfId(){
   const idList = [];
@@ -78,7 +85,6 @@ function listOfId(){
   idList.sort((a, b) => a - b);
   return idList;
 }
-
 //this function do the same as listOfId but for playlists
 function listOfPlayListId(){
   const idList = [];
@@ -88,7 +94,6 @@ function listOfPlayListId(){
   idList.sort((a, b) => a - b);
   return idList;
 }
-
 //the function below returns a given song duration in the mm:ss template
 function songDuration(id){
   let totalTime = findSongById(id).duration;
@@ -103,7 +108,6 @@ function songDuration(id){
   
   return "0" + minutes + ":" + seconds
 }
-
 // convert the duration from 'mm:ss' template to seconds
 function convertToSeconds(duration){
   let seconds;
@@ -116,12 +120,10 @@ function convertToSeconds(duration){
   seconds = ($duration[0] * 60) + ($duration[2] * 10)+ $duration[3] * 1;
   return seconds;
 }
-
 //the function below return a song object by id
 function findSongById(id){
   return player.songs.find(song => {return song.id === id});
 }
-
 // the function below return a playlist object by id
 function findPlaylistById(id){
   return player.playlists.find(PL => PL.id === id);
@@ -135,7 +137,7 @@ function playSong(id) {
 
 function removeSong(id) {
   let playList, indexInPlayList, indexOfPlayList;
-  const indexOfSong = player.songs.findIndex(song => {return song.id === id});
+  const indexOfSong = findIndexOfSong(id);
   
   if(indexOfSong === -1){
     throw 'id not found';
@@ -166,7 +168,7 @@ function addSong(title, album, artist, duration, id) {
 }
 
 function removePlaylist(id) {
-  const indexOfPlayList = player.playlists.findIndex(PL => {return PL.id === id});
+  const indexOfPlayList = findIndexOfPlaylist(id);
   if(indexOfPlayList === -1){
     throw 'id not found';
   }
@@ -187,14 +189,14 @@ function createPlaylist(name, id) {
 }
 
 function playPlaylist(id) {
-  const playList = player.playlists.findIndex(PL => PL.id === id);
+  const playList = findIndexOfPlaylist(id);
   for(let song of player.playlists[playList].songs){
     playSong(song);
   }
 }
 
 function editPlaylist(playlistId, songId) {
-  const playlistIndex = player.playlists.findIndex(PL => PL.id === playlistId);
+  const playlistIndex = findIndexOfPlaylist(playlistId);
   let songIndex = player.playlists[playlistIndex].songs.findIndex(song => song === songId);
   if(!findPlaylistById(playlistId) || !findSongById(songId)){
     throw 'id not found';
@@ -211,7 +213,7 @@ function editPlaylist(playlistId, songId) {
 }
 
 function playlistDuration(id) {
-  const playlistIndex = player.playlists.findIndex(PL => PL.id === id);
+  const playlistIndex = findIndexOfPlaylist(id);
   let totalDuration = 0;
   let song;
   for(let songId of player.playlists[playlistIndex].songs){
@@ -260,6 +262,7 @@ function searchByDuration(duration) {
   }
   return closestSong;
 }
+
 module.exports = {
   player,
   playSong,
