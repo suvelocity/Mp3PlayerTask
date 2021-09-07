@@ -52,25 +52,44 @@ const player = {
   }
 }
 
-function getSongById(id) {
+function errorPlaylist(id){
+  if (getListOfIdPlaylist().includes(id) === true) {
+    throw new Error("The id already exists");
+  }
+}
+
+function errorId (id) {
+  if (getListOfIdSongs().includes(id) === true) {
+    throw new Error("The id already exists");
+  }
+}
+
+function mmssToSeconds(mmss) { //Convert MM:SS string to seconds
+  let splitMmSs = mmss.split(':')
+  let seconds = (+splitMmSs[0]) * 60 + (+splitMmSs[1])
+  return seconds
+}
+
+
+function getSongById(id) { //Gets an ID and provides the details about the relevant song
   for (let key of player.songs) {
     if (key.id === id) {
       return key
     }
   }
 }
-function convertDuration(num) {
+function convertDuration(num) { //Converts seconds to MM:SS format
   let mins = Math.floor(num / 60)
   let sec = num % 60
   return mins.toString().padStart(2, '0') + ':' + sec.toString().padStart(2, '0')
 } 
 
 function playSong(id) {
-  
+  return player.playSong(getSongById(id))
 }
 
 
-function removeSong(id) {
+function removeSong(id) { //Deletes song from songs and playlists
   const removeIndexSongs = player.songs.findIndex( item => item.id === id );
   if (removeIndexSongs === -1)  {
     throw new Error('id not found');
@@ -84,47 +103,85 @@ function removeSong(id) {
   }
 }
 
-function getListOfId() {
+function getListOfIdSongs() { //Provides an array of all the IDs of the songs
   let arrayOfId = [];
   for (let i of player.songs) {
     arrayOfId.push(i["id"]);
   }
   return arrayOfId;
 }
-function generateId() {  //If the user does not give Id, the function produces independently.
-  newArrId = getListOfId().slice()
+function getListOfIdPlaylist() { //Provides an array of all the IDs of the playlist
+  let arrayOfId = [];
+  for (let i of player.playlists) {
+    arrayOfId.push(i["id"]);
+  }
+  return arrayOfId;
+}
+
+function generateId(arr) {  //If the user does not give Id, the function produces independently.
+  newArrId = arr.slice()
   newArrId.sort((a,b) => a-b)
   return newArrId[newArrId.length - 1] + 1
 }
 
-function addSong(title, album, artist, duration, id = generateId()) {
-  mmss = convertDuration(duration)
-  console.log(mmss)
-  let newSong = {id: id, title: title, album: album, artist: artist,duration: duration}
-  if (getListOfId().includes(id) === true) {
-    throw new Error("The id already exists");
-  }
+function addSong(title, album, artist, duration, id = generateId(getListOfIdSongs())) { //Adds an object-shaped song to an array of songs
+  let dueationToSeconds = mmssToSeconds(duration)
+  let newSong = {id: id, title: title, album: album, artist: artist,duration: dueationToSeconds} //Creates a new object
+  errorId(id)
   player.songs.push(newSong);
+  return newSong.id;
 }
 
-console.log(addSong('a','b','c','120',))
 
-function removePlaylist(id) {
-  // your code here
+function removePlaylist(id) { //Gets a playlist ID and deletes it from the playlist array
+  const removeIndex = player.playlists.findIndex( item => item.id === id );
+  if (removeIndex === -1)  {
+    throw new Error('playlist not found');
+  }
+  player.playlists.splice( removeIndex, 1 );
 }
 
-function createPlaylist(name, id) {
-  // your code here
+function createPlaylist(name, id = generateId(getListOfIdPlaylist())) {
+  let newPlaylist = {id: id, name: name, songs: []}
+  errorPlaylist(id)
+  player.playlists.push(newPlaylist);
+  return newPlaylist.id
 }
 
-function playPlaylist(id) {
-  // your code here
+function playPlaylist(id) {  //chack!!!!
+  for (let i of player.playlists){
+      if (i["id"] === id) {
+        for (let songs of i["songs"]) {
+          console.log(playSong(songs))
+        }
+    }
+  }
 }
+
 
 function editPlaylist(playlistId, songId) {
-  // your code here
+  if (getListOfIdPlaylist().includes(playlistId) === false) {
+    throw new Error("There is no playlist with this ID in the player");
+  }
+  if (getListOfIdSongs().includes(songId) === false) {
+    throw new Error("There is no song with this ID in the player");
+  }
+  for (let i of player.playlists){
+    if (i["id"] === playlistId) {
+        index = i["songs"].indexOf(songId)
+        if (index === -1) {
+          i["songs"].push(songId)
+        }else if (index >= 0) {
+          if (i["songs"].length === 1) {
+            removePlaylist(playlistId)
+          }else {
+          i["songs"].splice(index,1)
+          }
+        }
+    }
+  }
 }
-
+  
 function playlistDuration(id) {
   // your code here
 }
