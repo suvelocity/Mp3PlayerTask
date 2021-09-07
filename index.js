@@ -239,13 +239,21 @@ function removeHelpForSongsOnPlaylists(List,id){
     return [List[0]].concat(removeHelpForSongsOnPlaylists(List.slice(1),id));
   }
 }
-
+// this is help function that return boolean value of the exist of id in list (only on List of songs inside playlist- list of numbers)
+function isIdExistInsidePlaylist(List , id){
+  for(let i = 0; i < List.length; i++){
+    if (List[i] === id){
+      return true;
+    }
+  }
+  return false;
+}
 function editPlaylist(playlistId, songId) {
   if (!isIdExist(player.songs , songId)){
     throw "non exist id for song";
   }else if (!isIdExist(player.playlists , playlistId)){
-  throw "non exist id for song";
-  }else if(isIdExist(returnPropItem(player.playlists, playlistId).songs , songId)){
+  throw "non exist id for playlist";
+  }else if(!isIdExistInsidePlaylist(returnPropItem(player.playlists, playlistId).songs , songId)){
   for (let i = 0 ; i < player.playlists.length ; i++){
     if (player.playlists[i].id === playlistId){
       console.log("Yam")
@@ -266,7 +274,15 @@ function editPlaylist(playlistId, songId) {
 }
 
 function playlistDuration(id) {
-  // your code here
+  let duration = 0 
+  if (!isIdExist(player.playlists , id)){
+    throw "non exist id for playlist";
+  }else{
+    for (let i = 0 ; i < returnPropItem(player.playlists,id).songs.length ; i++){
+      duration += returnPropItem(player.songs,returnPropItem(player.playlists,id).songs[i]).duration;
+    }
+  }
+  return duration;
 }
 
 function searchByQuery(query) {
@@ -278,7 +294,10 @@ function searchByDuration(duration) {
 }
 playPlaylist(11);
 editPlaylist(11, 1);
-console.log(timeConventor(242));
+editPlaylist(11, 7);
+editPlaylist(11, 4);
+console.log(player.playlists);
+
 module.exports = {
   player,
   playSong,
