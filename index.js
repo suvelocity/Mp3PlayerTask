@@ -52,83 +52,6 @@ const player = {
   },
 }
 
-// finds the index of a playlist in player.playlists
-function findIndexOfPlaylist(id){
-  return player.playlists.findIndex(PL => PL.id === id);
-}
-// finds the index of a song in player.songs
-function findIndexOfSong(id){
-  return player.songs.findIndex(song => song.id === id);
-}
-//finds the absolute difference in duration between a song or a playlist and agiven duration
-function absDiffInDuration(obj, time){
-  if(obj.hasOwnProperty('songs')){
-    return Math.abs(playlistDuration(obj.id) - time);
-  }
-  return Math.abs(obj.duration - time);
-}
-//helps to sort an array of songs alphabetically by title or name
-function sortArray(a, b){
-  if(a.hasOwnProperty("title")){
-    return a.title.localeCompare(b.title);
-  }
-  if(a.hasOwnProperty("name")){
-    return a.name.localeCompare(b.name);
-  }
-}
-//a function that returns an array with all the songs id
-function listOfId(){
-  const idList = [];
-  for(let i = 0; i < player.songs.length; i++){
-    idList.push(player.songs[i].id); 
-  }
-  idList.sort((a, b) => a - b);
-  return idList;
-}
-//this function do the same as listOfId but for playlists
-function listOfPlayListId(){
-  const idList = [];
-  for(let i = 0; i < player.playlists.length; i++){
-    idList.push(player.playlists[i].id); 
-  }
-  idList.sort((a, b) => a - b);
-  return idList;
-}
-//the function below returns a given song duration in the mm:ss template
-function songDuration(id){
-  let totalTime = findSongById(id).duration;
-  let minutes = 0;
-  let seconds = 0;
-
-  while(totalTime >= 60){
-    minutes++;
-    totalTime -= 60;
-  }
-  seconds = totalTime;
-  
-  return "0" + minutes + ":" + seconds
-}
-// convert the duration from 'mm:ss' template to seconds
-function convertToSeconds(duration){
-  let seconds;
-  let $duration = duration.split("");
-  if($duration[0] !== '0'){
-    seconds = ($duration[0] * 600) + ($duration[1] * 60) + ($duration[3] * 10) + $duration[4] * 1;
-    return seconds;
-  }
-  $duration.shift();
-  seconds = ($duration[0] * 60) + ($duration[2] * 10)+ $duration[3] * 1;
-  return seconds;
-}
-//the function below return a song object by id
-function findSongById(id){
-  return player.songs.find(song => {return song.id === id});
-}
-// the function below return a playlist object by id
-function findPlaylistById(id){
-  return player.playlists.find(PL => PL.id === id);
-}
-
 function playSong(id) {
   const song = findSongById(id);
   song.duration = songDuration(id);
@@ -261,6 +184,86 @@ function searchByDuration(duration) {
     return closestPlaylist;
   }
   return closestSong;
+}
+
+
+//the section below is all of the functions that I wrote in order to make the code more readble and short
+
+// finds the index of a playlist in player.playlists
+function findIndexOfPlaylist(id){
+  return player.playlists.findIndex(PL => PL.id === id);
+}
+// finds the index of a song in player.songs
+function findIndexOfSong(id){
+  return player.songs.findIndex(song => song.id === id);
+}
+//finds the absolute difference in duration between a song or a playlist and agiven duration
+function absDiffInDuration(obj, time){
+  if(obj.hasOwnProperty('songs')){
+    return Math.abs(playlistDuration(obj.id) - time);
+  }
+  return Math.abs(obj.duration - time);
+}
+//helps to sort an array of songs alphabetically by title or name
+function sortArray(a, b){
+  if(a.hasOwnProperty("title")){
+    return a.title.localeCompare(b.title);
+  }
+  if(a.hasOwnProperty("name")){
+    return a.name.localeCompare(b.name);
+  }
+}
+//a function that returns an array with all the songs id
+function listOfId(){
+  const idList = [];
+  for(let i = 0; i < player.songs.length; i++){
+    idList.push(player.songs[i].id); 
+  }
+  idList.sort((a, b) => a - b);
+  return idList;
+}
+//this function do the same as listOfId but for playlists
+function listOfPlayListId(){
+  const idList = [];
+  for(let i = 0; i < player.playlists.length; i++){
+    idList.push(player.playlists[i].id); 
+  }
+  idList.sort((a, b) => a - b);
+  return idList;
+}
+//the function below returns a given song duration in the mm:ss template
+function songDuration(id){
+  let totalTime = findSongById(id).duration;
+  let minutes = 0;
+  let seconds = 0;
+
+  while(totalTime >= 60){
+    minutes++;
+    totalTime -= 60;
+  }
+  seconds = totalTime;
+  
+  return "0" + minutes + ":" + seconds
+}
+// convert the duration from 'mm:ss' template to seconds
+function convertToSeconds(duration){
+  let seconds;
+  let $duration = duration.split("");
+  if($duration[0] !== '0'){
+    seconds = ($duration[0] * 600) + ($duration[1] * 60) + ($duration[3] * 10) + $duration[4] * 1;
+    return seconds;
+  }
+  $duration.shift();
+  seconds = ($duration[0] * 60) + ($duration[2] * 10)+ $duration[3] * 1;
+  return seconds;
+}
+//the function below return a song object by id
+function findSongById(id){
+  return player.songs.find(song => {return song.id === id});
+}
+// the function below return a playlist object by id
+function findPlaylistById(id){
+  return player.playlists.find(PL => PL.id === id);
 }
 
 module.exports = {
