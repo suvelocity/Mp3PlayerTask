@@ -52,6 +52,13 @@ const player = {
   },
 }
 
+function absDiffInDuration(obj, time){
+  if(obj.hasOwnProperty('songs')){
+    return Math.abs(playlistDuration(obj.id) - time);
+  }
+  return Math.abs(obj.duration - time);
+}
+
 //helps to sort an array of songs alphabetically by title or name
 function sortArray(a, b){
   if(a.hasOwnProperty("title")){
@@ -101,6 +108,10 @@ function songDuration(id){
 function convertToSeconds(duration){
   let seconds;
   let $duration = duration.split("");
+  if($duration[0] !== '0'){
+    seconds = ($duration[0] * 600) + ($duration[1] * 60) + ($duration[3] * 10) + $duration[4] * 1;
+    return seconds;
+  }
   $duration.shift();
   seconds = ($duration[0] * 60) + ($duration[2] * 10)+ $duration[3] * 1;
   return seconds;
@@ -231,9 +242,24 @@ function searchByQuery(query) {
 }
 
 function searchByDuration(duration) {
-  // your code here
+  const timeInSeconds = convertToSeconds(duration);
+  let closestSong = player.songs[0];
+  let closestPlaylist = player.playlists[0];
+  for(let song of player.songs){
+    if(absDiffInDuration(song, timeInSeconds) < absDiffInDuration(closestSong, timeInSeconds)){
+      closestSong = song;
+    }
+  }
+  for(let PL of player.playlists){
+    if(absDiffInDuration(PL, timeInSeconds) < absDiffInDuration(closestPlaylist, timeInSeconds)){
+      closestPlaylist = PL;
+    }
+  }
+  if(absDiffInDuration(closestPlaylist, timeInSeconds) < absDiffInDuration(closestSong, timeInSeconds)){
+    return closestPlaylist;
+  }
+  return closestSong;
 }
-
 module.exports = {
   player,
   playSong,
