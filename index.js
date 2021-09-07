@@ -48,8 +48,14 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    console.log(/* your code here */)
-  },
+    let text = [];
+    let x; 
+    for(x in song){
+      text.push(song[x]); 
+    }
+    let a = "Playing " + text[1] + " from " + text[2] + " by " + text[3] + " | " + "0" + Math.floor(text[4]/60) + ":" + text[4]%60 + ".";   
+    console.log (a);                                                                                                                               
+ }
 }
 
 function playSong(id) {
