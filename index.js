@@ -215,6 +215,14 @@ function searchByQuery(query) {
       }
     }
   }
+  for (let i = 0; i < player.playlists.length; i++) {
+    for (let prop in player.playlists[i]) {
+      if (queryRegex.test(player.playlists[i][prop])) {
+        answer.playlists.push(player.playlists[i]);
+        break;
+      }
+    }
+  }
   answer.songs.sort(function (a, b) {
     let x = a.title.toLowerCase();
     let y = b.title.toLowerCase();
@@ -224,7 +232,7 @@ function searchByQuery(query) {
   })
   return answer;
 }
-searchByQuery('ll');
+
 function searchByDuration(duration) {
   // your code here
 }
