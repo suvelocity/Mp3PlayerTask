@@ -56,7 +56,13 @@ const player = {
 // this help function gets time in seconds and return it by minutes in this style => min:sec (for example, 04:19)
 function timeConventor(duration){
   if (duration/60 < 10){
-    return "0"+Math.floor(duration/60)+ ":" + duration%60;
+    if (duration%60 < 10){
+      return "0"+Math.floor(duration/60)+ ":0" + duration%60;
+    }else{
+      return "0"+Math.floor(duration/60)+ ":" + duration%60;
+    }
+  }else if (duration%60 < 10){
+    return Math.floor(duration/60)+ ":0" + duration%60;
   }else{
     return Math.floor(duration/60)+ ":" + duration%60;
   }
@@ -225,9 +231,38 @@ function playPlaylist(id) {
     }
   }
 }
+// this is help function that gets List of songs id and return it without the id of the argument
+function removeHelpForSongsOnPlaylists(List,id){
+  if (List[0] === id){
+    return List.slice(1)
+  }else{
+    return [List[0]].concat(removeHelpForSongsOnPlaylists(List.slice(1),id));
+  }
+}
 
 function editPlaylist(playlistId, songId) {
-  // your code here
+  if (!isIdExist(player.songs , songId)){
+    throw "non exist id for song";
+  }else if (!isIdExist(player.playlists , playlistId)){
+  throw "non exist id for song";
+  }else if(isIdExist(returnPropItem(player.playlists, playlistId).songs , songId)){
+  for (let i = 0 ; i < player.playlists.length ; i++){
+    if (player.playlists[i].id === playlistId){
+      console.log("Yam")
+      player.playlists[i].songs.push(songId);
+    }  
+  }
+  }else{
+    for (let i = 0 ; i < player.playlists.length ; i++){
+      if (player.playlists[i].id === playlistId){
+        console.log("ebgui")
+        player.playlists[i].songs = removeHelpForSongsOnPlaylists(player.playlists[i].songs,songId);
+        if(player.playlists[i].songs.length === 0){
+         removePlaylist(playlistId);
+        }
+      }
+    }
+  }  
 }
 
 function playlistDuration(id) {
@@ -242,6 +277,8 @@ function searchByDuration(duration) {
   // your code here
 }
 playPlaylist(11);
+editPlaylist(11, 1);
+console.log(timeConventor(242));
 module.exports = {
   player,
   playSong,
