@@ -53,27 +53,44 @@ const player = {
 }
 
 function playSong(id) {
-  if(findID(id)===false)
-  {
+  if (findID(id) === false) {
     throw 'non-existent ID';
   }
-  else
-  {
-    song={};
-    for(let obj of player.songs)
-    {
-      if(obj.id===id){
-        song=obj;
+  else {
+    song = {};
+    for (let obj of player.songs) {
+      if (obj.id === id) {
+        song = obj;
         break;
       }
     }
-console.log(player.playSong(song))
-}
+    console.log(player.playSong(song))
+  }
 }
 
 function removeSong(id) {
-  // your code here
+  if (findID(id) === false) {
+    throw 'non-existent ID';
+  }
+  for (let i = 0; i < player.songs.length; i++) {
+    if (player.songs[i].id === id) {
+      player.songs.splice(i, 1)
+      break;
+    }
+
+  }
+  for(let k=0;k<player.playlists.length;k++)
+  {
+    for(let j=0;j<player.playlists[k].songs.length;j++)
+    {
+      if(player.playlists[k].songs[j]===id)
+      player.playlists[k].songs.splice(j,1);
+      break;
+    }
+  }
 }
+
+
 
 function addSong(title, album, artist, duration, id) {
   // your code here
@@ -106,21 +123,20 @@ function searchByQuery(query) {
 function searchByDuration(duration) {
   // your code here
 }
-function convertTime(duration){
-  let seconds= duration%60;
-  let minutes= (duration-seconds)/60;
-  minutes=`0${minutes}`;
-return `${minutes}:${seconds}`;
+function convertTime(duration) {
+  let seconds = duration % 60;
+  let minutes = (duration - seconds) / 60;
+  minutes = `0${minutes}`;
+  return `${minutes}:${seconds}`;
 }
 
-function findID(id)
-{
-  for(let song of player.songs){
+function findID(id) {
+  for (let song of player.songs) {
     if (song.id === id)
       return true;
   }
   return false;
-  
+
 }
 
 module.exports = {
