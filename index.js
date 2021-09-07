@@ -78,7 +78,7 @@ function playSong(id) {
     ss = "0" + ss;
   }
   return mm + ":" + ss;
-  // console.log(mm + ":" + ss) 
+ 
 }
 
 
@@ -93,34 +93,10 @@ function removeSong(id) {
       }
   }    
     for (x in player.playlists){
-      console.log (id)
-      console.log(player.playlists[x].songs);
-      if (hasProperty (player.playlists[x].songs,id)) {
-      deletedFromPlaylist = player.playlists[x].songs.splice(findIndex(player.playlists[x].songs,id),1);
-      console.log(deletedFromPlaylist); 
-      console.log("2");
-    } 
-    }
-  // your code here 
-  } 
-  removeSong(4)
-
-function hasProperty(arr ,value) {
-    for( let i=0 ; i<arr.length ; i++){
-      if(arr[i] === value){
-        console.log (i)
-        return true;
-      } 
-  } return false
-}  
-  function findIndex(arr,value){
-    for( let i=0 ; i<arr.length ; i++){
-      if(arr[i] === value){
-        console.log (i)
-        return i;
-      }
-    }
-  }
+      if (player.playlists[x].songs.indexOf(id)>=0 ) {
+      deletedFromPlaylist = player.playlists[x].songs.splice(player.playlists[x].songs.indexOf(id),1);
+         }
+   } 
  
 
 function addSong(title, album, artist, duration, id) {
