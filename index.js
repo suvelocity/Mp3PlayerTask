@@ -122,9 +122,10 @@ function from_Time_String_To_Seconds(duration){
   return parseInt(newDuration[0]) * 60 + parseInt(newDuration[1]);
 }
 
-// ===> Generate a new ID to songs <===
+// ===> Generate a new ID <===
 function generate_ID(songOrPlaylist){
   let i = 1
+  // To Songs
   while(songOrPlaylist === "song"){
     const songObj = player.fingObjectByID(i);
     // If ID does not exists
@@ -134,7 +135,7 @@ function generate_ID(songOrPlaylist){
     i++;
   }
 
-  // ===> Generate a new ID to playlist <===
+  // To Playlist
   while(songOrPlaylist === "playlist"){
     const playlistObj = player.fingObjectPlaylistByID(i);
     // If ID does not exists
@@ -272,11 +273,27 @@ function editPlaylist(playlistId, songId) {
     }
   }
 }
+//editPlaylist(1,1)
+//console.log(player.playlists);
 
 
 
 function playlistDuration(id) {
-  // your code here
+  const myPlaylist = player.fingObjectPlaylistByID(id);
+  if(isNaN(id)){
+    throw "playlist ID must be a number";
+  }
+  else if(myPlaylist === undefined){
+    throw "playlist dosent exists";
+  }
+  else{
+    let durationInSeconds = 0;
+    myPlaylist.songs.forEach(song => {
+      const songObj = player.fingObjectByID(song);
+      durationInSeconds += songObj.duration;
+    });
+    return durationInSeconds;
+  }
 }
 
 function searchByQuery(query) {
