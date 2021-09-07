@@ -8,7 +8,7 @@ const player = {
       duration: 242,
     },
     {
-      id: 2,
+      id: 9,
       title: 'Vinda',
       album: 'Godtfolk',
       artist: 'Songleikr',
@@ -48,13 +48,27 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    console.log(/* your code here */)
+    return `Playing ${song.title} from ${song.album} by ${song.artist} | ${convertTime(song.duration)}.`;
   },
 }
 
-
 function playSong(id) {
-  // your code here
+  if(findID(id)===false)
+  {
+    throw 'non-existent ID';
+  }
+  else
+  {
+    song={};
+    for(let obj of player.songs)
+    {
+      if(obj.id===id){
+        song=obj;
+        break;
+      }
+    }
+console.log(player.playSong(song))
+}
 }
 
 function removeSong(id) {
@@ -91,6 +105,22 @@ function searchByQuery(query) {
 
 function searchByDuration(duration) {
   // your code here
+}
+function convertTime(duration){
+  let seconds= duration%60;
+  let minutes= (duration-seconds)/60;
+  minutes=`0${minutes}`;
+return `${minutes}:${seconds}`;
+}
+
+function findID(id)
+{
+  for(let song of player.songs){
+    if (song.id === id)
+      return true;
+  }
+  return false;
+  
 }
 
 module.exports = {
