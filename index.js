@@ -46,6 +46,7 @@ const player = {
   playlists: [
     { id: 1, name: 'Metal', songs: [1, 7, 4] },
     { id: 5, name: 'Israeli', songs: [4, 5] },
+    { id: 3, name : 'EGZ', songs : []}
   ],
   playSong(song) {
     console.log(/* your code here */)
@@ -113,6 +114,7 @@ function addSong(title, album, artist, duration, id) {
     'duration': duration
   };
   player.songs.push(newArr);
+  return player;
 }
 
 function removePlaylist(id) {
@@ -149,24 +151,25 @@ function createPlaylist(name, id) {
     'songs': []
   };
   player.playlists.push(newArr);
+  return player;
 }
 
 function playPlaylist(id) {
   for (let i = 0; i < player.playlists.length; i++) {
     if (player.playlists[i].id === id) {
       for (let j = 0; j < player.playlists[i].songs.length; j++) {
-       playSong( player.playlists[i].songs[j]);
+        playSong(player.playlists[i].songs[j]);
       }
       return;
     }
   }
-  throw 'Enter valid id';
+  throw 'Enter valid playlist id';
 }
 
-function getPlaylistIndexFromID(playlistId){
+function getPlaylistIndexFromID(playlistId) {
   for (let i = 0; i < player.playlists.length; i++) {
     if (player.playlists[i].id === playlistId) {
-      return playlistArrplace=i;
+      return playlistArrplace = i;
     }
   }
   throw 'Enter valid id';
@@ -177,14 +180,16 @@ function editPlaylist(playlistId, songId) {
   getSongFromID(songId);
   getPlaylistIndexFromID(playlistId);
   indexOfSongInPlaylist = player.playlists[playlistArrplace].songs.indexOf(songId);
-  if(indexOfSongInPlaylist<0){
+  if (indexOfSongInPlaylist < 0) {
     player.playlists[playlistArrplace].songs.push(songId);
   }
-  else{
-    player.playlists[playlistArrplace].songs.splice(indexOfSongInPlaylist,1);
+  else if (indexOfSongInPlaylist >= 0) {
+    player.playlists[playlistArrplace].songs.splice(indexOfSongInPlaylist, 1);
+    if (player.playlists[playlistArrplace].songs.length === 0) {
+      removePlaylist(playlistId);
+    }
   }
 }
-
 function playlistDuration(id) {
   // your code here
 }
