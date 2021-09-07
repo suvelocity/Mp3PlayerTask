@@ -47,20 +47,9 @@ const player = {
     { id: 1, name: 'Metal', songs: [1, 7, 4] },
     { id: 5, name: 'Israeli', songs: [4, 5] }
   ],
-  playSong(song) {
-    console.log(/* your code here */)
-  },
 }
 
 
-function getSongFromID(id) {
-  for (let i = 0; i < player.songs.length; i++) {
-    if (player.songs[i].id === id) {
-      return { title, album, artist, duration, } = player.songs[i], songArrIndex = i;
-    }
-  }
-  throw 'Please enter valid id';
-}
 function getBiggestSongID() {
   let biggestID = 0;
   for (let key of player.songs) {
@@ -72,11 +61,11 @@ function getBiggestSongID() {
 }
 function durationToMMSS(duration) {
   let mm = Math.floor(duration / 60);
-  let dd = duration % 60;
+  let ss = duration % 60;
   if (mm < 10) {
     mm = '0' + mm;
   }
-  return `${mm}:${dd}`
+  return `${mm}:${ss}`
 }
 function getPlaylistIndexFromID(playlistId) {
   for (let i = 0; i < player.playlists.length; i++) {
@@ -95,6 +84,14 @@ function durationToSeconds(duration) {
 function playSong(id) {
   getSongFromID(id);
   console.log(`Playing ${title} from ${album} by ${artist} | ${durationToMMSS(duration)}.`)
+}
+function getSongFromID(id) {
+  for (let i = 0; i < player.songs.length; i++) {
+    if (player.songs[i].id === id) {
+      return { title, album, artist, duration, } = player.songs[i], songArrIndex = i;
+    }
+  }
+  throw 'Please enter valid id';
 }
 
 function removeSong(id) {
@@ -118,14 +115,13 @@ function addSong(title, album, artist, duration, id) {
       throw 'This ID is taken, pick another ID';
     }
   }
-  let newArr = {
+  player.songs.push({
     'id': id,
     'title': title,
     'album': album,
     'artist': artist,
     'duration': duration
-  };
-  player.songs.push(newArr);
+  });
   return player;
 }
 
@@ -257,9 +253,7 @@ function searchByDuration(duration) {
   if ((Math.abs(savedSongDuration - secondDuration) < Math.abs(savedPlaylistDuration - secondDuration))) {
     return closestSong;
   }
-  else {
     return closestPlaylist;
-  }
 }
 
 module.exports = {
