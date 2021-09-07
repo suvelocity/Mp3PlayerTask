@@ -240,8 +240,40 @@ function playPlaylist(id) {
 
 
 function editPlaylist(playlistId, songId) {
-  // your code here
+  const myPlaylist = player.fingObjectPlaylistByID(playlistId);
+  const song  = player.fingObjectByID(songId);
+  if(isNaN(playlistId)){
+    throw "playlist ID must be a number";
+  }
+  else if(isNaN(songId)){
+    throw "song ID must be a number";
+  }
+  else if(myPlaylist === undefined){
+    throw "playlist dosent exists";
+  }
+  else if(song === undefined){
+    throw "song dosent exists";
+  }
+  else{
+    //If Song ID exists - remove
+    if(myPlaylist.songs.find(song => song === songId) === songId){
+      const index = myPlaylist.songs.indexOf(songId);
+      if(index > -1){
+        myPlaylist.songs.splice(index, 1);
+        //If it was the last song in the playlist - delete playlist
+        if(myPlaylist.songs.length === 0){
+          removePlaylist(playlistId);
+        }
+      }        
+    }
+    //If Song ID doesnt exists - add
+    else{
+      myPlaylist.songs.push(songId);       
+    }
+  }
 }
+
+
 
 function playlistDuration(id) {
   // your code here
