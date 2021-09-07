@@ -190,7 +190,14 @@ function editPlaylist(playlistId, songId) {
 }
 
 function playlistDuration(id) {
-  // your code here
+  const playlistIndex = player.playlists.findIndex(PL => PL.id === id);
+  let totalDuration = 0;
+  let song;
+  for(let songId of player.playlists[playlistIndex].songs){
+    song = findSongById(songId);
+    totalDuration += song.duration;
+  }
+  return totalDuration;
 }
 
 function searchByQuery(query) {
