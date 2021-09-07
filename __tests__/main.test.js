@@ -107,11 +107,15 @@ describe('Player Tests', () => {
   it('addSong should generate a new unique ID when it is not supplied', () => {
     const newSongId = addSong(...mockSong3Details.slice(0, -1))
     expect(newSongId).toBeDefined()
-    expect(mockPlayer.songs.map(song => song.id).includes(newSongId)).toBe(false)
+    expect(mockPlayer.songs.map((song) => song.id).includes(newSongId)).toBe(
+      false
+    )
   })
 
   it('addSong should throw for an ID that is taken', () => {
-    expect(() => addSong(...mockSong3Details.slice(0, -1), mockSong1.id)).toThrow()
+    expect(() =>
+      addSong(...mockSong3Details.slice(0, -1), mockSong1.id)
+    ).toThrow()
   })
 
   it('removePlaylist should remove a playlist from the player', () => {
@@ -134,7 +138,9 @@ describe('Player Tests', () => {
   it('createPlaylist should generate a new unique ID when it is not supplied', () => {
     const newPlaylistId = createPlaylist(mockPlaylist2.name)
     expect(newPlaylistId).toBeDefined()
-    expect(mockPlayer.playlists.map(p => p.id).includes(newPlaylistId)).toBe(false)
+    expect(mockPlayer.playlists.map((p) => p.id).includes(newPlaylistId)).toBe(
+      false
+    )
   })
 
   it('createPlaylist should throw for an ID that is taken', () => {
