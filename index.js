@@ -108,7 +108,7 @@ function addSong(title, album, artist, duration, id = generateNewId()) {
 
 function removePlaylist(id) {
   if (!checkId(player.playlists, id)) throw new Error('ID is not found')
-  let correctPlaylist = findPlaylistId(id)
+  let correctPlaylist = findPlaylistById(id)
   player.playlists.splice(correctPlaylist, 1)
 }
 
@@ -122,7 +122,7 @@ function createPlaylist(name, id = generateNewId()) {
 function playPlaylist(id) {
   if (!checkId(player.playlists, id))
     throw new Error("ID isn't exist, change the ID")
-  let correctPlaylist = findPlaylistId(id)
+  let correctPlaylist = findPlaylistById(id)
   for (let j = 0; j < correctPlaylist.songs.length; j++) {
     playSong(correctPlaylist.songs[j])
   }
@@ -134,7 +134,7 @@ function editPlaylist(playlistId, songId) {
     throw new Error("ID isn't exist, change the ID")
   if (!checkId(player.playlists, playlistId))
     throw new Error("ID isn't exist, change the ID")
-  let correctPlaylist = findPlaylistId(playlistId)
+  let correctPlaylist = findPlaylistById(playlistId)
   //runs on the playlists
   for (let j = 0; j < correctPlaylist.songs.length; j++) {
     //runs on the songs array in the playlist
@@ -157,7 +157,7 @@ function editPlaylist(playlistId, songId) {
 // console.log(player.playlists[1])
 
 function playlistDuration(id) {
-  let correctPlaylist = findPlaylistId(id)
+  let correctPlaylist = findPlaylistById(id)
   let save = 0,
     sum = 0
   for (let i = 0; i < correctPlaylist.songs.length; i++) {
@@ -170,25 +170,39 @@ function playlistDuration(id) {
 }
 
 function searchByQuery(query) {
-  // your code here
+  let tempQuery = query.toUpperCase()
+  const results = { songs: [], playlists: [] }
+  for (let i = 0; i < player.playlists.length; i++) {
+    //for playlists
+    if (player.playlists[i].name.toUpperCase().includes(tempQuery)) {
+      results.playlists.push(player.playlists[i])
+      results.playlists.sort((a, b) => {
+        if (a.name.toUpperCase() < b.name.toUpperCase()) return -1
+      })
+    }
+  }
+  for (let i = 0; i < player.songs.length; i++) {
+    //for songs
+    if (
+      player.songs[i].album.toUpperCase().includes(tempQuery) ||
+      player.songs[i].artist.toUpperCase().includes(tempQuery) ||
+      player.songs[i].title.toUpperCase().includes(tempQuery)
+    ) {
+      results.songs.push(player.songs[i])
+      results.songs.sort((a, b) => {
+        if (a.title.toUpperCase() < b.title.toUpperCase()) return -1
+      })
+    }
+  }
+  return results
 }
 
 function searchByDuration(duration) {
   duration = oppositOfdurationFormat(duration)
   let arrSongs = arrLengthSongs(duration)
-  let arrPlaylist = arrLengthmPlaylist(duration)
-  console.log(arrSongs[0])
-  console.log(arrPlaylist[0])
-  console.log(arrSongs[1])
-  console.log(arrPlaylist[1])
-  // return arrSongs[0] < arrPlaylist[0] ? arrSongs[1] : arrPlaylist[1]
-  if (arrSongs[0] < arrPlaylist[0]) {
-    return arrSongs[1]
-  }
-  return arrPlaylist[1]
+  let arrPlaylist = arrLengthPlaylist(duration)
+  return arrSongs[0] < arrPlaylist[0] ? arrSongs[1] : arrPlaylist[1]
 }
-
-console.log(searchByDuration('10:00'))
 
 ////////////////////////////////////////////////---  Help Functions(Start) ---////////////////////////////////////////////////////
 
@@ -208,18 +222,18 @@ function arrLengthSongs(duration) {
   return arr
 }
 
-function arrLengthmPlaylist(duration) {
-  //gets playlist duartion return the closest playlist duration
+function arrLengthPlaylist(duration) {
+  //gets song duartion return array of [closet-duration-seconds,closet-duration-playlist]
   let arr = []
   let minDuration = duration,
     index = 0
   for (let i = 0; i < player.playlists.length; i++) {
     if (
       minDuration >
-      Math.abs(duration - sumDurationPlaylist(player.playlists[i].id))
+      Math.abs(duration - playlistDuration(player.playlists[i].id))
     ) {
       minDuration = Math.abs(
-        duration - sumDurationPlaylist(player.playlists[i].id)
+        duration - playlistDuration(player.playlists[i].id)
       )
       index = i
     }
@@ -229,34 +243,7 @@ function arrLengthmPlaylist(duration) {
   return arr
 }
 
-function sumDurationPlaylist(id) {
-  //gets id of playlist and return his sum of duration
-  let correctPlaylist = findPlaylistById(id)
-  let sum = 0
-  let tempArr = correctPlaylist.songs.slice(0, correctPlaylist.songs.length)
-  for (let i = 0; i < tempArr.length; i++) {
-    sum += songsDurationById(tempArr[i])
-  }
-  return sum
-}
-
 function findPlaylistById(id) {
-  //gets id of playlist and return the playlist
-  let savePlaylist
-  for (let i = 0; i < player.playlists.length; i++) {
-    if (id === player.playlists[i].id) savePlaylist = player.playlists[i]
-  }
-  return savePlaylist
-}
-
-function songsDurationById(id) {
-  //gets id of song and return his duration
-  for (let i = 0; i < player.songs.length; i++) {
-    if (player.songs[i].id === id) return player.songs[i].duration
-  }
-}
-
-function findPlaylistId(id) {
   //Get a playlist id and return
   let correctPlaylist
   for (let i = 0; i < player.playlists.length; i++) {
