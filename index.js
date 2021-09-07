@@ -45,8 +45,7 @@ const player = {
   ],
   playlists: [
     { id: 1, name: 'Metal', songs: [1, 7, 4] },
-    { id: 5, name: 'Israeli', songs: [4, 5] },
-    { id: 3, name: 'EGZ', songs: [] }
+    { id: 5, name: 'Israeli', songs: [4, 5] }
   ],
   playSong(song) {
     console.log(/* your code here */)
@@ -69,6 +68,11 @@ function durationToMMSS(duration) {
     mm = '0' + mm;
   }
   return `${mm}:${dd}`
+}
+function durationToSeconds(duration){
+  let mm = duration[0] + duration[1];
+  let ss = duration[3] + duration[4];
+  return secondDuration = (+mm*60 + +ss);
 }
 
 function playSong(id) {
@@ -226,16 +230,33 @@ function searchByQuery(query) {
   answer.songs.sort(function (a, b) {
     let x = a.title.toLowerCase();
     let y = b.title.toLowerCase();
-    if (x < y) {return -1;}
-    if (x > y) {return 1;}
+    if (x < y) { return -1; }
+    if (x > y) { return 1; }
     return 0;
   })
   return answer;
 }
 
 function searchByDuration(duration) {
-  // your code here
+  durationToSeconds(duration)
+  let closestSong,closestPlaylist;
+  let savedDuration = player.songs[0].duration;
+  for (let i = 1; i < player.songs.length; i++) {
+    if (Math.abs(player.songs[i].duration - secondDuration) < Math.abs(savedDuration - secondDuration)) {
+      closestSong = player.songs[i];
+      savedDuration = player.songs[i].duration;
+    }
+  }
+savedDuration = Infinity;
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (Math.abs(playlistDuration(player.playlists[i].id) - secondDuration) < Math.abs(savedDuration - secondDuration)) {
+      closestPlaylist = player.playlists[i];
+      savedDuration = playlistDuration(player.playlists[i].id);
+    }
+  }
+  return closestPlaylist;
 }
+searchByDuration('10:00');
 
 module.exports = {
   player,
