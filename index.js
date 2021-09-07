@@ -59,8 +59,14 @@ const player = {
 }
 
 function playSong(id) {
-  // your code here
-}
+  let songInfo = [];
+    let y; 
+    for(y in player.songs){
+     if (player.song[y] === id){
+      player.playSong(y);
+      break;
+     }; 
+    }
 
 function removeSong(id) {
   // your code here
