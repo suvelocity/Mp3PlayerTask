@@ -50,8 +50,11 @@ const player = {
 
   playSong(song) {
     const songObj = this.fingObjectByID(song);
+    if(isNaN(song)){
+      throw "ID must be a number";
+    }
     // If not exists
-    if(songObj === undefined){
+    else if(songObj === undefined){
       throw ("non existent ID")
     }
     else{
@@ -86,13 +89,13 @@ function playSong(id) {
 
 function removeSong(id) {
   const songObj = player.fingObjectByID(id);
-  // If ID does not exists
-  if(songObj === undefined){
-    throw ("non existent ID");
-  }
   // If ID is not a number
-  else if(isNaN(id)){
+  if(isNaN(id)){
     throw "ID must be a number";
+  }
+  // If ID does not exists
+  else if(songObj === undefined){
+    throw ("non existent ID");
   }
   // If ID does exists - remove
   else{
@@ -176,13 +179,13 @@ function addSong(title, album, artist, duration, id) {
 }
 
 
-function removePlaylist(id) {
-  if(player.fingObjectPlaylistByID(id) === undefined){
-    throw "non existent ID";
-  }
+function removePlaylist(id) {  
   // If ID is not a number
-  else if(isNaN(id)){
+  if(isNaN(id)){
     throw "ID must be a number";
+  }
+  else if(player.fingObjectPlaylistByID(id) === undefined){
+    throw "non existent ID";
   }
   else{
     // Removes from playlist
@@ -221,8 +224,20 @@ function createPlaylist(name, id) {
 }
 
 function playPlaylist(id) {
-  // your code here
+  const playlistObj = player.fingObjectPlaylistByID(id);  
+  // Checks If ID is a string
+  if(isNaN(id)){
+    throw "ID must be a number";
+  }
+  // Check if ID is exists in playlists
+  else if(playlistObj === undefined){
+    throw "non existent ID";
+  }
+  else{
+    playlistObj.songs.forEach(song => playSong(song));
+  }
 }
+
 
 function editPlaylist(playlistId, songId) {
   // your code here
