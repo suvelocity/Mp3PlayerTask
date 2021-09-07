@@ -101,10 +101,10 @@ function findSongById(id){
   return player.songs.find(song => {return song.id === id});
 }
 
-//the function below return a playlist object by id
-// function findPlaylistById(id){
-//   return player.playlists.find(PL => PL.id === id);
-// }
+// the function below return a playlist object by id
+function findPlaylistById(id){
+  return player.playlists.find(PL => PL.id === id);
+}
 
 function playSong(id) {
   const song = findSongById(id);
