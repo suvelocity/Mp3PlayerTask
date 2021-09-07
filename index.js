@@ -46,8 +46,8 @@ const player = {
     },
   ],
   playlists: [
-    { id: 1, name: 'Metal', songs: [1, 7, 4] },
-    { id: 5, name: 'Israeli', songs: [4, 5] },
+    { id: 11, name: 'Metal', songs: [1, 7, 4] },
+    { id: 12, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
       console.log("Playing " + song.title + " from " + song.album + " by " + song.artist + " | " + timeConventor(song.duration) + ".");
@@ -131,16 +131,16 @@ function removeSong(id) {
     throw "non exist Id";
   }
 }
-//this function return id number based on the player songs list.
-function numberForId(player){
+//this function return id number based on the player songs/playlists list.
+function numberForId(playerList){
   let arr=[];
-  for (let i = 0 ; i < player.songs.length ; i++){
-    arr.push(player.songs[i].id);
+  for (let i = 0 ; i < playerList.length ; i++){
+    arr.push(playerList[i].id);
   }
   if (arr.length === 0){
     return 1;
   }
-  arr=arr.sort();
+  arr=arr.sort(function (a, b) { return a - b;  });
   let id = 0;
   for (let i = 0 ;  i < arr.length ; i++){
     if(arr[i] > (i+1)){
@@ -163,9 +163,8 @@ function addSong(title, album, artist, duration, id) {
   if (isIdExist(player.songs , id)){
     throw "this id is taken";
   }else if(id=== undefined){
-    newId = numberForId(player);
+    newId = numberForId(player.songs);
   }
-  console.log("this is id:"+newId);
   player.songs.push(new Object());
   player.songs[player.songs.length-1].id= newId;
   player.songs[player.songs.length-1].duration= timeConventorToSeconds(duration);
@@ -193,11 +192,38 @@ function removePlaylist(id) {
 }
 
 function createPlaylist(name, id) {
-  // your code here
+  let newId=id;
+  if (isIdExist(player.playlists , id)){
+    throw "this id is taken";
+  }else if(id=== undefined){
+    newId = numberForId(player.playlists);
+  }
+  player.playlists.push(new Object());
+  player.playlists[player.playlists.length-1].id= newId;
+  player.playlists[player.playlists.length-1].name= name;
+  player.playlists[player.playlists.length-1].songs= [];
+  return newId;
+}
+// this is help function that get list of properties and return the item with the id the function gets as argument.
+function returnPropItem(playerList,id){
+  if (playerList.length === 0){
+    throw "non exist id";
+  }else if (playerList[0].id === id){
+    return playerList[0];
+  }else{
+    return returnPropItem(playerList.slice(1),id);
+  }
 }
 
 function playPlaylist(id) {
-  // your code here
+  if (!isIdExist(player.playlists , id)){
+    throw "non exist id";
+  }else{
+    let playlist = returnPropItem(player.playlists,id);
+    for (let i = 0 ; i < playlist.songs.length ; i++ ){
+      playSong(playlist.songs[i]);
+    }
+  }
 }
 
 function editPlaylist(playlistId, songId) {
@@ -215,8 +241,7 @@ function searchByQuery(query) {
 function searchByDuration(duration) {
   // your code here
 }
-addSong("Heat Waves", "Blah", "Glass", "04:34");
-
+playPlaylist(11);
 module.exports = {
   player,
   playSong,
