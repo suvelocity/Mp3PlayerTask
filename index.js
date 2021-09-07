@@ -61,6 +61,15 @@ function getSongFromID(id) {
   }
   throw 'Please enter valid id';
 }
+function getBiggestSongID() {
+  let biggestID = 0;
+  for (let key of player.songs) {
+    if (key.id > biggestID) {
+      biggestID = key.id;
+    }
+  }
+  return biggestID;
+}
 function durationToMMSS(duration) {
   let mm = Math.floor(duration / 60);
   let dd = duration % 60;
@@ -68,6 +77,14 @@ function durationToMMSS(duration) {
     mm = '0' + mm;
   }
   return `${mm}:${dd}`
+}
+function getPlaylistIndexFromID(playlistId) {
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (player.playlists[i].id === playlistId) {
+      return playlistArrplace = i;
+    }
+  }
+  throw 'Enter valid id';
 }
 function durationToSeconds(duration) {
   let mm = duration[0] + duration[1];
@@ -91,15 +108,6 @@ function removeSong(id) {
   }
 }
 
-function getBiggestSongID() {
-  let biggestID = 0;
-  for (let key of player.songs) {
-    if (key.id > biggestID) {
-      biggestID = key.id;
-    }
-  }
-  return biggestID;
-}
 
 function addSong(title, album, artist, duration, id) {
   if (!id) {
@@ -170,14 +178,6 @@ function playPlaylist(id) {
   throw 'Enter valid playlist id';
 }
 
-function getPlaylistIndexFromID(playlistId) {
-  for (let i = 0; i < player.playlists.length; i++) {
-    if (player.playlists[i].id === playlistId) {
-      return playlistArrplace = i;
-    }
-  }
-  throw 'Enter valid id';
-}
 
 
 function editPlaylist(playlistId, songId) {
