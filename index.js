@@ -45,7 +45,7 @@ const player = {
   ],
   playlists: [
     { id: 1, name: 'Metal', songs: [1, 7, 4] },
-    { id: 5, name: 'Israeli', songs: [2] },
+    { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
     console.log(
@@ -106,17 +106,10 @@ function addSong(title, album, artist, duration, id = generateNewId()) {
   return id
 }
 
-addSong('Shugi', 'Booby', 'Kooky', '04:24', 22)
-console.log(player.songs[6])
-
 function removePlaylist(id) {
   if (!checkId(player.playlists, id)) throw new Error('ID is not found')
-  for (let i = 0; i < player.playlists.length; i++) {
-    if (player.playlists[i].id === id) {
-      player.playlists.splice(i, 1) //-- ?למה שניהם עובדים לעזאזל
-      // delete player.playlists.splice(i, 1)
-    }
-  }
+  let correctPlaylist = findPlaylistId(id)
+  player.playlists.splice(correctPlaylist, 1)
 }
 
 function createPlaylist(name, id = generateNewId()) {
@@ -129,12 +122,9 @@ function createPlaylist(name, id = generateNewId()) {
 function playPlaylist(id) {
   if (!checkId(player.playlists, id))
     throw new Error("ID isn't exist, change the ID")
-  for (let i = 0; i < player.playlists.length; i++) {
-    if (player.playlists[i].id === id) {
-      for (let j = 0; j < player.playlists[i].songs.length; j++) {
-        playSong(player.playlists[i].songs[j])
-      }
-    }
+  let correctPlaylist = findPlaylistId(id)
+  for (let j = 0; j < correctPlaylist.songs.length; j++) {
+    playSong(correctPlaylist.songs[j])
   }
   return id
 }
@@ -144,24 +134,20 @@ function editPlaylist(playlistId, songId) {
     throw new Error("ID isn't exist, change the ID")
   if (!checkId(player.playlists, playlistId))
     throw new Error("ID isn't exist, change the ID")
-  let savePlaylist
-  for (let i = 0; i < player.playlists.length; i++) {
-    if (playlistId === player.playlists[i].id)
-      savePlaylist = player.playlists[i]
-  }
+  let correctPlaylist = findPlaylistId(playlistId)
   //runs on the playlists
-  for (let j = 0; j < savePlaylist.songs.length; j++) {
+  for (let j = 0; j < correctPlaylist.songs.length; j++) {
     //runs on the songs array in the playlist
-    if (songId === savePlaylist.songs[j]) {
+    if (songId === correctPlaylist.songs[j]) {
       //If the song ID exists in the playlist
       removeSongsFromPlaylist(songId)
       //removes it
     } else {
-      savePlaylist.songs.push(songId)
+      correctPlaylist.songs.push(songId)
     }
-    if (savePlaylist.songs.length === 0) {
+    if (correctPlaylist.songs.length === 0) {
       //If it was the only song in the playlist
-      removePlaylist(savePlaylist.id)
+      removePlaylist(correctPlaylist.id)
     }
   }
 }
@@ -171,16 +157,14 @@ function editPlaylist(playlistId, songId) {
 // console.log(player.playlists[1])
 
 function playlistDuration(id) {
-  let save = 0
-  let sum = 0
-  for (let i = 0; i < player.playlists.length; i++) {
-    if (id === player.playlists[i].id)
-      for (let j = 0; j < player.playlists[i].songs.length; j++) {
-        save = player.playlists[i].songs[j]
-        for (let t = 0; t < player.songs.length; t++) {
-          if (player.songs[t].id === save) sum += player.songs[t].duration
-        }
-      }
+  let correctPlaylist = findPlaylistId(id)
+  let save = 0,
+    sum = 0
+  for (let i = 0; i < correctPlaylist.songs.length; i++) {
+    save = correctPlaylist.songs[i]
+    for (let j = 0; j < player.songs.length; j++) {
+      if (player.songs[j].id === save) sum += player.songs[j].duration
+    }
   }
   return sum
 }
@@ -191,21 +175,95 @@ function searchByQuery(query) {
 
 function searchByDuration(duration) {
   duration = oppositOfdurationFormat(duration)
-  let minDuartion = Math.abs(duration - player.songs[0].duration)
-  let saveI = 0
-  for (let i = 0; i < player.songs.length; i++) {
-    if (minDuartion > Math.abs(minDuartion - player.songs[i].duration))
-      minDuartion = Math.abs(minDuartion - player.songs[i].duration)
-    saveI = i
+  let arrSongs = arrLengthSongs(duration)
+  let arrPlaylist = arrLengthmPlaylist(duration)
+  console.log(arrSongs[0])
+  console.log(arrPlaylist[0])
+  console.log(arrSongs[1])
+  console.log(arrPlaylist[1])
+  // return arrSongs[0] < arrPlaylist[0] ? arrSongs[1] : arrPlaylist[1]
+  if (arrSongs[0] < arrPlaylist[0]) {
+    return arrSongs[1]
   }
-  console.log(minDuartion)
-  console.log(saveI)
-  return player.songs[saveI]
+  return arrPlaylist[1]
 }
 
-searchByDuration('17:25')
+console.log(searchByDuration('10:00'))
 
-//////////////////////////////////////---  Helper Functions(Start) ---////////////////////////////////////////////////////
+////////////////////////////////////////////////---  Help Functions(Start) ---////////////////////////////////////////////////////
+
+function arrLengthSongs(duration) {
+  //gets song duartion return array of [closet-duration-seconds,closet-duration-song]
+  let arr = []
+  let minDuration = duration,
+    index = 0 //{id: 3,title: "Thunderstruck", album: "The Razors Edge"}
+  for (let i = 0; i < player.songs.length; i++) {
+    if (minDuration > Math.abs(duration - player.songs[i].duration)) {
+      minDuration = Math.abs(duration - player.songs[i].duration)
+      index = i
+    }
+  }
+  arr.push(minDuration)
+  arr.push(player.songs[index])
+  return arr
+}
+
+function arrLengthmPlaylist(duration) {
+  //gets playlist duartion return the closest playlist duration
+  let arr = []
+  let minDuration = duration,
+    index = 0
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (
+      minDuration >
+      Math.abs(duration - sumDurationPlaylist(player.playlists[i].id))
+    ) {
+      minDuration = Math.abs(
+        duration - sumDurationPlaylist(player.playlists[i].id)
+      )
+      index = i
+    }
+  }
+  arr.push(minDuration)
+  arr.push(player.playlists[index])
+  return arr
+}
+
+function sumDurationPlaylist(id) {
+  //gets id of playlist and return his sum of duration
+  let correctPlaylist = findPlaylistById(id)
+  let sum = 0
+  let tempArr = correctPlaylist.songs.slice(0, correctPlaylist.songs.length)
+  for (let i = 0; i < tempArr.length; i++) {
+    sum += songsDurationById(tempArr[i])
+  }
+  return sum
+}
+
+function findPlaylistById(id) {
+  //gets id of playlist and return the playlist
+  let savePlaylist
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (id === player.playlists[i].id) savePlaylist = player.playlists[i]
+  }
+  return savePlaylist
+}
+
+function songsDurationById(id) {
+  //gets id of song and return his duration
+  for (let i = 0; i < player.songs.length; i++) {
+    if (player.songs[i].id === id) return player.songs[i].duration
+  }
+}
+
+function findPlaylistId(id) {
+  //Get a playlist id and return
+  let correctPlaylist
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (id === player.playlists[i].id) correctPlaylist = player.playlists[i]
+  }
+  return correctPlaylist
+}
 
 function removeSongsFromPlaylist(id) {
   //this function remove a song only from the playlist and not from the songs object
@@ -232,7 +290,6 @@ function durationFormat(duration) {
 function oppositOfdurationFormat(duration) {
   //converting mm:ss to seconds
   duration = duration.split(':')
-  console.log(duration)
   let minutes = parseInt(duration[0]) * 60
   let seconds = parseInt(duration[1])
   return minutes + seconds
@@ -260,7 +317,7 @@ function generateNewId() {
   return biggestId() + 1
 }
 
-//////////////////////////////////////---  Helper Functions(End) ---////////////////////////////////////////////////////
+/////////////////////////////////////////////////---  Help Functions(End) ---////////////////////////////////////////////////////
 
 module.exports = {
   //Don't touch ben tipagach
