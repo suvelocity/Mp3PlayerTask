@@ -52,6 +52,16 @@ const player = {
   },
 }
 
+//helps to sort an array of songs alphabetically by title or name
+function sortArray(a, b){
+  if(a.hasOwnProperty("title")){
+    return a.title.localeCompare(b.title);
+  }
+  if(a.hasOwnProperty("name")){
+    return a.name.localeCompare(b.name);
+  }
+}
+
 //a function that returns an array with all the songs id
 function listOfId(){
   const idList = [];
@@ -201,7 +211,23 @@ function playlistDuration(id) {
 }
 
 function searchByQuery(query) {
-  // your code here
+  const queryObj = {
+    playlists: [],
+    songs: []
+  };
+  for(let playList of player.playlists){
+    if(playList.name.includes(query)){
+      queryObj.playlists.push(playList);
+    }
+  }
+  for(let song of player.songs){
+    if(song.title.includes(query) || song.artist.includes(query) || song.album.includes(query)){
+      queryObj.songs.push(song);
+    }
+  }
+  queryObj.playlists.sort(sortArray);
+  queryObj.songs.sort(sortArray);
+  return queryObj;
 }
 
 function searchByDuration(duration) {
