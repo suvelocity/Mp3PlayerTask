@@ -69,10 +69,10 @@ function durationToMMSS(duration) {
   }
   return `${mm}:${dd}`
 }
-function durationToSeconds(duration){
+function durationToSeconds(duration) {
   let mm = duration[0] + duration[1];
   let ss = duration[3] + duration[4];
-  return secondDuration = (+mm*60 + +ss);
+  return secondDuration = (+mm * 60 + +ss);
 }
 
 function playSong(id) {
@@ -239,24 +239,28 @@ function searchByQuery(query) {
 
 function searchByDuration(duration) {
   durationToSeconds(duration)
-  let closestSong,closestPlaylist;
-  let savedDuration = player.songs[0].duration;
-  for (let i = 1; i < player.songs.length; i++) {
-    if (Math.abs(player.songs[i].duration - secondDuration) < Math.abs(savedDuration - secondDuration)) {
+  let closestSong, closestPlaylist;
+  let savedSongDuration = Infinity;
+  for (let i = 0; i < player.songs.length; i++) {
+    if (Math.abs(player.songs[i].duration - secondDuration) < Math.abs(savedSongDuration - secondDuration)) {
       closestSong = player.songs[i];
-      savedDuration = player.songs[i].duration;
+      savedSongDuration = player.songs[i].duration;
     }
   }
-savedDuration = Infinity;
+  let savedPlaylistDuration = Infinity;
   for (let i = 0; i < player.playlists.length; i++) {
-    if (Math.abs(playlistDuration(player.playlists[i].id) - secondDuration) < Math.abs(savedDuration - secondDuration)) {
+    if (Math.abs(playlistDuration(player.playlists[i].id) - secondDuration) < Math.abs(savedPlaylistDuration - secondDuration)) {
       closestPlaylist = player.playlists[i];
-      savedDuration = playlistDuration(player.playlists[i].id);
+      savedPlaylistDuration = playlistDuration(player.playlists[i].id);
     }
   }
-  return closestPlaylist;
+  if ((Math.abs(savedSongDuration - secondDuration) < Math.abs(savedPlaylistDuration - secondDuration))) {
+    return closestSong;
+  }
+  else {
+    return closestPlaylist;
+  }
 }
-searchByDuration('10:00');
 
 module.exports = {
   player,
