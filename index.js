@@ -48,28 +48,43 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    let text = [];
-    let x; 
-    for(x in song){
-      text.push(song[x]); 
-    }
-    let a = "Playing " + text[1] + " from " + text[2] + " by " + text[3] + " | " + "0" + Math.floor(text[4]/60) + ":" + text[4]%60 + ".";   
-    console.log (a);                                                                                                                               
- }
+  
+    console.log(/* your code here */)
+  },
 }
 
 function playSong(id) {
   let songInfo = [];
-    let y; 
-    for(y in player.songs){
-     if (player.song[y] === id){
-      player.playSong(y);
-      break;
-     }; 
-    }
+  let x;
+  for (x in player.songs){
+    if (player.songs[x].id=== id){
+      songInfo.push(player.songs[x].title);
+      songInfo.push(player.songs[x].album);
+      songInfo.push(player.songs[x].artist);
+      songInfo.push(player.songs[x].duration);
+    } 
+   } console.log(songInfo);
+   console.log("Playing " + songInfo[0] + " from " + songInfo[1] +  " by " + songInfo[2] + " | " + durationMmss(songInfo[3]) + "." )
+  }
+  playSong(1);
+
+  function durationMmss(duration) {
+   let mm = Math.floor(duration/60);
+   let ss = duration%60;
+   if (mm<10){
+     mm = "0" + mm;
+   }
+   if (ss<10){
+    ss = "0" + ss;
+  }
+  return mm + ":" + ss;
+  // console.log(mm + ":" + ss) 
+}
+durationMmss(242)
+
 
 function removeSong(id) {
-  // your code here
+  // your code here 
 }
 
 function addSong(title, album, artist, duration, id) {
