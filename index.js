@@ -139,7 +139,7 @@ function removeSong(id) {
     removeFromPlayLists(id);
 }
 
-function addSong(title, album, artist, duration, id) {
+function addSong(title, album, artist, duration, id=0) {
   const newSong = {}
   newSong.title = title
   newSong.album = album
