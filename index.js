@@ -62,6 +62,11 @@ function playSong(id) {
 }
 
 function removeSong(id) {
+  let a=0;
+    for(let x=0;x<player.songs.length ;x++){
+      if (player.songs[x].id===id) a=1}
+    if (a===0)
+      throw ("non-existent ID,try another one");
   for (let i=0;i<player.songs.length ;i++){
     if (player.songs[i].id===id){
       player.songs.splice(i,1)
