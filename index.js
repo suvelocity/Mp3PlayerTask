@@ -58,6 +58,12 @@ function songById(id) {
   }
   return undefined;
 }
+function songIndexById(id){
+  for(let i=0;i<player.songs.length;i++){
+    if(player.songs[i]["id"]===id) return i;
+  }
+  return -1;
+}
 function playSong(id) {
   try{
     if (songById(id)===undefined) {
@@ -83,7 +89,13 @@ function sTOmmss(s)
 
  
 function removeSong(id) {
-  // your code here
+  try{
+    if (songIndexById(id)===-1) {
+      throw new Error("non-existent ID");
+    } 
+    delete player.songs[songIndexById(id)]
+  }
+  catch(err){console.log(err.message)}
 }
 
 
