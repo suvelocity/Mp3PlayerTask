@@ -248,7 +248,7 @@ function editPlaylist(playlistId, songId) {
     }
   } 
 }  
-editPlaylist(1, 1)
+// editPlaylist(1, 1)
 
 
 function songExist(id){
@@ -259,15 +259,27 @@ function songExist(id){
   } return false;
 }
 
-
-
-
-
-
-
 function playlistDuration(id) {
-  // your code here
+  let playlistSongs = [];
+  for ( let i = 0 ; i < player.playlists.length; i++ ){ 
+    if (player.playlists[i].id === id ){
+       for ( let j = 0 ; j < player.playlists[i].songs.length ; j++ ){
+        playlistSongs.push(player.playlists[i].songs[j]);
+       }
+    } 
+  }
+   console.log(playlistSongs)
+   let totalDuration = 0;
+    for ( let i = 0 ; i < player.songs.length; i++ ){
+      for ( let k = 0 ; k < playlistSongs.length ; k++ ){
+        if ( player.songs[i].id === playlistSongs[k] ){
+          totalDuration += player.songs[i].duration;
+        }
+      }
+    }
+ return (totalDuration);
 }
+// playlistDuration(1)
 
 function searchByQuery(query) {
   // your code here
