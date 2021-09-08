@@ -57,6 +57,9 @@ function playSong(id) {
 }
 
 function removeSong(id) {
+  if (!idIsTakenQUSTION(id)){
+    throw("non-existent ID");
+  }
   player.songs.splice((player.songs.find( song => song.id === id)),1);
   for (let i =0; i< player.playlists.length; i++){
     for (let j = 0; j< player.playlists[i].songs.length;j++){
@@ -69,7 +72,7 @@ function removeSong(id) {
 
 function addSong(title, album, artist, duration, id = genarateID()) {
   if (idIsTakenQUSTION(id)){
-    id = genarateID();
+    throw(id);
   }
   player.songs.push({
     ["title"] : title,
@@ -82,7 +85,10 @@ function addSong(title, album, artist, duration, id = genarateID()) {
 }
 
 function removePlaylist(id) {
-  // your code here
+  if (!idIsTakenPlaylistQUSTION(id)){
+    throw("non-existent ID");
+  }
+  player.playlists.splice((player.playlists.find( playlist => playlist.id === id)),1);
 }
 
 function createPlaylist(name, id) {
@@ -127,6 +133,14 @@ function formatMinutsToSeconds (duration){
 function idIsTakenQUSTION(id){
   for (let j = 0; j < player.songs.length;j++){
     if(player.songs[j].id === id){
+      return true;
+    }
+    else{return false;}
+  }
+}
+function idIsTakenPlaylistQUSTION(id){
+  for (let j = 0; j < player.playlists.length;j++){
+    if(player.playlists[j].id === id){
       return true;
     }
     else{return false;}
