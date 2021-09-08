@@ -221,11 +221,49 @@ function playPlaylist(id) {
 }
 
 
-
-
 function editPlaylist(playlistId, songId) {
-  // your code here
+  let k = 0;
+  for ( let i = 0 ; i < player.playlists.length; i++ ){ 
+    if (player.playlists[i].id === playlistId ){
+      k = 1;
+      for ( let j = 0 ; j < player.playlists[i].songs.length; j++ ){
+          if (player.playlists[i].songs[j] === songId ){
+            k = 2;
+            player.playlists[i].songs.splice(j,1);
+            if (player.playlists[i].songs.length === 0 ){
+              player.playlists.splice(i,1);
+            }
+            return;
+          } if (k === 1 && songExist(songId)){
+            player.playlists[i].songs.push(songId);
+          } else { throw 'Please enter valid songId'};
+      }
+    }     if (k === 0){
+          throw 'Please enter valid playlistId'
+          }  
+  } 
+  for (x in player.songs){
+    if (player.songs[x].id !== songId){
+    throw 'Please enter valid songId'
+    }
+  } 
+}  
+editPlaylist(1, 1)
+
+
+function songExist(id){
+  for ( let i = 0 ; i < player.songs.length; i++ ){
+    if ( player.songs[i].id === id ){
+      return true;
+    }
+  } return false;
 }
+
+
+
+
+
+
 
 function playlistDuration(id) {
   // your code here
