@@ -86,6 +86,15 @@ function removeSong(id) {
       break;
     }
   }
+
+
+  for (let k = 0; k < player.playlists.length; k++) {
+    for (let j = 0; j < player.playlists[k].songs.length; j++) {
+      if (player.playlists[k].songs[j] === id)
+        player.playlists[k].songs.splice(j, 1);
+      break;
+    }
+  }
 }
 
 
@@ -111,7 +120,15 @@ function addSong(title, album, artist, duration, id = 15) {
 }
 
 function removePlaylist(id) {
-  // your code here
+  if (findIdPlaylist(id) === false) {
+    throw 'non-existent ID';
+  }
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (player.playlists[i].id === id) {
+      delete player.playlists[i];
+      player.playlists.length--;
+    }
+  }
 }
 
 function createPlaylist(name, id) {
@@ -159,6 +176,13 @@ function convertSeconds(duration) {
   return minutes * 60 + seconds;
 
 
+}
+function findIdPlaylist(id) {
+  for (let newPlay of player.playlists) {
+    if (newPlay.id === id)
+      return true
+  }
+  return false
 }
 
 module.exports = {
