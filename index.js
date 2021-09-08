@@ -144,6 +144,7 @@ function playPlaylist(id) {
 }
 
 function editPlaylist(playlistId, songId) {
+  let a;
   let y;
   let list;
   for (let x=0;x<player.playlists.length;x++){
@@ -152,11 +153,14 @@ function editPlaylist(playlistId, songId) {
     }
   }
   for (let i=0;i<list.songs.length;i++){
-    if (list.songs[i]===songId&&list.songs.length<2)
-      player.playlists.splice(y,1)
-    else if (list.songs[i]===songId&&list.songs.length>1)
-      list.songs.splice(i,1)
+    if (list.songs[i]===songId&&list.songs.length<2){
+      a=1;
+      player.playlists.splice(y,1)}
+    else if (list.songs[i]===songId&&list.songs.length>1){
+      a=1;
+      list.songs.splice(i,1)}
   }
+  if (a===0){ list.songs.push(songId) }
 }
 
 
