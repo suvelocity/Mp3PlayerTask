@@ -159,7 +159,10 @@ function addSong(title, album, artist, duration, id=0) {
 }
 
 function removePlaylist(id) {
-  // your code here
+  if (playListIndexById(id) === -1) {
+    throw new Error('non-existent ID')
+  }
+  player.playlists.splice(playListIndexById(id),1);
 }
 
 function createPlaylist(name, id) {
