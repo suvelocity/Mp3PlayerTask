@@ -1,3 +1,4 @@
+'use strict'
 const player = {
   songs: [
     {
@@ -48,59 +49,76 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    console.log(`Playing ${song.title} from ${song.album} by ${song.artist} | ${sTOmmss(song.duration)}.`)
-  }
-
+    console.log(
+      `Playing ${song.title} from ${song.album} by ${song.artist} | ${sTOmmss(
+        song.duration
+      )}.`
+    )
+  },
 }
 function songById(id) {
-  for(let i=0;i<player.songs.length;i++){
-    if(player.songs[i]["id"]===id) return player.songs[i];
+  for (let i = 0; i < player.songs.length; i++) {
+    if (player.songs[i]['id'] === id) return player.songs[i]
   }
-  return undefined;
+  return undefined
 }
-function songIndexById(id){
-  for(let i=0;i<player.songs.length;i++){
-    if(player.songs[i]["id"]===id) return i;
+function songIndexById(id) {
+  for (let i = 0; i < player.songs.length; i++) {
+    if (player.songs[i]['id'] === id) return i
   }
-  return -1;
+  return -1
+}
+function isIdExsist(id) {
+  for (let i = 0; i < player.songs.length; i++) {
+    if (player.songs[i]['id'] === id) return true
+  }
+  return false
 }
 function playSong(id) {
-  try{
-    if (songById(id)===undefined) {
-      throw new Error("non-existent ID");
-    } 
-    player.playSong(songById(id));
-  }
-  catch(err){console.log(err.message)}
+    if (songById(id) === undefined) {
+      throw new Error('non-existent ID')
+    }
+    player.playSong(songById(id))
 }
 
+function sTOmmss(s) {
+  const mm = Math.floor(s / 60)
+  const ss = s % 60
+  let mmss = ''
+  if (mm > 9 && ss > 9) mmss = `${mm}:${ss}`
+  if (mm > 9 && ss <= 9) mmss = `${mm}:0${ss}`
+  if (mm <= 9 && ss > 9) mmss = `0${mm}:${ss}`
+  if (mm <= 9 && ss <= 9) mmss = `0${mm}:0${ss}`
+  return mmss
+}
+function mmssTOs(mmss) {
+  return parseInt(mmss.slice(0, 2)) * 60 + parseInt(mmss.slice(3, 5))
+}
 
-function sTOmmss(s)
-  {
-    const mm = Math.floor(s/60);
-    const ss = s%60;
-    let mmss="";
-    if (mm>9 && ss>9) mmss=`${mm}:${ss}`
-    if (mm>9 && ss<=9)mmss=`${mm}:0${ss}`;
-    if (mm<=9 && ss>9)mmss=`0${mm}:${ss}`;
-    if (mm<=9 && ss<=9)mmss=`0${mm}:0${ss}`;
-    return mmss;
-  }
-
- 
 function removeSong(id) {
-  try{
-    if (songIndexById(id)===-1) {
-      throw new Error("non-existent ID");
-    } 
+    if (songIndexById(id) === -1) {
+      throw new Error('non-existent ID')
+    }
     delete player.songs[songIndexById(id)]
-  }
-  catch(err){console.log(err.message)}
 }
-
 
 function addSong(title, album, artist, duration, id) {
-  // your code here
+  const newSong = {}
+  newSong.title = title
+  newSong.album = album
+  newSong.artist = artist
+  newSong.duration = mmssTOs(duration)
+  if (!isIdExsist(id)) newSong.id = id
+  else {
+    for (let i = 0; i < player.songs.length + 1; i++) {
+      if (!isIdExsist(i)) {
+        newSong.id = i
+      }
+    }
+    throw new Error(`existent ID,the chosen id is ${newSong.id}`)
+  }
+  player.songs.push(newSong)
+  return newSong.id
 }
 
 function removePlaylist(id) {
@@ -144,4 +162,3 @@ module.exports = {
   searchByQuery,
   searchByDuration,
 }
-
