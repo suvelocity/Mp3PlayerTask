@@ -58,11 +58,13 @@ function playSong(id) {
      return player.songs[i]
    }
  }
- throw ("no such id ,try another one")
+ throw ("non-existent ID,try another one")
 }
 
 function removeSong(id) {
-  // your code here
+  for (let i=0;i<player.songs.length ;i++){
+    if (player.songs[i].id===id){
+      
 }
 
 function addSong(title, album, artist, duration, id) {
