@@ -70,7 +70,7 @@ function removeSong(id) {
   }
 }
 
-function addSong(title, album, artist, duration, id = genarateID()) {
+function addSong(title, album, artist, duration, id = genarateIDSongs()) {
   if (idIsTakenQUSTION(id)){
     throw(id);
   }
@@ -91,8 +91,16 @@ function removePlaylist(id) {
   player.playlists.splice((player.playlists.find( playlist => playlist.id === id)),1);
 }
 
-function createPlaylist(name, id) {
-  // your code here
+function createPlaylist(name, id = genarateIDSongsPlaylist()) {
+  if (idIsTakenPlaylistQUSTION(id)){
+    throw(id);
+  }
+  player.playlists.push({
+    ["name"] : name,
+    ["id"] : id,
+    ["songs"] : []
+  })
+  return id
 }
 
 function playPlaylist(id) {
@@ -114,11 +122,23 @@ function searchByQuery(query) {
 function searchByDuration(duration) {
   // your code here
 }
-function genarateID (){
+function genarateIDSongs (){
   for (let i = 1; i < player.songs.length+1;i++){
     let flag = true;
     for (let j = 0; j < player.songs.length;j++){
       if(player.songs[j].id === i){
+        flag =false;
+        break;
+      }
+    }
+    if (flag){return i}
+  }
+}
+function genarateIDSongsPlaylist (){
+  for (let i = 1; i < player.playlists.length+1;i++){
+    let flag = true;
+    for (let j = 0; j < player.playlists.length;j++){
+      if(player.playlists[j].id === i){
         flag =false;
         break;
       }
