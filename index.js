@@ -232,27 +232,50 @@ function playlistDuration(id) {
   return sum;
 
 }
-
+function comparepl (a,b){
+    let fa=a.name.toLowerCase(),
+        fb=b.name.toLowerCase();
+    if(fa<fb){
+        return -1;
+    }
+    if(fa > fb){
+        return 1;
+    }
+    return 0;
+  };
+function compares (a,b){
+    let fa=a.title.toLowerCase(),
+        fb=b.title.toLowerCase();
+    if(fa<fb){
+        return -1;
+    }
+    if(fa > fb){
+        return 1;
+    }
+    return 0;
+  };
 function searchByQuery(query) {
   let lowerCasedQuery=query.toLowerCase()
-  let found={songs:[],playlists:[]};
+  let found={};
+  let playlists=[]
+  let songs=[];
   for(let i=0;i<player.playlists.length;i++){
     if(player.playlists[i].name.toLowerCase().includes(lowerCasedQuery)){
-      found.playlists=player.playlists[i];
+      playlists.push(player.playlists[i]);
     }
   }
   for(let i=0;i<player.songs.length;i++){
     const song =player.songs[i];
-    if(song.title.toLowerCase().includes(lowerCasedQuery)||song.album.toLowerCase().includes(lowerCasedQuery) || song.artist.toLowerCase().includes(lowerCasedQuery)){
-      found.songs=song;
+    if(song.title.toLowerCase().includes(lowerCasedQuery)||
+    song.album.toLowerCase().includes(lowerCasedQuery) ||
+     song.artist.toLowerCase().includes(lowerCasedQuery)){
+      songs.push(song);
     }
   }
-  sort(found.playlists);
-  sort(found.songs)
+  found.playlists= playlists.sort(comparepl);
+  found.songs=songs.sort(compares);
   return found;
 }
-
-
 function searchByDuration(duration) {
   duration=mmssTOs(duration)
   let closestPlayList=player.playlists[0];
