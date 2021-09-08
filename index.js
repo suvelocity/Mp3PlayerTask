@@ -148,12 +148,9 @@ function playPlaylist(id) {
   if (findIdPlaylist(id) === false) {
     throw 'non-existent ID';
   }
-  for(let i=0;i<player.playlists.length;i++)
-  {
-    if(player.playlists[i].id===id)
-    {
-      for(let j=0;j<player.playlists[i].songs.length;j++)
-      {
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (player.playlists[i].id === id) {
+      for (let j = 0; j < player.playlists[i].songs.length; j++) {
         playSong(player.playlists[i].songs[j])
       }
     }
@@ -161,7 +158,35 @@ function playPlaylist(id) {
 }
 
 function editPlaylist(playlistId, songId) {
-  // your code here
+  if (findIdPlaylist(playlistId) === false) {
+    throw 'non-existent ID';
+  }
+  if (findID(songId) === false) {
+    throw 'non-existent ID';
+  }
+  for (var j = 0; j < player.playlists.length; j++) {
+    if (player.playlists[j].id === playlistId) {
+      for (var i = 0; i < player.playlists[j].songs.length; i++) {
+        if (player.playlists[j].songs.length === 1 && player.playlists[j].songs[0] === songId) {
+          player.playlists.splice(j, 1);
+          break;
+        }
+        else
+          if (player.playlists[j].songs[i] === songId) {
+            player.playlists[j].songs.splice(i, 1);
+            break;
+          }
+          else
+            if (i === player.playlists[j].songs.length - 2) {
+              player.playlists[j].songs.push(songId);
+            }
+
+      }
+
+
+
+    }
+  }
 }
 
 function playlistDuration(id) {
