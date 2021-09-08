@@ -52,11 +52,22 @@ const player = {
   }
 
 }
-
-function playSong(id) {
-  try{player.playSong(player.songs[id])}
- catch{console.log("could not find this song")}
+function songById(id) {
+  for(let i=0;i<player.songs.length;i++){
+    if(player.songs[i]["id"]===id) return player.songs[i];
+  }
+  return undefined;
 }
+function playSong(id) {
+  try{
+    if (songById(id)===undefined) {
+      throw new Error("non-existent ID");
+    } 
+    player.playSong(songById(id));
+  }
+  catch(err){console.log(err.message)}
+}
+
 
 function sTOmmss(s)
   {
@@ -74,6 +85,7 @@ function sTOmmss(s)
 function removeSong(id) {
   // your code here
 }
+
 
 function addSong(title, album, artist, duration, id) {
   // your code here
