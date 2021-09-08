@@ -93,13 +93,10 @@ function playListIndexById(id){
   return -1
 }
 
-function playListsWiththeSong(id){//return array with index of any playlists that have this song
-  let playListsIndexWithSong=[];
-  for (let i = 0; i < player.playlists.length; i++) 
-  {
-      if(player.playlists[i].songs.includes(id)) playListsIndexWithSong.push(i);
-  }
-  return playListsIndexWithSong;
+
+function addToPlayList(songId,playlistId){
+  let song=songById(songId);
+  player.playlists[playListIndexById(playlistId)].songs.push(song.id)
 }
 
 function removeFromPlayLists(songId){
@@ -113,7 +110,14 @@ function removeFromPlayLists(songId){
     }
   }
 }
-
+function removeFromPlayList(songId,playlistId)
+{
+  for(let i=0;i<playListById(playlistId).songs.length;i++){
+   if(player.playlists[playListIndexById(playlistId)].songs[i]===songId){
+    player.playlists[playListIndexById(playlistId)].songs.splice(i,1)
+   }
+  }
+}
 
 function playSong(id) {
     if (songById(id) === undefined) {
@@ -164,6 +168,7 @@ function addSong(title, album, artist, duration, id=0) {
   return newSong.id
 }
 
+
 function removePlaylist(id) {
   if (playListIndexById(id) === -1) {
     throw new Error('non-existent ID')
@@ -186,11 +191,30 @@ function createPlaylist(name, id=0) {
   return newPlayList.id;
 }
 function playPlaylist(id) {
-  // your code here
+  if (playListIndexById(id) === -1) {
+    throw new Error('non-existent ID')
+  }
+  let playlist=playListById(id);
+  for(let i=0;i<playlist.songs.length;i++){
+    playSong(playlist.songs[i])
+  }
 }
 
-function editPlaylist(playlistId, songId) {
-  // your code here
+function editPlaylist(playlistId, songId) {  
+  if (playListById(playlistId) === undefined) {
+    throw new Error('non-existent playlistId')
+  }
+  if (songById(songId)===undefined) {
+    throw new Error('non-existent songId')
+  }
+  let playlist=playListById(playlistId);
+  if(playlist.songs.includes(songId)&&playlist.songs.length===1)removePlaylist(playlistId)
+  else if(playlist.songs.includes(songId)&&playlist.songs.length!==1){
+    removeFromPlayList(songId,playlistId)
+  }
+  else if(!playlist.songs.includes(songId)){
+    addToPlayList(songId,playlistId)
+  }
 }
 
 function playlistDuration(id) {
