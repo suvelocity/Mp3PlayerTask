@@ -48,14 +48,14 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    console.log(/* your code here */)
+    console.log(playsong(id))
   },
 }
 
 function playSong(id) {
  for (let i=0;i<player.songs.length ;i++){
    if (player.songs[i].id===id){
-     return player.songs[i]
+     return  (player.songs[i])
    }
  }
  throw ("non-existent ID,try another one")
@@ -86,17 +86,15 @@ function addSong(title, album, artist, duration, id=12) {
     if (player.songs[x].id===id) a=1}
   if (a===1)
     throw ("existent ID,try another one");
-  let b=0;
-  for (let i=0;i<duration.length;i++){
-     if (duration[i]===':')
-        b=1;
-      }
-      if (b===0) throw ("The song duration should be in mm:ss format");
+  var sec_num = parseInt(duration, 10)
+  var minutes = Math.floor(sec_num / 60) % 60
+  var seconds = sec_num % 60
+  duration= (minutes +":"+seconds)
   player.songs.push({"id":id,
                     "title":title,
                      "album":album,
                      "artist":artist,
-                     "duration":duration,
+                     "duration":duration
                     })
   return player.songs[player.songs.length-1].id
 
