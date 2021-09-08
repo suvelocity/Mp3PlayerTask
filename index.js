@@ -56,17 +56,22 @@ const player = {
 function playSong(id) {
   let songInfo = [];
   let x;
+  let k = 0;
   for (x in player.songs){
     if (player.songs[x].id=== id){
       songInfo.push(player.songs[x].title);
       songInfo.push(player.songs[x].album);
       songInfo.push(player.songs[x].artist);
       songInfo.push(player.songs[x].duration);
+      k = 1;
+      console.log("Playing " + songInfo[0] + " from " + songInfo[1] +  " by " + songInfo[2] + " | " + durationMmss(songInfo[3]) + "." )
+      return ;
     } 
-   } console.log(songInfo);
-   console.log("Playing " + songInfo[0] + " from " + songInfo[1] +  " by " + songInfo[2] + " | " + durationMmss(songInfo[3]) + "." )
   }
-  
+     throw 'Please enter valid id'; 
+     
+}
+ 
 
   function durationMmss(duration) {
    let mm = Math.floor(duration/60);
@@ -87,22 +92,61 @@ function removeSong(id) {
   let deletedSong = [];
   let deletedFromPlaylist = [];
   let x;
+  let k = 0;
   for (x in player.songs){
-      if (player.songs[x].id=== id){
-      deletedSong = player.songs.splice([x],1); 
+      if (player.songs[x].id === id){
+        k = 1;
+        deletedSong = player.songs.splice([x],1); 
+        break;
+    }
+  }   if ( k === 0 ) {throw 'Please enter valid id'};
+      k = 0 
+      for (x in player.playlists){
+        if (player.playlists[x].songs.indexOf(id)>=0 ) {
+          k = 1
+          deletedFromPlaylist = player.playlists[x].songs.splice(player.playlists[x].songs.indexOf(id),1);
+          break;
       }
-  }    
-    for (x in player.playlists){
-      if (player.playlists[x].songs.indexOf(id)>=0 ) {
-      deletedFromPlaylist = player.playlists[x].songs.splice(player.playlists[x].songs.indexOf(id),1);
-         }
-   } 
- 
+   }   if ( k === 0 ) {throw 'Please enter valid id'};
+} 
+
 
 function addSong(title, album, artist, duration, id) {
-  // your code here
+    let k = 0
+  for ( let i = 0 ; i < player.songs.length; i++ ){
+      if ( player.songs[i].id === id) { 
+        k = 1
+        }
+      }
+      if ( k === 0){
+      let newId = generateId(id);
+    player.songs.push({
+      "id" : newId,
+      "title" : title,
+      "album" : album,
+      "artist" : artist,
+      "duration" : durationMmss(duration)
+    });
+      console.log (player.songs);
+      return newId;
+   } else throw 'Please choose a new id' 
 }
+ addSong ("a","a" , "8", "612",)
 
+function generateId(id) {
+  if (id === undefined){
+   
+  let maxId = 0;
+  for ( let i = 0 ; i < player.songs.length; i++ ) {
+    if ( maxId < player.songs[i].id ){
+      maxId = player.songs[i].id;     
+    }
+  } return (maxId + 1);
+ }else {
+   return (id);
+   }
+ }
+//  generateId(16)
 function removePlaylist(id) {
   // your code here
 }
