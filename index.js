@@ -1,3 +1,4 @@
+
 'use strict'
 const player = {
   songs: [
@@ -92,6 +93,7 @@ function playListIndexById(id){
   }
   return -1
 }
+
 
 
 function addToPlayList(songId,playlistId){
@@ -228,15 +230,54 @@ function playlistDuration(id) {
     sum+=song.duration;
   }
   return sum;
+
 }
 
 function searchByQuery(query) {
-  // your code here
+  let lowerCasedQuery=query.toLowerCase()
+  let found={songs:[],playlists:[]};
+  for(let i=0;i<player.playlists.length;i++){
+    if(player.playlists[i].name.toLowerCase().includes(lowerCasedQuery)){
+      found.playlists=player.playlists[i];
+    }
+  }
+  for(let i=0;i<player.songs.length;i++){
+    const song =player.songs[i];
+    if(song.title.toLowerCase().includes(lowerCasedQuery)||song.album.toLowerCase().includes(lowerCasedQuery) || song.artist.toLowerCase().includes(lowerCasedQuery)){
+      found.songs=song;
+    }
+  }
+  sort(found.playlists);
+  sort(found.songs)
+  return found;
 }
 
+
 function searchByDuration(duration) {
-  // your code here
+  duration=mmssTOs(duration)
+  let closestPlayList=player.playlists[0];
+  let closestsong=player.songs[0];
+  for(let i=0;i<player.playlists.length;i++){
+    let a=playlistDuration(player.playlists[i].id);
+    let b=playlistDuration(closestPlayList.id);
+    if((a-duration)**2<(b-duration)**2){
+      closestPlayList=player.playlists[i];
+    } 
+  }
+  for(let i=0;i<player.songs.length;i++){
+    let a=player.songs[i].duration
+    let b=closestsong.duration
+    if((a-duration)**2<(b-duration)**2){
+      closestsong=player.songs[i];
+    } 
+  }
+  let a=closestsong.duration
+  let b=playlistDuration(closestPlayList.id)
+  if((a-duration)**2<(b-duration)**2) return closestsong;
+  return closestPlayList;
 }
+
+
 
 module.exports = {
   player,
