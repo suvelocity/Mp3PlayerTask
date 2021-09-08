@@ -1,4 +1,4 @@
-const { isIdentifier } = require("@babel/types");
+const { isIdentifier, LOOP_TYPES } = require("@babel/types");
 
 const player = {
   songs: [
@@ -125,7 +125,11 @@ function editPlaylist(playlistId, songId) {
 
 }
 function playlistDuration(id) {
-  // your code here
+  let sum =0;
+  for (let i =0; i<getPlaylistById(id).songs.length;i++){
+    sum +=getSongById(getPlaylistById(id).songs[i]).duration;
+  }
+  return sum;
 }
 
 function searchByQuery(query) {
@@ -133,7 +137,22 @@ function searchByQuery(query) {
 }
 
 function searchByDuration(duration) {
-  // your code here
+  let closestDurationObject = player.songs[0];
+  let durationInSeconds = formatMinutsToSeconds(duration);
+  let distance = Math.abs(player.songs[0].duration - durationInSeconds);
+  for (let i = 0; i< player.songs.length;i++){
+    if (Math.abs(player.songs[i].duration - durationInSeconds) < distance) {
+      distance = Math.abs(player.songs[i].duration - durationInSeconds);
+      closestDurationObject = player.songs[i];
+    }
+  }
+  for (let index = 0; index < player.playlists.length; index++) {
+    if (Math.abs(playlistDuration(player.playlists[index].id) - durationInSeconds) < distance) {
+      distance = Math.abs(playlistDuration(player.playlists[index].id) - durationInSeconds);
+      closestDurationObject = player.playlists[index];
+    }
+  }
+  return closestDurationObject;
 }
 
 // help functions:
