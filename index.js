@@ -81,12 +81,19 @@ function removeSong(id) {
 }
 
 function addSong(title, album, artist, duration, id=12) {
+  let a=0;
+  for(let x=0;x<player.songs.length ;x++){
+    if (player.songs[x].id===id) a=1}
+  if (a===1)
+    throw ("existent ID,try another one");
   player.songs.push({"id":id,
                     "title":title,
                      "album":album,
                      "artist":artist,
                      "duration":duration,
                     })
+  return player.songs[player.songs.length-1].id
+
 }
 
 function removePlaylist(id) {
