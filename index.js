@@ -57,9 +57,13 @@ function playSong(id) {
 }
 
 function removeSong(id) {
-  delete (player.songs.find( song => song.id === id));
-  for (let i in (player.playlists)){
-    delete(i.songs.filter(song => song.id === id));
+  player.songs.splice((player.songs.find( song => song.id === id)),1);
+  for (let i =0; i< player.playlists.length; i++){
+    for (let j = 0; j< player.playlists[i].songs.length;j++){
+      if (player.playlists[i].songs[j] === id){
+        player.playlists[i].songs.splice(j,1);
+      }
+    }
   }
 }
 
