@@ -68,12 +68,47 @@ function songIndexById(id) {
   }
   return -1
 }
-function isIdExsist(id) {
+function isIdExsistInSongs(id) {
   for (let i = 0; i < player.songs.length; i++) {
     if (player.songs[i]['id'] === id) return true
   }
   return false
 }
+function playListById(id){
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (player.playlists[i]['id'] === id) return player.playlists[i]
+  }
+  return undefined
+}
+function playListIndexById(id){
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (player.playlists[i]['id'] === id) return i
+  }
+  return -1
+}
+
+function playListsWiththeSong(id){//return array with index of any playlists that have this song
+  let playListsIndexWithSong=[];
+  for (let i = 0; i < player.playlists.length; i++) 
+  {
+      if(player.playlists[i].songs.includes(id)) playListsIndexWithSong.push(i);
+  }
+  return playListsIndexWithSong;
+}
+
+function removeFromPlayLists(songId){
+  for(let i=0;i<player.playlists.length;i++){
+    if (player.playlists[i].songs.includes(songId)){
+      for(let j=0;j<player.playlists[i].songs.length;j++){
+        if(player.playlists[i].songs[j]===songId){
+          player.playlists[i].songs.splice(j,1)
+        }
+      }
+    }
+  }
+}
+
+
 function playSong(id) {
     if (songById(id) === undefined) {
       throw new Error('non-existent ID')
@@ -95,11 +130,13 @@ function mmssTOs(mmss) {
   return parseInt(mmss.slice(0, 2)) * 60 + parseInt(mmss.slice(3, 5))
 }
 
+
 function removeSong(id) {
     if (songIndexById(id) === -1) {
       throw new Error('non-existent ID')
     }
-    delete player.songs[songIndexById(id)]
+    delete player.songs[songIndexById(id)];
+    removeFromPlayLists(id);
 }
 
 function addSong(title, album, artist, duration, id) {
@@ -108,10 +145,10 @@ function addSong(title, album, artist, duration, id) {
   newSong.album = album
   newSong.artist = artist
   newSong.duration = mmssTOs(duration)
-  if (!isIdExsist(id)) newSong.id = id
+  if (!isIdExsistInSongs(id)) newSong.id = id
   else {
     for (let i = 0; i < player.songs.length + 1; i++) {
-      if (!isIdExsist(i)) {
+      if (!isIdExsistInSongs(i)) {
         newSong.id = i
       }
     }
