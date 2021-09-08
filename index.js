@@ -273,19 +273,16 @@ function editPlaylist(playlistId, songId) {
     }
   }
 }
-//editPlaylist(1,1)
-//console.log(player.playlists);
-
-
 
 function playlistDuration(id) {
   const myPlaylist = player.fingObjectPlaylistByID(id);
+  
   if(isNaN(id)){
     throw "playlist ID must be a number";
   }
   else if(myPlaylist === undefined){
     throw "playlist dosent exists";
-  }
+  }  
   else{
     let durationInSeconds = 0;
     myPlaylist.songs.forEach(song => {
@@ -297,8 +294,42 @@ function playlistDuration(id) {
 }
 
 function searchByQuery(query) {
-  // your code here
+  const newQuery  = query.toLowerCase();
+  const objectReturned = {
+    "songs": [],
+    "playlists": []
+  }
+
+  player.songs.forEach(song => {
+    if(song.title.toLowerCase().includes(newQuery) || song.album.toLowerCase().includes(newQuery) || song.artist.toLowerCase().includes(newQuery)){
+      objectReturned["songs"].push(song);
+    }
+  });
+  // Sorting Songs by title
+  objectReturned.songs.sort(function(name1, name2) {
+    // Ignore uppercase and lowercase chars
+    var nameA = name1.title.toUpperCase(); 
+    var nameB = name2.title.toUpperCase(); 
+    return (nameA < nameB) ? -1 : (nameA > nameB) ? 1 : 0;   
+  })
+
+  player.playlists.forEach(playlist => {
+    if(playlist.name.toLowerCase().includes(newQuery)){
+      objectReturned["playlists"].push(playlist);
+    }
+  });
+
+  // Sorting Playlists by names
+  objectReturned.playlists.sort(function(name1, name2) {
+    // Ignore uppercase and lowercase chars
+    var nameA = name1.name.toUpperCase(); 
+    var nameB = name2.name.toUpperCase(); 
+    return (nameA < nameB) ? -1 : (nameA > nameB) ? 1 : 0;      
+  })
+
+  return objectReturned;
 }
+
 
 function searchByDuration(duration) {
   // your code here
