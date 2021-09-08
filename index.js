@@ -74,6 +74,12 @@ function isIdExsistInSongs(id) {
   }
   return false
 }
+function isIdExsistInPlayLists(id) {
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (player.playlists[i]['id'] === id) return true
+  }
+  return false
+}
 function playListById(id){
   for (let i = 0; i < player.playlists.length; i++) {
     if (player.playlists[i]['id'] === id) return player.playlists[i]
@@ -165,10 +171,20 @@ function removePlaylist(id) {
   player.playlists.splice(playListIndexById(id),1);
 }
 
-function createPlaylist(name, id) {
-  // your code here
+function createPlaylist(name, id=0) {
+  let newPlayList={name,songs:[]};
+  if (!playListById(id)) newPlayList.id=id;
+  else{
+    for (let i = 0; i < player.playlists.length + 1; i++) {
+      if (!isIdExsistInPlayLists(i)) {
+        newPlayList.id = i
+      }
+    }
+    throw new Error(`existent ID,the chosen id is ${newPlayList.id}`)
+  }
+  player.playlists.push(newPlayList);
+  return newPlayList.id;
 }
-
 function playPlaylist(id) {
   // your code here
 }
