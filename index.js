@@ -48,12 +48,32 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    console.log(/* your code here */)
+    return (`Playing ${song.title} from ${song.album} by ${song.artist} | ${secondsToMinutes(song.duration)}.`)
   },
 }
 
+function secondsToMinutes(duration){
+  let secounds = duration;
+  // Calculating the minutes
+  let mm = ( "0" + Math.floor(secounds / 60) + ":");
+  // Calculate the remaining seconds
+  let ss; 
+  if (secounds % 60 < 10) { 
+    ss = "0"+ secounds % 60;
+  }else if (secounds % 60  ){ 
+    ss =  secounds % 60;
+  }else {
+    ss = '00';
+  }
+  return mm +ss;
+};
+
 function playSong(id) {
-  // your code here
+  for (let song of player.songs){
+    if(song.id === id){
+    console.log(player.playSong(song));
+    };
+  };
 }
 
 function removeSong(id) {
