@@ -54,10 +54,11 @@ const player = {
 
 function playSong(id) {
  for (let i=0;i<player.songs.length ;i++){
-   if (player.song[i]===id){
+   if (player.songs[i].id===id){
      return player.songs[i]
    }
  }
+ throw ("no such id ,try another one")
 }
 
 function removeSong(id) {
