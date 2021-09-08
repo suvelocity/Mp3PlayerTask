@@ -47,9 +47,7 @@ const player = {
     { id: 1, name: 'Metal', songs: [1, 7, 4] },
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
-  playSong(song) {
-
-  },
+  playSong(song) {},
 }
 
 function playSong(id) {
@@ -60,14 +58,25 @@ function playSong(id) {
 }
 
 function removeSong(id) {
-  for (let y of player) {
-    id = player.songs.slice[y]
-    return id
+  for (let i = 0; i < player.songs.length; i++) {
+    if (player.songs[i].id === id) {
+      player.songs.splice(i, 1)
+      break
+    }
   }
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (player.playlists[i].songs.indexOf(id) >= 0) {
+      player.playlists[i].songs.splice(player.playlists[i].songs.indexOf(id), 1)
+      break
+    } if(id!== Number) {
+      throw `The ID should be a number`
+    }
+  }
+  return player
 }
 
 function addSong(title, album, artist, duration, id) {
- player.songs.push(addSong())
+  player.songs.push(addSong())
 }
 
 function removePlaylist(id) {
