@@ -207,6 +207,7 @@ function searchByQuery(query) {
       arrPlaylist.push(player.playlists[i].name)
     }
   }
+  return ("songs \b"+arrSongs+"\n playlists \b"+arrPlaylist)
 }
 
 function searchByDuration(duration) {
