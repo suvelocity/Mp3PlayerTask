@@ -131,7 +131,7 @@ function removePlaylist(id) {
   }
 }
 
-function createPlaylist(name, id=20) {
+function createPlaylist(name, id = 20) {
   if (findIdPlaylist(id) === true) {
     throw 'ID is already taken';
   }
@@ -145,7 +145,19 @@ function createPlaylist(name, id=20) {
 }
 
 function playPlaylist(id) {
-  // your code here
+  if (findIdPlaylist(id) === false) {
+    throw 'non-existent ID';
+  }
+  for(let i=0;i<player.playlists.length;i++)
+  {
+    if(player.playlists[i].id===id)
+    {
+      for(let j=0;j<player.playlists[i].songs.length;j++)
+      {
+        playSong(player.playlists[i].songs[j])
+      }
+    }
+  }
 }
 
 function editPlaylist(playlistId, songId) {
