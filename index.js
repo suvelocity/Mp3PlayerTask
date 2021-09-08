@@ -133,7 +133,28 @@ function playlistDuration(id) {
 }
 
 function searchByQuery(query) {
-  // your code here
+  let objectsContainsTheQuery= {};
+  for (let index = 0; index < player.songs.length; index++) {
+    if(player.songs[index].title.includes(query) || player.songs[index].album.includes(query) || player.songs[index].artist.includes(query)){
+      if (objectsContainsTheQuery[0] === undefined) {
+        objectsContainsTheQuery.push([player.songs[index]]);  
+      }
+      else{
+        objectsContainsTheQuery[0].push([player.songs[i]]);
+      }
+    }
+  }
+  for (let i= 0; i< player.playlists.length;i++){
+    if (player.playlists[i].name.includes(query)) {
+      if (objectsContainsTheQuery[1] === undefined) {
+        objectsContainsTheQuery.push([player.playlists[i]]);
+      }
+      else{
+        objectsContainsTheQuery[1].push([player.playlists[i]]);
+      }
+    }
+  }
+  return objectsContainsTheQuery;
 }
 
 function searchByDuration(duration) {
