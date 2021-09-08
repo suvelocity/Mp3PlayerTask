@@ -67,8 +67,15 @@ function removeSong(id) {
   }
 }
 
-function addSong(title, album, artist, duration, id) {
-  // your code here
+function addSong(title, album, artist, duration, id = genarateID()) {
+  player.songs.push({
+    ["title"] : title,
+    ["album"] : album,
+    ["artist"] : artist,
+    ["duration"] : formatMinutsToSeconds(duration),
+    ["id"] : id
+  })
+  return id;
 }
 
 function removePlaylist(id) {
@@ -97,6 +104,22 @@ function searchByQuery(query) {
 
 function searchByDuration(duration) {
   // your code here
+}
+function genarateID (){
+  for (let i = 1; i < player.songs.length+1;i++){
+    let flag = true;
+    for (let j = 0; j < player.songs.length;j++){
+      if(player.songs[j].id === i){
+        flag =false;
+        break;
+      }
+    }
+    if (flag){return i}
+  }
+}
+function formatMinutsToSeconds (duration){
+  let seconds = parseInt(duration.slice(0,2))*60 + parseInt(duration.slice(3,5));
+  return seconds;
 }
 
 module.exports = {
