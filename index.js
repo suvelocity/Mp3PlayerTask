@@ -195,6 +195,9 @@ catch{ throw ("non-existent playlist Id please try another")}
 function searchByQuery(query) {
   let arrSongs=[];
   for (let x=0;x<player.songs.length;x++){
+    if (player.songs[x].title.includes(query)||
+    player.songs[x].album.includes(query)==true||
+    player.songs[x].artist.includes(query)==true){
 }
 
 function searchByDuration(duration) {
