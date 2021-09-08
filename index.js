@@ -71,6 +71,7 @@ function playSong(id) {
      throw 'Please enter valid id'; 
      
 }
+// playSong(7)
  
 
   function durationMmss(duration) {
@@ -184,7 +185,7 @@ function createPlaylist(name, id) {
  } else throw 'Please choose a new id' 
    
 }
-createPlaylist("holand", )
+// createPlaylist("holand", )
 
 function generateIdForPlaylist(id) {
   if (id === undefined){
@@ -204,8 +205,23 @@ function generateIdForPlaylist(id) {
 
 
 function playPlaylist(id) {
-  // your code here
+  let k = 0;
+  for ( let i = 0 ; i < player.playlists.length; i++ ){ 
+    if (player.playlists[i].id === id ){
+      k = 1;
+      for ( let j = 0 ; j < player.playlists[i].songs.length; j++ ){
+        playSong(player.playlists[i].songs[j]);
+      } 
+      return ;
+    } 
+  }
+  if (k === 0){
+    throw 'Please enter valid id'
+  }
 }
+
+
+
 
 function editPlaylist(playlistId, songId) {
   // your code here
