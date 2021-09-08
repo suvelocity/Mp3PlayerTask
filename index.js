@@ -48,7 +48,7 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    console.log( "Playing {song.title} from {song.album} by {song.artist} | {song.duration}" );
+
   },
 }
 
@@ -61,21 +61,24 @@ function playSong(id) {
 
 function removeSong(id) {
   for (let y of player) {
-    id = player.slice[y]
+    id = player.songs.slice[y]
     return id
   }
 }
 
 function addSong(title, album, artist, duration, id) {
-  // your code here
+ player.songs.push(addSong())
 }
 
 function removePlaylist(id) {
-  // your code here
+  for (let z of player) {
+    id = player.playlists.slice[z]
+    return id
+  }
 }
 
 function createPlaylist(name, id) {
-  // your code here
+  player.playlists.push(createPlaylist())
 }
 
 function playPlaylist(id) {
