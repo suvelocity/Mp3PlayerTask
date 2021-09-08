@@ -92,16 +92,24 @@ function addSong(title, album, artist, duration, id=12) {
   duration= (minutes +":"+seconds)
   player.songs.push({"id":id,
                     "title":title,
-                     "album":album,
-                     "artist":artist,
-                     "duration":duration
+                    "album":album,
+                    "artist":artist,
+                    "duration":duration
                     })
   return player.songs[player.songs.length-1].id
 
 }
 
 function removePlaylist(id) {
-  // your code here
+    let a=0;
+    for (let i=0;i<player.playlists.length;i++){
+      if (player.playlists[i].id===id){
+        a=1
+        player.playlists.splice(i,1)
+      }
+    }
+    if (a===0) throw ("non-existent id , try another")
+    
 }
 
 function createPlaylist(name, id) {
