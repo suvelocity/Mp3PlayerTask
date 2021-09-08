@@ -79,12 +79,10 @@ function removeSong(id) {
     }
 
   }
-  for(let k=0;k<player.playlists.length;k++)
-  {
-    for(let j=0;j<player.playlists[k].songs.length;j++)
-    {
-      if(player.playlists[k].songs[j]===id)
-      player.playlists[k].songs.splice(j,1);
+  for (let k = 0; k < player.playlists.length; k++) {
+    for (let j = 0; j < player.playlists[k].songs.length; j++) {
+      if (player.playlists[k].songs[j] === id)
+        player.playlists[k].songs.splice(j, 1);
       break;
     }
   }
@@ -92,8 +90,24 @@ function removeSong(id) {
 
 
 
-function addSong(title, album, artist, duration, id) {
-  // your code here
+function addSong(title, album, artist, duration, id = 15) {
+  if (findID(id) === true) {
+    throw 'ID is already taken';
+  }
+  let time = convertSeconds(duration);
+
+  let song = {
+    id: id,
+    title: title,
+    album: album,
+    artist: artist,
+    duration: time,
+  }
+
+
+  player.songs.push(song);
+  return id;
+
 }
 
 function removePlaylist(id) {
@@ -136,6 +150,14 @@ function findID(id) {
       return true;
   }
   return false;
+
+}
+function convertSeconds(duration) {
+  let array = duration.split(":");
+  let minutes = parseInt(array[0]);
+  let seconds = parseInt(array[1]);
+  return minutes * 60 + seconds;
+
 
 }
 
