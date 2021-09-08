@@ -67,9 +67,15 @@ function removeSong(id) {
       player.songs.splice(i,1)
     }
   }
+  for (let i=0;i<player.playlists.length;i++){
+    for (let j=0;j<player.playlists[i].songs.length;j++){
+      if (player.playlists[i].songs[j]===id)
+        player.playlists[i].songs.splice(j,1);
+    }
+  }
 }
 
-function addSong(title, album, artist, duration, id) {
+function addSong(title, album, artist, duration, id=12) {
   player.songs.push({"id":id,
                     "title":title,
                      "album":album,
