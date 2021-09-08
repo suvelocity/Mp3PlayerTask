@@ -64,11 +64,18 @@ function playSong(id) {
 function removeSong(id) {
   for (let i=0;i<player.songs.length ;i++){
     if (player.songs[i].id===id){
-      
+      player.songs.splice(i,1)
+    }
+  }
 }
 
 function addSong(title, album, artist, duration, id) {
-  // your code here
+  player.songs.push({"id":id,
+                    "title":title,
+                     "album":album,
+                     "artist":artist,
+                     "duration":duration,
+                    })
 }
 
 function removePlaylist(id) {
