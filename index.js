@@ -144,11 +144,16 @@ function playPlaylist(id) {
 }
 
 function editPlaylist(playlistId, songId) {
+  let y;
   let list;
   for (let x=0;x<player.playlists.length;x++){
-  if(player.playlists[x].id===playlistId){
-   list= player.playlists[x]
+    if(player.playlists[x].id===playlistId){
+      list= player.playlists[x]
+    }
   }
+  for (let i=0;i<list.songs.length;i++){
+    if (list.songs[i]===songId&&list.songs.length<2)
+      player.playlists.splice(y,1)
   }
 }
 
