@@ -68,6 +68,9 @@ function removeSong(id) {
 }
 
 function addSong(title, album, artist, duration, id = genarateID()) {
+  if (idIsTakenQUSTION(id)){
+    id = genarateID();
+  }
   player.songs.push({
     ["title"] : title,
     ["album"] : album,
@@ -120,6 +123,14 @@ function genarateID (){
 function formatMinutsToSeconds (duration){
   let seconds = parseInt(duration.slice(0,2))*60 + parseInt(duration.slice(3,5));
   return seconds;
+}
+function idIsTakenQUSTION(id){
+  for (let j = 0; j < player.songs.length;j++){
+    if(player.songs[j].id === id){
+      return true;
+    }
+    else{return false;}
+  }
 }
 
 module.exports = {
