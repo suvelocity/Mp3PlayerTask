@@ -85,10 +85,7 @@ function addSong(title, album, artist, duration, id = genarateIDSongs()) {
 }
 
 function removePlaylist(id) {
-  if (!idIsTakenPlaylistQUSTION(id)){
-    throw("non-existent ID");
-  }
-  player.playlists.splice((player.playlists.find( playlist => playlist.id === id)),1);
+  player.playlists.splice((getPlaylistById(id)),1);
 }
 
 function createPlaylist(name, id = genarateIDSongsPlaylist()) {
@@ -104,7 +101,6 @@ function createPlaylist(name, id = genarateIDSongsPlaylist()) {
 }
 
 function playPlaylist(id) {
-  // your code here
 }
 
 function editPlaylist(playlistId, songId) {
@@ -166,7 +162,22 @@ function idIsTakenPlaylistQUSTION(id){
     else{return false;}
   }
 }
-
+function getPlaylistById(id){
+  for (let j = 0; j < player.playlists.length;j++){
+    if(player.playlists[j].id === id){
+      return player.playlists[j];
+    }
+    else{throw("non-existent ID");}
+  }
+}
+function getSongById(id){
+  for (let j = 0; j < player.songs.length;j++){
+    if(player.songs[j].id === id){
+      return player.songs[j];
+    }
+    else{throw("non-existent ID");}
+  }
+}
 module.exports = {
   player,
   playSong,
