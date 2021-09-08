@@ -131,8 +131,17 @@ function removePlaylist(id) {
   }
 }
 
-function createPlaylist(name, id) {
-  // your code here
+function createPlaylist(name, id=20) {
+  if (findIdPlaylist(id) === true) {
+    throw 'ID is already taken';
+  }
+  let newPlayList = {
+    id: id,
+    name: name,
+    songs: [],
+  }
+  player.playlists.push(newPlayList);
+  return id;
 }
 
 function playPlaylist(id) {
