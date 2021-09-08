@@ -54,10 +54,10 @@ const player = {
 
 function playSong(id) {
  for (let i=0;i<player.songs.length ;i++){
-   
+   if (player.song[i]===id){
+     return player.songs[i]
+   }
  }
-
-
 }
 
 function removeSong(id) {
