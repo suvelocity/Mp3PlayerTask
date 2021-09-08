@@ -53,7 +53,11 @@ const player = {
 }
 
 function playSong(id) {
-  // your code here
+ for (let i=0;i<player.songs.length ;i++){
+   
+ }
+
+
 }
 
 function removeSong(id) {
