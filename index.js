@@ -151,7 +151,7 @@ function editPlaylist(playlistId, songId) {
     }
   }
   if (z===0)throw ("non existing songId please try another")
-  let a;
+  let a=0;
   let y;
   let list;
   for (let x=0;x<player.playlists.length;x++){
@@ -172,7 +172,12 @@ function editPlaylist(playlistId, songId) {
 
 
 function playlistDuration(id) {
-  // your code here
+  let list;
+  for (let x=0;x<player.playlists.length;x++){
+      if(player.playlists[x].id===id){
+        list= player.playlists[x]
+      }
+}
 }
 
 function searchByQuery(query) {
