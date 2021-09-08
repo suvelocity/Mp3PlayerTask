@@ -193,12 +193,20 @@ catch{ throw ("non-existent playlist Id please try another")}
 }
 
 function searchByQuery(query) {
+  let arrPlaylist=[];
   let arrSongs=[];
   for (let x=0;x<player.songs.length;x++){
     if (player.songs[x].title.includes(query)||
         player.songs[x].album.includes(query)==true||
         player.songs[x].artist.includes(query)==true){
           arrSongs.push(player.songs[x].title)
+    }
+  }
+  for (let i=0 ;i<player.playlists.length;i++){
+    if (player.playlists[i].name.includes(query)){
+      arrPlaylist.push(player.playlists[i].name)
+    }
+  }
 }
 
 function searchByDuration(duration) {
