@@ -49,7 +49,7 @@ const player = {
   ],
 
   playSong(song) {
-    const songObj = this.fingObjectByID(song);
+    const songObj = this.findSongByID(song);
     if(isNaN(song)){
       throw "ID must be a number";
     }
@@ -58,27 +58,17 @@ const player = {
       throw ("non existent ID")
     }
     else{
-      console.log("Playing " + songObj.title + " from " + songObj.album + " by " + songObj.artist + " | " + player.calcPlayTime(songObj.duration) + ".");
+      console.log("Playing " + songObj.title + " from " + songObj.album + " by " + songObj.artist + " | " + calcPlayTime(songObj.duration) + ".");
     }
   },
 
-  // ===> Reformat from seconds to MM:SS <===
-  calcPlayTime(durationTime) {
-    const min = Math.floor(durationTime / 60);
-    const sec = durationTime - min * 60;
-    // Should add 0 before the number?   numberS = number as string    
-    const numberS1 = (min < 10) ? "0" : "";
-    const numberS2 = (sec < 10) ? "0" : "";
-    return numberS1 + min + ":" + numberS2 + sec;
-  },
-
   // ===> Returns the song by the ID given <===
-  fingObjectByID(id){
+  findSongByID(id){
     return player.songs.find(songObj => songObj.id === id);
   },
 
   // ===> Returns the playlist by the ID given <===
-  fingObjectPlaylistByID(id){
+  findPlaylistByID(id){
     return player.playlists.find(songObj => songObj.id === id);
   }
 }
@@ -88,7 +78,7 @@ function playSong(id) {
 }
 
 function removeSong(id) {
-  const songObj = player.fingObjectByID(id);
+  const songObj = player.findSongByID(id);
   // If ID is not a number
   if(isNaN(id)){
     throw "ID must be a number";
@@ -122,12 +112,22 @@ function from_Time_String_To_Seconds(duration){
   return parseInt(newDuration[0]) * 60 + parseInt(newDuration[1]);
 }
 
+// ===> Reformat from seconds to MM:SS <===
+function calcPlayTime(durationTime) {
+  const min = Math.floor(durationTime / 60);
+  const sec = durationTime - min * 60;
+  // Should add 0 before the number?   numberS = number as string    
+  const numberS1 = (min < 10) ? "0" : "";
+  const numberS2 = (sec < 10) ? "0" : "";
+  return numberS1 + min + ":" + numberS2 + sec;
+}
+
 // ===> Generate a new ID <===
 function generate_ID(songOrPlaylist){
   let i = 1
   // To Songs
   while(songOrPlaylist === "song"){
-    const songObj = player.fingObjectByID(i);
+    const songObj = player.findSongByID(i);
     // If ID does not exists
     if(songObj === undefined){      
       return i;
@@ -137,7 +137,7 @@ function generate_ID(songOrPlaylist){
 
   // To Playlist
   while(songOrPlaylist === "playlist"){
-    const playlistObj = player.fingObjectPlaylistByID(i);
+    const playlistObj = player.findPlaylistByID(i);
     // If ID does not exists
     if(playlistObj === undefined){      
       return i;
@@ -152,7 +152,7 @@ function addSong(title, album, artist, duration, id) {
   const newDuration = from_Time_String_To_Seconds(duration);  
 
   //Check if ID is already exits
-  if(player.fingObjectByID(id) !== undefined){
+  if(player.findSongByID(id) !== undefined){
     throw "That ID has been taken";   
   }  
 
@@ -185,7 +185,7 @@ function removePlaylist(id) {
   if(isNaN(id)){
     throw "ID must be a number";
   }
-  else if(player.fingObjectPlaylistByID(id) === undefined){
+  else if(player.findPlaylistByID(id) === undefined){
     throw "non existent ID";
   }
   else{
@@ -199,7 +199,7 @@ function removePlaylist(id) {
 
 function createPlaylist(name, id) {
   //Check if ID is already exits
-  if(player.fingObjectPlaylistByID(id) !== undefined){
+  if(player.findPlaylistByID(id) !== undefined){
     throw "That ID has been taken";   
   };
 
@@ -225,7 +225,7 @@ function createPlaylist(name, id) {
 }
 
 function playPlaylist(id) {
-  const playlistObj = player.fingObjectPlaylistByID(id);  
+  const playlistObj = player.findPlaylistByID(id);  
   // Checks If ID is a string
   if(isNaN(id)){
     throw "ID must be a number";
@@ -241,8 +241,8 @@ function playPlaylist(id) {
 
 
 function editPlaylist(playlistId, songId) {
-  const myPlaylist = player.fingObjectPlaylistByID(playlistId);
-  const song  = player.fingObjectByID(songId);
+  const myPlaylist = player.findPlaylistByID(playlistId);
+  const song  = player.findSongByID(songId);
   if(isNaN(playlistId)){
     throw "playlist ID must be a number";
   }
@@ -275,7 +275,7 @@ function editPlaylist(playlistId, songId) {
 }
 
 function playlistDuration(id) {
-  const myPlaylist = player.fingObjectPlaylistByID(id);
+  const myPlaylist = player.findPlaylistByID(id);
   
   if(isNaN(id)){
     throw "playlist ID must be a number";
@@ -286,7 +286,7 @@ function playlistDuration(id) {
   else{
     let durationInSeconds = 0;
     myPlaylist.songs.forEach(song => {
-      const songObj = player.fingObjectByID(song);
+      const songObj = player.findSongByID(song);
       durationInSeconds += songObj.duration;
     });
     return durationInSeconds;
@@ -325,15 +325,43 @@ function searchByQuery(query) {
     var nameA = name1.name.toUpperCase(); 
     var nameB = name2.name.toUpperCase(); 
     return (nameA < nameB) ? -1 : (nameA > nameB) ? 1 : 0;      
-  })
+  });
 
   return objectReturned;
 }
 
 
 function searchByDuration(duration) {
-  // your code here
+
+  const secondsDuration = from_Time_String_To_Seconds(duration);
+  let lowestReduceNumber = Math.abs(player.songs[0].duration - secondsDuration);
+  let selected_ID = 0;  
+  let returnSongOrPlaylist = "";
+  player.songs.forEach(song => {
+    if(lowestReduceNumber > Math.abs(song.duration - secondsDuration)){
+      lowestReduceNumber = Math.abs(song.duration - secondsDuration);
+      selected_ID = song.id;
+      returnSongOrPlaylist = "song";
+    }
+  });
+
+  player.playlists.forEach(playlist => {
+    if(lowestReduceNumber > Math.abs(playlistDuration(playlist.id) - secondsDuration)){
+      lowestReduceNumber = Math.abs(playlistDuration(playlist.id) - secondsDuration);
+      selected_ID = playlist.id;
+      returnSongOrPlaylist = "playlist";
+    }
+  });
+
+  if(returnSongOrPlaylist === "song"){
+    return player.findSongByID(selected_ID);
+  }
+  else if (returnSongOrPlaylist === "playlist"){
+    return player.findPlaylistByID(selected_ID);
+  }
 }
+
+
 
 module.exports = {
   player,
