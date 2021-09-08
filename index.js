@@ -86,6 +86,12 @@ function addSong(title, album, artist, duration, id=12) {
     if (player.songs[x].id===id) a=1}
   if (a===1)
     throw ("existent ID,try another one");
+  let b=0;
+  for (let i=0;i<duration.length;i++){
+     if (duration[i]===':')
+        b=1;
+      }
+      if (b===0) throw ("The song duration should be in mm:ss format");
   player.songs.push({"id":id,
                     "title":title,
                      "album":album,
