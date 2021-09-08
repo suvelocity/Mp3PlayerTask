@@ -135,7 +135,7 @@ function removeSong(id) {
     if (songIndexById(id) === -1) {
       throw new Error('non-existent ID')
     }
-    delete player.songs[songIndexById(id)];
+    player.songs.splice(songIndexById(id),1);
     removeFromPlayLists(id);
 }
 
