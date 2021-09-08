@@ -144,6 +144,13 @@ function playPlaylist(id) {
 }
 
 function editPlaylist(playlistId, songId) {
+  let z=0;
+  for (let j=0;j<player.songs.length;j++){
+    if (player.songs[j].id===songId){
+      z=1;
+    }
+  }
+  if (z===0)throw ("non existing songId please try another")
   let a;
   let y;
   let list;
