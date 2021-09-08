@@ -124,7 +124,7 @@ function addSong(title, album, artist, duration, id) {
         }
       }
       if ( k === 0){
-      let newId = generateId(id);
+      let newId = generateIdForSongs(id);
     player.songs.push(
       {
         "id" : newId,
@@ -134,13 +134,13 @@ function addSong(title, album, artist, duration, id) {
         "duration" : durationtoSeconds(duration),
       }
     );
-      console.log (player.songs);
+     
       return (newId);
    } else throw 'Please choose a new id' 
 }
  addSong ("this","one" , "i add","04:56",9);
 
-function generateId(id) {
+function generateIdForSongs(id) {
   if (id === undefined){
     let maxId = 0;
   for ( let i = 0 ; i < player.songs.length; i++ ) {
@@ -153,14 +153,55 @@ function generateId(id) {
   }
 }
 
-
 function removePlaylist(id) {
-  // your code here
+  let spliced = [];
+  for (let i = 0 ; i < player.playlists.length ; i++){
+    if (player.playlists[i].id=== id){
+      spliced = player.playlists.splice([i],1);
+      return
+    } else {
+      throw 'Please enter valid id';
+    }
+     
+  } 
 }
 
 function createPlaylist(name, id) {
-  // your code here
+  let k = 0;
+  for ( let i = 0 ; i < player.playlists.length; i++ ){
+    if ( player.playlists[i].id === id) { 
+      k = 1
+      }
+    }
+    if ( k === 0){
+    let newPlaylistId = generateIdForPlaylist(id);
+  player.playlists.push(
+    {
+       "id": newPlaylistId, "name": name, "songs": [] 
+    }
+  );
+      return (newPlaylistId);
+ } else throw 'Please choose a new id' 
+   
 }
+createPlaylist("holand", )
+
+function generateIdForPlaylist(id) {
+  if (id === undefined){
+    let maxId = 0;
+  for ( let i = 0 ; i < player.playlists.length; i++ ) {
+    if ( maxId < player.playlists[i].id ){
+      maxId = player.playlists[i].id;     
+    }
+  }     
+  return (maxId + 1);
+  } else {
+   return (id);
+  }
+}
+
+
+
 
 function playPlaylist(id) {
   // your code here
