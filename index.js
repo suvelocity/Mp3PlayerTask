@@ -1,3 +1,5 @@
+const { isIdentifier } = require("@babel/types");
+
 const player = {
   songs: [
     {
@@ -108,8 +110,9 @@ function playPlaylist(id) {
 
 
 function editPlaylist(playlistId, songId) {
+  getSongById(songId);
   if (getPlaylistById(playlistId).songs.includes(songId)){
-    if (getPlaylistById(id).songs.length > 1){
+    if (getPlaylistById(playlistId).songs.length > 1){
       removeSongFromPlaylist(playlistId,songId);
     }
     else{
@@ -119,8 +122,8 @@ function editPlaylist(playlistId, songId) {
   else {
     getPlaylistById(playlistId).songs.push(songId);
   }
-}
 
+}
 function playlistDuration(id) {
   // your code here
 }
@@ -164,43 +167,42 @@ function formatMinutsToSeconds (duration){
   return seconds;
 }
 function idIsTakenQUSTION(id){
-  for (let j = 0; j < player.songs.length;j++){
-    if(player.songs[j].id === id){
+  for (let i = 0; i < player.songs.length;i++){
+    if(player.songs[i].id === id){
       return true;
     }
-    else{return false;}
   }
+  return false;
 }
 function idIsTakenPlaylistQUSTION(id){
   for (let j = 0; j < player.playlists.length;j++){
     if(player.playlists[j].id === id){
       return true;
     }
-    else{return false;}
   }
+  return false;
 }
-function getPlaylistById(id){
+function getPlaylistById(playlistId){
   for (let j = 0; j < player.playlists.length;j++){
-    if(player.playlists[j].id === id){
+    if(player.playlists[j].id === playlistId){
       return player.playlists[j];
     }
-    else{throw("non-existent playlist ID");}
   }
+  throw("non-existent playlist ID");
 }
-function getSongById(id){
+function getSongById(songId){
   for (let j = 0; j < player.songs.length;j++){
-    if(player.songs[j].id === id){
+    if(player.songs[j].id === songId){
       return player.songs[j];
-    }
-    else{throw("non-existent song ID");}
+    }    
   }
+ throw("non-existent song ID");
 }
 function removeSongFromPlaylist(playlistId, songId){
   for (let i = 0 ; i< getPlaylistById(playlistId).songs.length;i++) {
     if (getPlaylistById(playlistId).songs[i] === songId) {
       getPlaylistById(playlistId).songs.splice(i,1);
     }
-    
   }
 }
 module.exports = {
