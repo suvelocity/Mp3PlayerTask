@@ -48,8 +48,9 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    console.log(`Playing ${song.title} from ${song.album} by ${song.artist} | ${song.duration}.`)
-  },
+    console.log(`Playing ${song.title} from ${song.album} by ${song.artist} | ${sTOmmss(song.duration)}.`)
+  }
+
 }
 
 function playSong(id) {
@@ -57,6 +58,19 @@ function playSong(id) {
  catch{console.log("could not find this song")}
 }
 
+function sTOmmss(s)
+  {
+    const mm = Math.floor(s/60);
+    const ss = s%60;
+    let mmss="";
+    if (mm>9 && ss>9) mmss=`${mm}:${ss}`
+    if (mm>9 && ss<=9)mmss=`${mm}:0${ss}`;
+    if (mm<=9 && ss>9)mmss=`0${mm}:${ss}`;
+    if (mm<=9 && ss<=9)mmss=`0${mm}:0${ss}`;
+    return mmss;
+  }
+
+ 
 function removeSong(id) {
   // your code here
 }
