@@ -86,6 +86,11 @@ function playSong(id) {
  
 }
 
+function durationtoSeconds(duration){
+const mm = duration[0]+duration[1];
+const ss = duration[3]+duration[4];
+return duration = +mm*60 + +ss;
+}
 
 
 function removeSong(id) {
@@ -120,33 +125,35 @@ function addSong(title, album, artist, duration, id) {
       }
       if ( k === 0){
       let newId = generateId(id);
-    player.songs.push({
-      "id" : newId,
-      "title" : title,
-      "album" : album,
-      "artist" : artist,
-      "duration" : durationMmss(duration)
-    });
+    player.songs.push(
+      {
+        "id" : newId,
+        "title" : title,
+        "album" : album,
+        "artist" :  artist,
+        "duration" : durationtoSeconds(duration),
+      }
+    );
       console.log (player.songs);
-      return newId;
+      return (newId);
    } else throw 'Please choose a new id' 
 }
- addSong ("a","a" , "8", "612",)
+ addSong ("this","one" , "i add","04:56",9);
 
 function generateId(id) {
   if (id === undefined){
-   
-  let maxId = 0;
+    let maxId = 0;
   for ( let i = 0 ; i < player.songs.length; i++ ) {
     if ( maxId < player.songs[i].id ){
       maxId = player.songs[i].id;     
     }
   } return (maxId + 1);
- }else {
+  } else {
    return (id);
-   }
- }
-//  generateId(16)
+  }
+}
+
+
 function removePlaylist(id) {
   // your code here
 }
