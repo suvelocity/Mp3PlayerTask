@@ -112,8 +112,7 @@ function removePlaylist(id) {
     
 }
 
-function createPlaylist(name, id) {
-  // your code here
+function createPlaylist(name, id=6) {
 }
 
 function playPlaylist(id) {
