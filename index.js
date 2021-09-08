@@ -117,6 +117,10 @@ function createPlaylist(name, id=6) {
   for(let x=0;x<player.playlists.length ;x++){
     if (player.playlists[x].id===id) a=1 }
     if (a===1) throw ("existent ID,try another one");
+    player.playlists.push({
+      "id":id,
+      "name":name
+})
 }
 
 function playPlaylist(id) {
