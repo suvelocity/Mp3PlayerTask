@@ -47,10 +47,11 @@ const player = {
     { id: 1, name: 'Metal', songs: [1, 7, 4] },
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
-  playSong(song) {
-    console.log(playsong(id))
-  },
-}
+  playSong(song){
+    console.log(`Playing ${song.title} from ${song.album} by ${song.artist} | ${convertDuration1(song.duration)}.`);
+    }
+  }
+
 
 function playSong(id) {
  for (let i=0;i<player.songs.length ;i++){
@@ -80,24 +81,37 @@ function removeSong(id) {
   }
 }
 
-function addSong(title, album, artist, duration, id=12) {
+function maxID (arr)
+{
+  let max=0;
+  for (let i = 0; i < arr.length; i++)
+  {
+    if (arr[i].id > max)
+      max = arr[i].id;
+  }
+  return max;
+}
+
+function addSong(title, album, artist, duration, id) {
+  if (id===undefined)
+  id=maxID(player.songs)+1;
+  let time=0;
   let a=0;
-  for(let x=0;x<player.songs.length ;x++){
+  for(let x=0 ;x<player.songs.length ; x++){
     if (player.songs[x].id===id) a=1}
   if (a===1)
     throw ("existent ID,try another one");
-  var sec_num = parseInt(duration, 10)
-  var minutes = Math.floor(sec_num / 60) % 60
-  var seconds = sec_num % 60
-  duration= (minutes +":"+seconds)
+  let arr=duration.split(":")
+  var c = parseInt(arr[0])
+  var b = parseInt(arr[1])
+  time =(c*60 + b)
   player.songs.push({"id":id,
                     "title":title,
                     "album":album,
                     "artist":artist,
-                    "duration":duration
+                    "duration":time
                     })
   return player.songs[player.songs.length-1].id
-
 }
 
 function removePlaylist(id) {
@@ -193,21 +207,22 @@ catch{ throw ("non-existent playlist Id please try another")}
 }
 
 function searchByQuery(query) {
-  let arrPlaylist=[];
-  let arrSongs=[];
+  query.toLowerCase()
+  let results={Playlists:[],
+              Songs:[]}
   for (let x=0;x<player.songs.length;x++){
-    if (player.songs[x].title.includes(query)||
-        player.songs[x].album.includes(query)==true||
-        player.songs[x].artist.includes(query)==true){
-          arrSongs.push(player.songs[x].title)
+    if (player.songs[x].title.toLowerCase().includes(query)||
+        player.songs[x].album.toLowerCase().includes(query)==true||
+        player.songs[x].artist.toLowerCase().includes(query)==true){
+          results.Songs.push(player.songs[x].title)
     }
   }
   for (let i=0 ;i<player.playlists.length;i++){
-    if (player.playlists[i].name.includes(query)){
-      arrPlaylist.push(player.playlists[i].name)
+    if (player.playlists[i].name.toLowerCase().includes(query)){
+      results.Playlists.push(player.playlists[i].name)
     }
   }
-  return ("songs \b"+arrSongs+"\n playlists \b"+arrPlaylist)
+  return results;
 }
 
 function searchByDuration(duration) {
