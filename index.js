@@ -48,16 +48,19 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    console.log( "Playing ", song.title, " from ", song.album, " by ", song.artist, " | " ,song.duration, ".")
+    console.log( "Playing "+ song["title"]+ " from "+ song.album+ " by "+ song.artist+ " | "+ ('0' + Math.floor(song.duration / 60)).slice(-2)+":"+ song.duration%60 +".")
   },
 }
 
 function playSong(id) {
-  player.playSong(player.songs.id);
+  player.playSong(player.songs.find( song => song.id === id));
 }
 
 function removeSong(id) {
-  // your code here
+  delete (player.songs.find( song => song.id === id));
+  for (let i in (player.playlists)){
+    delete(i.songs.filter(song => song.id === id));
+  }
 }
 
 function addSong(title, album, artist, duration, id) {
