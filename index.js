@@ -193,7 +193,8 @@ catch{ throw ("non-existent playlist Id please try another")}
 }
 
 function searchByQuery(query) {
-  // your code here
+  let arrSongs=[];
+  for (let x=0;x<player.songs.length;x++){
 }
 
 function searchByDuration(duration) {
