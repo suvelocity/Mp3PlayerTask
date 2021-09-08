@@ -63,9 +63,9 @@ const player = {
 }
 
 function playSong(id) {
-  //play the requested song by his ID
   if (!checkId(player.songs, id)) throw new Error('ID is not found')
   for (let i = 0; i < player.songs.length; i++) {
+    //runs on the songs array
     if (player.songs[i].id === id) {
       player.playSong(player.songs[i])
     }
@@ -73,29 +73,21 @@ function playSong(id) {
 }
 
 function removeSong(id) {
-  //remove song by ID
   if (!checkId(player.songs, id)) throw new Error('ID is not found')
   for (let i = 0; i < player.songs.length; i++) {
+    //runs on the songs array
     //remove from songs
     if (player.songs[i].id === id) {
       player.songs.splice(i, 1)
     }
   }
-
-  for (let j = 0; j < player.playlists.length; j++) {
-    // remove from playlists
-    for (let k = 0; k < player.playlists[j].songs.length; k++) {
-      if (player.playlists[j].songs[k] === id) {
-        player.playlists[j].songs.splice(k, 1)
-      }
-    }
-  }
+  removeSongsFromPlaylist(id)
 }
 
 function addSong(title, album, artist, duration, id = generateNewId()) {
   if (checkId(player.songs, id))
     throw new Error('ID already exist, change the ID or omit it')
-  duration = oppositOfdurationFormat(duration)
+  duration = oppositOfdurationFormat(duration) //convert from mm:ss format to seconds
   player.songs.push({
     title,
     album,
@@ -124,6 +116,7 @@ function playPlaylist(id) {
     throw new Error("ID isn't exist, change the ID")
   let correctPlaylist = findPlaylistById(id)
   for (let j = 0; j < correctPlaylist.songs.length; j++) {
+    //run on the songs array inside the wanted playlist
     playSong(correctPlaylist.songs[j])
   }
   return id
@@ -147,22 +140,20 @@ function editPlaylist(playlistId, songId) {
     }
     if (correctPlaylist.songs.length === 0) {
       //If it was the only song in the playlist
-      removePlaylist(correctPlaylist.id)
+      removePlaylist(correctPlaylist.id) //remove this playlist
     }
   }
 }
 
-// editPlaylist(5, 2)
-// console.log(player.playlists[0])
-// console.log(player.playlists[1])
-
 function playlistDuration(id) {
-  let correctPlaylist = findPlaylistById(id)
+  let correctPlaylist = findPlaylistById(id) //correctPlaylist contain the wanted playlist
   let save = 0,
     sum = 0
   for (let i = 0; i < correctPlaylist.songs.length; i++) {
+    //run on the songs array inside this playlist
     save = correctPlaylist.songs[i]
     for (let j = 0; j < player.songs.length; j++) {
+      //run on the songs array
       if (player.songs[j].id === save) sum += player.songs[j].duration
     }
   }
@@ -198,20 +189,21 @@ function searchByQuery(query) {
 }
 
 function searchByDuration(duration) {
-  duration = oppositOfdurationFormat(duration)
-  let arrSongs = arrLengthSongs(duration)
-  let arrPlaylist = arrLengthPlaylist(duration)
+  duration = oppositOfdurationFormat(duration) //convert from mm:ss format to seconds
+  let arrSongs = arrLengthSongs(duration) //arrSongs contain array that look like this: [ closest-duartion-for-song , the-object-himself(song) ]
+  let arrPlaylist = arrLengthPlaylist(duration) //arrPlaylist contain array that look like this: [ closest-duartion-for-playlist , the-object-himself(playlist) ]
   return arrSongs[0] < arrPlaylist[0] ? arrSongs[1] : arrPlaylist[1]
 }
 
 ////////////////////////////////////////////////---  Help Functions(Start) ---////////////////////////////////////////////////////
 
 function arrLengthSongs(duration) {
-  //gets song duartion return array of [closet-duration-seconds,closet-duration-song]
+  //gets song duartion return array of [closet-duration-song-in-seconds , closet-duration-song-the-object-himself(song)]
   let arr = []
   let minDuration = duration,
-    index = 0 //{id: 3,title: "Thunderstruck", album: "The Razors Edge"}
+    index = 0
   for (let i = 0; i < player.songs.length; i++) {
+    //run on the songs array
     if (minDuration > Math.abs(duration - player.songs[i].duration)) {
       minDuration = Math.abs(duration - player.songs[i].duration)
       index = i
@@ -223,11 +215,12 @@ function arrLengthSongs(duration) {
 }
 
 function arrLengthPlaylist(duration) {
-  //gets song duartion return array of [closet-duration-seconds,closet-duration-playlist]
+  //gets playlist duartion return array of [closet-duration-playlist-in-seconds , closet-duration-playlist-the-object-himself(playlist)]
   let arr = []
   let minDuration = duration,
     index = 0
   for (let i = 0; i < player.playlists.length; i++) {
+    //run on playlists array
     if (
       minDuration >
       Math.abs(duration - playlistDuration(player.playlists[i].id))
@@ -244,9 +237,10 @@ function arrLengthPlaylist(duration) {
 }
 
 function findPlaylistById(id) {
-  //Get a playlist id and return
+  //Get a playlist id and return the wanted playlist by his id
   let correctPlaylist
   for (let i = 0; i < player.playlists.length; i++) {
+    //run on playlists array
     if (id === player.playlists[i].id) correctPlaylist = player.playlists[i]
   }
   return correctPlaylist
@@ -265,7 +259,7 @@ function removeSongsFromPlaylist(id) {
 }
 
 function durationFormat(duration) {
-  //converting to mm:ss format
+  //converting from seconds to mm:ss format
   let minutes = Math.floor(duration / 60)
   let seconds = duration % 60
   if (minutes < 10 && seconds < 10) return '0' + minutes + ':' + '0' + seconds
@@ -275,7 +269,7 @@ function durationFormat(duration) {
 }
 
 function oppositOfdurationFormat(duration) {
-  //converting mm:ss to seconds
+  //convert from mm:ss format to seconds
   duration = duration.split(':')
   let minutes = parseInt(duration[0]) * 60
   let seconds = parseInt(duration[1])
@@ -285,6 +279,7 @@ function oppositOfdurationFormat(duration) {
 function checkId(songs, id) {
   //Check if ID existed
   for (let i = 0; i < songs.length; i++) {
+    //run on songs array
     if (songs[i].id === id) return true
   }
   return false
@@ -294,13 +289,14 @@ function biggestId() {
   //the function return the biggest ID from thw array
   let max = player.songs[0].id
   for (let i = 0; i < player.songs.length; i++) {
+    //run on songs array
     if (max < player.songs[i].id) max = player.songs[i].id
   }
   return max
 }
 
 function generateNewId() {
-  //generates6 new ID
+  //generate new ID
   return biggestId() + 1
 }
 
