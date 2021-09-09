@@ -48,12 +48,13 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    console.log(/* your code here */)
+    console.log(`Playing ${song.title} from ${song.album} by ${song.artist} | ${secToMmSs(song.duration)}.`)
   },
 }
 
 function playSong(id) {
-  // your code here
+
+  return player.playSong(songById(id));
 }
 
 function removeSong(id) {
@@ -104,4 +105,30 @@ module.exports = {
   playlistDuration,
   searchByQuery,
   searchByDuration,
+}
+
+// help functions 
+
+function songById(id) {
+  for (let i = 0; i < player.songs.length; i++) {
+    if (player.songs[i].id == id) {
+      return player.songs[i]
+    }
+    throw new Error("There is no song with such an Id");
+  }
+}
+
+
+function secToMmSs(duration) {
+  let min = Math.floor(duration / 60);
+  let sec = duration - (min * 60);
+
+  if (min < 10) {
+    min = "0" + String(min);
+  }
+  if (sec < 10) {
+    sec = "0" + String(sec);
+  }
+
+  return min + ':' + sec
 }
