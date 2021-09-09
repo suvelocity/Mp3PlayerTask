@@ -139,7 +139,7 @@ function addSong(title, album, artist, duration, id) {
       return (newId);
    } else throw 'Please choose a new id' 
 }
- addSong ("this","one" , "i add","04:56",9);
+//  addSong ("this","one" , "i add","04:56",9);
 
 function generateIdForSongs(id) {
   if (id === undefined){
@@ -282,11 +282,76 @@ function playlistDuration(id) {
 // playlistDuration(1)
 
 function searchByQuery(query) {
+  for ( let i = 0 ; i < player.songs ; i++ ){
+    
+  }
   // your code here
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function searchByDuration(duration) {
-  // your code here
+  let closestDuration = Infinity;
+  let smallestGap = Infinity;
+  let songId;
+  for ( let i = 0 ; i < player.songs.length ; i++){
+    console.log (player.songs[i].duration)
+    console.log (Math.abs(player.songs[i].duration - durationtoSeconds(duration)))
+    if (Math.abs(player.songs[i].duration - durationtoSeconds(duration)) < smallestGap  ){
+      smallestGap = Math.abs(player.songs[i].duration- durationtoSeconds(duration))
+      closestDuration = player.songs[i].duration 
+      songId = player.songs[i]
+    } 
+  } console.log (closestDuration)
+  console.log (smallestGap)
+  console.log (songId)
+
+ 
+  
+  let playlistWin = -1 ;
+  for ( let i = 0 ; i < player.playlists.length ; i++){
+    let playlistDuration = 0;
+    console.log (player.playlists[i])
+    console.log (player.playlists[i].songs.length)
+    for ( let j = 0 ; j < player.playlists[i].songs.length ; j++){
+      
+      playlistDuration += durationById(player.playlists[i].songs[j])
+      console.log (playlistDuration)
+    } if ( Math.abs(playlistDuration - durationtoSeconds(duration)) < smallestGap ){
+      playlistWin = i;
+    }
+    
+    console.log (playlistDuration)
+  } console.log (playlistWin)
+  if (playlistWin > -1 ){
+    return player.playlists[playlistWin]
+  } else return  songId
+}
+ 
+
+// searchByDuration("07:30")
+
+function durationById(id) {
+  for ( let i = 0 ; i < player.songs.length ; i++){
+    if (player.songs[i].id === id){
+      return (player.songs[i].duration)
+    }
+  }
 }
 
 module.exports = {
