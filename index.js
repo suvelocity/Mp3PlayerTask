@@ -48,12 +48,17 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    console.log(/* your code here */)
+    return ("Playing "+ song.title + " from " + song.album + " by "+song.artist + " | "+durationConvertor(song.duration)+".") 
   },
 }
 
 function playSong(id) {
-  // your code here
+  let songPlayer = findSongById(id);
+  if (songPlayer === undefined)
+  {
+    throw "This is not an existing song ID"
+  }
+  console.log(player.playSong(songPlayer));
 }
 
 function removeSong(id) {
