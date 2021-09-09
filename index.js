@@ -101,7 +101,34 @@ function findSongById (id)
 }
 
 
+function durationConvertor (duration)
+{
+  let min="";
+  let sec="";
+  if (typeof(duration) !== "number" || typeof(duration) === undefined)
+  {
+    throw "Please Enter a number"
+  }
+  min = Math.floor(duration/60);
+  sec = duration%60;
+  
+  if (min < 10 && sec < 10)  //making sure the time format get out correctly
+  {
+  return("0"+min+":"+"0"+sec)
+  }
+  else if (min < 10 && sec > 10)
+  {
+    return("0"+min+":"+sec)
+  }
+  else if (min > 10 && sec < 10)
+  {
+    return(min+":"+"0"+sec)
+  }
+  else {
+    return(min+":"+sec) 
+  }
 
+}
 
 //#endregion
 
