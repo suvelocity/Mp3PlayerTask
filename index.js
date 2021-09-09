@@ -122,7 +122,10 @@ function removeSong(id) {
 
 function addSong(title, album, artist, duration, id) {
   if(!id){
-    id = Math.floor(Math.random()*100);
+    // If the new ID will be like the existing one the do...while will change him
+    do{
+      id = Math.floor(Math.random()*100);
+    }while(player.songs.findIndex( i => (i.id === id))>= 0);
   }
   throwExistSong(id);
   let newSong = {
@@ -148,6 +151,10 @@ function removePlaylist(id) {
 function createPlaylist(name, id) {
   if(!id){
     id = Math.floor(Math.random()*100);
+    // If the new ID will be like the existing one the do...while change him
+    do{
+      id = Math.floor(Math.random()*100);
+    }while(player.playlists.findIndex( i => (i.id === id))>= 0);
   }
   throwExistPlaylist(id);
   let newPlaylist = {
