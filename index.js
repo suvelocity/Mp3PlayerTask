@@ -48,12 +48,20 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    console.log(/* your code here */)
+    console.log("playing" + song.title);
   },
 }
 
 function playSong(id) {
-  // your code here
+  const songs = player.songs;
+  for(let i=0; i<songs.length; i++)
+  {
+    if(id===songs[i].id)
+    {
+      player.playSong(songs[i]);
+    }
+
+  }
 }
 
 function removeSong(id) {
