@@ -110,7 +110,7 @@ function addSong(title, album, artist, duration, id) {
     player.songs.push(newSong);
     console.log(newSong);
     return newSong["id"];
-  }
+}
 
 
   function removePlaylist(id) {
@@ -156,7 +156,16 @@ function createPlaylist(name, id) {
 
 
 function playPlaylist(id) {
-  // your code here
+  if(findPlaylistById(id)===undefined)
+  {
+    throw "playlist id doesn't exist";
+  }
+  
+  const currentPlaylist=findPlaylistById(id);
+  for(let i=0; i<currentPlaylist.songs.length; i++)
+  {
+    playSong(currentPlaylist.songs[i]);
+  }
 }
 
 function editPlaylist(playlistId, songId) {
@@ -213,6 +222,11 @@ function durationConvertor (duration)
 
 }
 
+function findPlaylistById(id) //return playlist object by id
+{
+  let idToPlaylistConvertor= player.playlists.find(x=> x["id"]===id);
+  return idToPlaylistConvertor;
+}
 //#endregion
 
 
