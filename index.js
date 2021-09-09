@@ -84,7 +84,13 @@ function removeSong(id) {
   removeSongsFromPlaylist(id)
 }
 
-function addSong(title, album, artist, duration, id = generateNewId()) {
+function addSong(
+  title,
+  album,
+  artist,
+  duration,
+  id = generateNewId(player.songs)
+) {
   if (checkId(player.songs, id))
     throw new Error('ID already exist, change the ID or omit it')
   duration = oppositOfdurationFormat(duration) //convert from mm:ss format to seconds
@@ -104,7 +110,7 @@ function removePlaylist(id) {
   player.playlists.splice(correctPlaylist, 1)
 }
 
-function createPlaylist(name, id = generateNewId()) {
+function createPlaylist(name, id = generateNewId(player.playlists)) {
   if (checkId(player.playlists, id))
     throw new Error('ID already exist, change the ID or omit it')
   player.playlists.push({ name, id, songs: [] })
@@ -128,18 +134,17 @@ function editPlaylist(playlistId, songId) {
   if (!checkId(player.playlists, playlistId))
     throw new Error("ID isn't exist, change the ID")
   let correctPlaylist = findPlaylistById(playlistId)
-  //runs on the playlists
   for (let j = 0; j < correctPlaylist.songs.length; j++) {
     //runs on the songs array in the playlist
     if (songId === correctPlaylist.songs[j]) {
-      //If the song ID exists in the playlist
+      //if the song ID exists in the playlist
       removeSongsFromPlaylist(songId)
       //removes it
     } else {
       correctPlaylist.songs.push(songId)
     }
     if (correctPlaylist.songs.length === 0) {
-      //If it was the only song in the playlist
+      //if it was the only song in the playlist
       removePlaylist(correctPlaylist.id) //remove this playlist
     }
   }
@@ -276,28 +281,28 @@ function oppositOfdurationFormat(duration) {
   return minutes + seconds
 }
 
-function checkId(songs, id) {
-  //Check if ID existed
-  for (let i = 0; i < songs.length; i++) {
-    //run on songs array
-    if (songs[i].id === id) return true
+function checkId(songsOrPlaylists, id) {
+  //gets a songs or playlists array and check if this id existed
+  for (let i = 0; i < songsOrPlaylists.length; i++) {
+    //run on songs or playlists array
+    if (songsOrPlaylists[i].id === id) return true
   }
   return false
 }
 
-function biggestId() {
+function biggestId(songsOrPlaylists) {
   //the function return the biggest ID from thw array
-  let max = player.songs[0].id
-  for (let i = 0; i < player.songs.length; i++) {
-    //run on songs array
-    if (max < player.songs[i].id) max = player.songs[i].id
+  let max = songsOrPlaylists[0].id
+  for (let i = 0; i < songsOrPlaylists.length; i++) {
+    //run on songs or playlists array
+    if (max < songsOrPlaylists[i].id) max = songsOrPlaylists[i].id
   }
   return max
 }
 
-function generateNewId() {
-  //generate new ID
-  return biggestId() + 1
+function generateNewId(songsOrPlaylists) {
+  //gets songs or playlists array and generate new ID
+  return biggestId(songsOrPlaylists) + 1
 }
 
 /////////////////////////////////////////////////---  Help Functions(End) ---////////////////////////////////////////////////////
