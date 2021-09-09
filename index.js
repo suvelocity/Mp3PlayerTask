@@ -1,4 +1,3 @@
-
 'use strict'
 const player = {
   songs: [
@@ -51,9 +50,7 @@ const player = {
   ],
   playSong(song) {
     console.log(
-      `Playing ${song.title} from ${song.album} by ${song.artist} | ${sTOmmss(
-        song.duration
-      )}.`
+      `Playing ${song.title} from ${song.album} by ${song.artist} | ${sTOmmss(song.duration)}.`
     )
   },
 }
@@ -81,51 +78,48 @@ function isIdExsistInPlayLists(id) {
   }
   return false
 }
-function playListById(id){
+function playListById(id) {
   for (let i = 0; i < player.playlists.length; i++) {
     if (player.playlists[i]['id'] === id) return player.playlists[i]
   }
   return undefined
 }
-function playListIndexById(id){
+function playListIndexById(id) {
   for (let i = 0; i < player.playlists.length; i++) {
     if (player.playlists[i]['id'] === id) return i
   }
   return -1
 }
 
-
-
-function addToPlayList(songId,playlistId){
-  let song=songById(songId);
+function addToPlayList(songId, playlistId) {
+  let song = songById(songId)
   player.playlists[playListIndexById(playlistId)].songs.push(song.id)
 }
 
-function removeFromPlayLists(songId){
-  for(let i=0;i<player.playlists.length;i++){
-    if (player.playlists[i].songs.includes(songId)){
-      for(let j=0;j<player.playlists[i].songs.length;j++){
-        if(player.playlists[i].songs[j]===songId){
-          player.playlists[i].songs.splice(j,1)
+function removeFromPlayLists(songId) {
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (player.playlists[i].songs.includes(songId)) {
+      for (let j = 0; j < player.playlists[i].songs.length; j++) {
+        if (player.playlists[i].songs[j] === songId) {
+          player.playlists[i].songs.splice(j, 1)
         }
       }
     }
   }
 }
-function removeFromPlayList(songId,playlistId)
-{
-  for(let i=0;i<playListById(playlistId).songs.length;i++){
-   if(player.playlists[playListIndexById(playlistId)].songs[i]===songId){
-    player.playlists[playListIndexById(playlistId)].songs.splice(i,1)
-   }
+function removeFromPlayList(songId, playlistId) {
+  for (let i = 0; i < playListById(playlistId).songs.length; i++) {
+    if (player.playlists[playListIndexById(playlistId)].songs[i] === songId) {
+      player.playlists[playListIndexById(playlistId)].songs.splice(i, 1)
+    }
   }
 }
 
 function playSong(id) {
-    if (songById(id) === undefined) {
-      throw new Error('non-existent ID')
-    }
-    player.playSong(songById(id))
+  if (songById(id) === undefined) {
+    throw new Error('non-existent ID')
+  }
+  player.playSong(songById(id))
 }
 
 function sTOmmss(s) {
@@ -142,16 +136,15 @@ function mmssTOs(mmss) {
   return parseInt(mmss.slice(0, 2)) * 60 + parseInt(mmss.slice(3, 5))
 }
 
-
 function removeSong(id) {
-    if (songIndexById(id) === -1) {
-      throw new Error('non-existent ID')
-    }
-    player.songs.splice(songIndexById(id),1);
-    removeFromPlayLists(id);
+  if (songIndexById(id) === -1) {
+    throw new Error('non-existent ID')
+  }
+  player.songs.splice(songIndexById(id), 1)
+  removeFromPlayLists(id)
 }
 
-function addSong(title, album, artist, duration, id=0) {
+function addSong(title, album, artist, duration, id = 0) {
   const newSong = {}
   newSong.title = title
   newSong.album = album
@@ -170,18 +163,17 @@ function addSong(title, album, artist, duration, id=0) {
   return newSong.id
 }
 
-
 function removePlaylist(id) {
   if (playListIndexById(id) === -1) {
     throw new Error('non-existent ID')
   }
-  player.playlists.splice(playListIndexById(id),1);
+  player.playlists.splice(playListIndexById(id), 1)
 }
 
-function createPlaylist(name, id=0) {
-  let newPlayList={name,songs:[]};
-  if (!playListById(id)) newPlayList.id=id;
-  else{
+function createPlaylist(name, id = 0) {
+  let newPlayList = { name, songs: [] }
+  if (!playListById(id)) newPlayList.id = id
+  else {
     for (let i = 0; i < player.playlists.length + 1; i++) {
       if (!isIdExsistInPlayLists(i)) {
         newPlayList.id = i
@@ -189,33 +181,33 @@ function createPlaylist(name, id=0) {
     }
     throw new Error(`existent ID,the chosen id is ${newPlayList.id}`)
   }
-  player.playlists.push(newPlayList);
-  return newPlayList.id;
+  player.playlists.push(newPlayList)
+  return newPlayList.id
 }
 function playPlaylist(id) {
   if (playListIndexById(id) === -1) {
     throw new Error('non-existent ID')
   }
-  let playlist=playListById(id);
-  for(let i=0;i<playlist.songs.length;i++){
+  let playlist = playListById(id)
+  for (let i = 0; i < playlist.songs.length; i++) {
     playSong(playlist.songs[i])
   }
 }
 
-function editPlaylist(playlistId, songId) {  
+function editPlaylist(playlistId, songId) {
   if (playListById(playlistId) === undefined) {
     throw new Error('non-existent playlistId')
   }
-  if (songById(songId)===undefined) {
+  if (songById(songId) === undefined) {
     throw new Error('non-existent songId')
   }
-  let playlist=playListById(playlistId);
-  if(playlist.songs.includes(songId)&&playlist.songs.length===1)removePlaylist(playlistId)
-  else if(playlist.songs.includes(songId)&&playlist.songs.length!==1){
-    removeFromPlayList(songId,playlistId)
-  }
-  else if(!playlist.songs.includes(songId)){
-    addToPlayList(songId,playlistId)
+  let playlist = playListById(playlistId)
+  if (playlist.songs.includes(songId) && playlist.songs.length === 1)
+    removePlaylist(playlistId)
+  else if (playlist.songs.includes(songId) && playlist.songs.length !== 1) {
+    removeFromPlayList(songId, playlistId)
+  } else if (!playlist.songs.includes(songId)) {
+    addToPlayList(songId, playlistId)
   }
 }
 
@@ -223,84 +215,83 @@ function playlistDuration(id) {
   if (playListById(id) === undefined) {
     throw new Error('non-existent playlistId')
   }
-  const playlist=playListById(id);
-  let sum=0;
-  for(let i=0;i<playlist.songs.length;i++){
-    let song=songById(playlist.songs[i])
-    sum+=song.duration;
+  const playlist = playListById(id)
+  let sum = 0
+  for (let i = 0; i < playlist.songs.length; i++) {
+    let song = songById(playlist.songs[i])
+    sum += song.duration
   }
-  return sum;
-
+  return sum
 }
-function comparepl (a,b){
-    let fa=a.name.toLowerCase(),
-        fb=b.name.toLowerCase();
-    if(fa<fb){
-        return -1;
-    }
-    if(fa > fb){
-        return 1;
-    }
-    return 0;
-  };
-function compares (a,b){
-    let fa=a.title.toLowerCase(),
-        fb=b.title.toLowerCase();
-    if(fa<fb){
-        return -1;
-    }
-    if(fa > fb){
-        return 1;
-    }
-    return 0;
-  };
+function comparepl(a, b) {
+  let fa = a.name.toLowerCase(),
+    fb = b.name.toLowerCase()
+  if (fa < fb) {
+    return -1
+  }
+  if (fa > fb) {
+    return 1
+  }
+  return 0
+}
+function compares(a, b) {
+  let fa = a.title.toLowerCase(),
+    fb = b.title.toLowerCase()
+  if (fa < fb) {
+    return -1
+  }
+  if (fa > fb) {
+    return 1
+  }
+  return 0
+}
 function searchByQuery(query) {
-  let lowerCasedQuery=query.toLowerCase()
-  let found={};
-  let playlists=[]
-  let songs=[];
-  for(let i=0;i<player.playlists.length;i++){
-    if(player.playlists[i].name.toLowerCase().includes(lowerCasedQuery)){
-      playlists.push(player.playlists[i]);
+  let lowerCasedQuery = query.toLowerCase()
+  let found = {}
+  let playlists = []
+  let songs = []
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (player.playlists[i].name.toLowerCase().includes(lowerCasedQuery)) {
+      playlists.push(player.playlists[i])
     }
   }
-  for(let i=0;i<player.songs.length;i++){
-    const song =player.songs[i];
-    if(song.title.toLowerCase().includes(lowerCasedQuery)||
-    song.album.toLowerCase().includes(lowerCasedQuery) ||
-     song.artist.toLowerCase().includes(lowerCasedQuery)){
-      songs.push(song);
+  for (let i = 0; i < player.songs.length; i++) {
+    const song = player.songs[i]
+    if (
+      song.title.toLowerCase().includes(lowerCasedQuery) ||
+      song.album.toLowerCase().includes(lowerCasedQuery) ||
+      song.artist.toLowerCase().includes(lowerCasedQuery)
+    ) {
+      songs.push(song)
     }
   }
-  found.playlists= playlists.sort(comparepl);
-  found.songs=songs.sort(compares);
-  return found;
+  found.playlists = playlists.sort(comparepl)
+  found.songs = songs.sort(compares)
+  return found
 }
 function searchByDuration(duration) {
-  duration=mmssTOs(duration)
-  let closestPlayList=player.playlists[0];
-  let closestsong=player.songs[0];
-  for(let i=0;i<player.playlists.length;i++){
-    let a=playlistDuration(player.playlists[i].id);
-    let b=playlistDuration(closestPlayList.id);
-    if((a-duration)**2<(b-duration)**2){
-      closestPlayList=player.playlists[i];
-    } 
+  duration = mmssTOs(duration)
+  let closestPlayList = player.playlists[0]
+  let closestsong = player.songs[0]
+  for (let i = 0; i < player.playlists.length; i++) {
+    let a = playlistDuration(player.playlists[i].id)
+    let b = playlistDuration(closestPlayList.id)
+    if ((a - duration) ** 2 < (b - duration) ** 2) {
+      closestPlayList = player.playlists[i]
+    }
   }
-  for(let i=0;i<player.songs.length;i++){
-    let a=player.songs[i].duration
-    let b=closestsong.duration
-    if((a-duration)**2<(b-duration)**2){
-      closestsong=player.songs[i];
-    } 
+  for (let i = 0; i < player.songs.length; i++) {
+    let a = player.songs[i].duration
+    let b = closestsong.duration
+    if ((a - duration) ** 2 < (b - duration) ** 2) {
+      closestsong = player.songs[i]
+    }
   }
-  let a=closestsong.duration
-  let b=playlistDuration(closestPlayList.id)
-  if((a-duration)**2<(b-duration)**2) return closestsong;
-  return closestPlayList;
+  let a = closestsong.duration
+  let b = playlistDuration(closestPlayList.id)
+  if ((a - duration) ** 2 < (b - duration) ** 2) return closestsong
+  return closestPlayList
 }
-
-
 
 module.exports = {
   player,
