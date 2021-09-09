@@ -160,7 +160,14 @@ function createPlaylist(name, id) {
 }
 
 function playPlaylist(id) {
-  // your code here
+  throwNotExistPlaylist(id);
+  for(let i = 0; i< player.playlists.length; i++){
+    if( player.playlists[i].id === id){
+      for(let song of player.playlists[i].songs){
+        playSong(song);
+      }
+    }
+  }
 }
 
 function editPlaylist(playlistId, songId) {
