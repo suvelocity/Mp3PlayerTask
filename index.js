@@ -1,4 +1,4 @@
-const { stringLiteral } = require("@babel/types");
+const { stringLiteral, assertEnumDeclaration } = require("@babel/types");
 
 const player = {
   songs: [
@@ -47,7 +47,7 @@ const player = {
     
   ],
   playlists: [
-    { id: 1, name: 'Metal', songs: [1, 7, 4] },
+    { id: 1, name: 'Metal', songs: [1,7,4] },
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
@@ -231,8 +231,40 @@ function playPlaylist(id) {
 
 
 function editPlaylist(playlistId, songId) {
-  // your code here
+ 
+//  defining two sets , one for the songs id and one for the playlist id
+ let songsArrId=player.songs.map(x => x.id);
+ let playlistArrId=player.playlists.map(x => x.id);
+// throw area for non existing id's
+        if(!(playlistArrId.includes(playlistId))){
+          throw("Non-existent playlist ID")
+        }
+        if(!(songsArrId.includes(songId))){
+          throw("Non-existent song ID")
+        }
+  
+// Find index of playlist whose id is equal to playlistId
+  let currPlay_ind=player.playlists.findIndex(element => element.id===playlistId)
+  let currPlay=player.playlists[currPlay_ind]
+
+// Find the index of the song whose id is equal to songId
+  let songIndex=currPlay.songs.findIndex(element => element===songId)
+  if (songIndex === -1){// If song not found, add it to the playlist
+    currPlay.songs.push(songId);
+  }
+  else{ // If song found, delete it from playlist. If afterwards the playlist is empty, delete it.
+    currPlay.songs.splice(songIndex,1);
+    if(currPlay.songs.length===0){
+        player.playlists.splice(currPlay_ind,1);
+    }
+  }
+
 }
+ console.log(editPlaylist(1,3));
+
+
+
+
 
 function playlistDuration(id) {
   // 
@@ -304,7 +336,7 @@ function searchByDuration(duration) {
     }
   }
   if(minPlaylists>minSongs){
-    // calculates what closer , the playlists nearest duration or the songs nearest duration.
+    // calculates what closer , the playlists nearest duration or the songs nearest duration
     return player.songs[minS_index];
   }else{
     return player.playlists[minP_index];
@@ -351,4 +383,5 @@ module.exports = {
 //   }
 // }
 // console.log(result);
+
 
