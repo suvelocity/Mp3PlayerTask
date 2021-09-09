@@ -180,11 +180,43 @@ function playlistDuration(id) {
 }
 
 function searchByQuery(query) {
-  // your code here
+  const result={songs:[],playlists:[]}
+  let str=query.toLowerCase();
+  for(let i of player.songs){
+    if(i.album.toLowerCase().includes(str)||i.artist.toLowerCase().includes(str) || i.title.toLowerCase().includes(str))
+    {
+      result.songs.push(i);
+      result.songs.sort((a,b)=> {if(a.title.toLowerCase()<b.title.toLowerCase()) return -1;});
+    }
+  }
+  for(let j of player.playlists)
+  {
+    if((j.name.toLowerCase()).includes(str))
+    {
+      result.playlists.push(j);
+      result.playlists.sort((a,b)=> {if(a.name.toLowerCase()<b.name.toLowerCase()) return -1;});
+    }
+  }
+  return result;
 }
 
 function searchByDuration(duration) {
-  // your code here
+  let durationDifference=10000;
+  let durationInSeconds=durationToSeconds(duration);
+  let result={};
+  for(let i in player.songs){
+    if(Math.abs(player.songs[i].duration-durationInSeconds)<durationDifference){
+      durationDifference=Math.abs(player.songs[i].duration-durationInSeconds);
+      result=player.songs[i]
+    }
+  }
+  for(let j in player.playlists){
+    if(Math.abs(playlistDuration(player.playlists[j].id)-durationInSeconds)<durationDifference){
+      durationDifference=Math.abs(playlistDuration(player.playlists[j].id)-durationInSeconds);
+      result=player.playlists[j]
+    }
+  }
+  return result;
 }
 
 module.exports = {
