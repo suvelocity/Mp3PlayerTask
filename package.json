@@ -25,5 +25,8 @@
     "testMatch": [
       "**/__tests__/**/*.test.+(ts|tsx|js)"
     ]
+  },
+  "dependencies": {
+    "tests": "^0.0.1"
   }
 }

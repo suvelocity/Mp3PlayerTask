@@ -47,13 +47,34 @@ const player = {
     { id: 1, name: 'Metal', songs: [1, 7, 4] },
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
+  //function that looks for a song with a certin id in an array of songs.
+  //and "plays" it.
   playSong(song) {
-    console.log(/* your code here */)
+    let ans; // var to store the song with the right id.
+    // search for the song in the array.
+    this.songs.forEach(check => {
+      if(check.id == song)
+        ans = check;
+    });
+    let mmDuration;
+    let ssDuration;
+    try {
+      //calculate the duration in mm:ss format.
+      mmDuration = Math.floor(ans.duration / 60);
+      if(mmDuration < 10)
+        mmDuration = "0" + mmDuration;
+      ssDuration = ans.duration - mmDuration * 60;
+      //log the song in the right format.
+      console.log(`Playing ${ans.title} from ${ans.album} by ${ans.artist} | ${mmDuration}:${ssDuration}.`);
+    } catch (error) {
+      //exception handling.
+      console.log("error playing this song");
+    }
   },
 }
 
 function playSong(id) {
-  // your code here
+  player.playSong(id);
 }
 
 function removeSong(id) {
@@ -91,6 +112,7 @@ function searchByQuery(query) {
 function searchByDuration(duration) {
   // your code here
 }
+
 
 module.exports = {
   player,
