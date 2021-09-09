@@ -92,7 +92,12 @@ function removePlaylist(id) {
 }
 
 function createPlaylist(name, id) {
-  // your code here
+checkIdFindIndex(id, player.playlists, 'already');
+while (id === undefined || checkIdFindIndex(id, player.playlists) > -1) {
+  id = (Math.floor(Math.random()*100));
+}
+player.playlists.push({ id, name, songs: [] });
+return id;
 }
 
 function playPlaylist(id) {
