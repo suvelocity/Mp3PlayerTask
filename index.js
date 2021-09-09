@@ -92,16 +92,16 @@ function removePlaylist(id) {
 }
 
 function createPlaylist(name, id) {
-checkIdFindIndex(id, player.playlists, 'already');
-while (id === undefined || checkIdFindIndex(id, player.playlists) > -1) {
-  id = (Math.floor(Math.random()*100));
-}
-player.playlists.push({ id, name, songs: [] });
-return id;
+  checkIdFindIndex(id, player.playlists, 'already');
+  while (id === undefined || checkIdFindIndex(id, player.playlists) > -1) {
+    id = (Math.floor(Math.random()*100));
+  }
+  player.playlists.push({ id, name, songs: [] });
+  return id;
 }
 
 function playPlaylist(id) {
-player.playlists[checkIdFindIndex(id, player.playlists, 'does not')].songs.forEach(songId => playSong(songId));
+  player.playlists[checkIdFindIndex(id, player.playlists, 'does not')].songs.forEach(songId => playSong(songId));
 }
 
 function editPlaylist(playlistId, songId) {
