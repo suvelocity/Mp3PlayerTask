@@ -155,7 +155,19 @@ function playPlaylist(id) {
 }
 
 function editPlaylist(playlistId, songId) {
-  // your code here
+  songById(songId)
+  let playlist=playlistById(playlistId);
+  let index=playlistIndex(playlist);
+  for(let i=0;i<playlist.songs.length;i++){
+    if (playlist.songs[i]===songId){
+      player.playlists[index].songs.splice(i,1)
+      if(player.playlists[index].songs.length===0){
+        removePlaylist(playlistId);
+      }
+    } else{
+      player.playlists[index].songs.push(songId)
+    }
+  }
 }
 
 function playlistDuration(id) {
