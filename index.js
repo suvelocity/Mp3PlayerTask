@@ -238,6 +238,13 @@ function searchByDuration(duration) {
     var c = parseInt(arr[0])
     var b = parseInt(arr[1])
     duration =(c*60 + b)
+    let durArr=[];
+    let min;
+    for (let i=0;i<player.songs.length;i++){
+    durArr.push(player.songs[i].duration)
+    }
+    for (let x=0;x<player.playlists.length;x++){
+    durArr.push(playlistDuration(player.playlists[x].id))}
 }
 
 module.exports = {
