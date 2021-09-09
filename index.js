@@ -48,34 +48,36 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-      let mm;
-      let ss;
-      let found;
-      this.songs.forEach(element => { // check if the element of the right id exist//
-      if(element.id == song){
-        mm = Math.floor(element.duration/60); // calculate the minutes//
-        if(mm<10)
-           mm = "0"+ mm;
-        ss = element.duration % 60; // calculate the second//
-        found = element;
-      }
-    });
-    try{
-      console.log(`Playing ${found.title} from ${found.album} by ${found.artist} | ${mm}:${ss}.`);
-   }
-   catch(error){ 
-     console.log("this song is unavailable");
-   }
+    console.log("Playing "+player.songs[song].title+" from "+player.songs[song].album+" by "+player.songs[song].artist+" | "+songDuration(player.songs[song].duration)+".");
   },
 
 }
 function playSong(id) {
-  player.playSong(id);
+  let num=songById(id);
+  if(num==-1)
+    throw("ID doesn't exist");
+  player.playSong(num);
 }
-playSong(33);
+playSong(1);
 
+removeSong(4);
 function removeSong(id) {
-  // your code here
+  let idR = songById(id);
+  if (idR==-1)
+    throw("ID doesn't exist!");
+  player.songs.splice(idR,1);
+  for (let i = 0; i < player.playlists.length; i++) {
+    for (let j = 0; j < player.playlists[i].songs.length; j++) {
+      if(player.playlists[i].songs[j]==id){
+        player.playlists[i].songs.splice(j,1);
+      console.log(player.playlists[i].songs.length);
+    }
+  }
+
+  
+}
+
+  
 }
 
 function addSong(title, album, artist, duration, id) {
@@ -108,6 +110,27 @@ function searchByQuery(query) {
 
 function searchByDuration(duration) {
   // your code here
+}
+// found the index in the array of the id
+function songById(idT)
+{
+  for (let i = 0; i < player.songs.length; i++) {
+    if(player.songs[i].id==idT)
+      return i;
+  }
+  return -1;
+}
+// get duration and return it in min:sec format
+function songDuration(duration){
+  let min=0;
+  while(duration >=60)
+  {
+    min++;
+    duration-=60;
+  }
+  if(duration<10)
+    return "0"+min+":0"+duration;
+  return "0"+min+":"+duration;
 }
 
 module.exports = {
