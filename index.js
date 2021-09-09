@@ -44,13 +44,7 @@ const player = {
       artist: 'Full Trunk',
       duration: 259,
     },
-    {
-      id: 8,
-      title: '',
-      album: 'Show Us What You Got',
-      artist: 'Full Trunk',
-      duration: 259,
-    },
+    
   ],
   playlists: [
     { id: 1, name: 'Metal', songs: [1, 7, 4] },
@@ -96,6 +90,7 @@ function durationConverter(dur){
   let mmSs = mins_str + ":" + secs_str;
 
   return mmSs
+ 
 }
 
 
@@ -289,8 +284,44 @@ function searchByQuery(query) {
 
 
 function searchByDuration(duration) {
-  // your code here
+  let durationNum=durationConverterOtherSide(duration);
+  let minSongs = Math.abs((player.songs[0].duration)-durationNum);
+  let minS_index=0;
+  let minPlaylists =Math.abs(playlistDuration(player.playlists[0].id)-durationNum);
+  let minP_index=0;
+  for(let i = 0; i<player.songs.length ; i++){
+    // find the song with the nearest duration
+    if(Math.abs((player.songs[i].duration)-durationNum)<minSongs){
+      minSongs=Math.abs((player.songs[i].duration)-durationNum);
+      minS_index=i;
+    }
+  }
+  for(let j = 0; j<player.playlists.length ; j++){
+    // finds the playlist with the nearest duration
+    if(Math.abs((playlistDuration(player.playlists[j].id))-durationNum)<minPlaylists){
+      minPlaylists=Math.abs(playlistDuration(player.playlists[j].id)-durationNum);
+      minP_index=j;
+    }
+  }
+  if(minPlaylists>minSongs){
+    // calculates what closer , the playlists nearest duration or the songs nearest duration.
+    return player.songs[minS_index];
+  }else{
+    return player.playlists[minP_index];
+  }
 }
+
+function durationConverterOtherSide (mmSs){
+  // a function to evaluate the song duration from mm:ss format to a number.
+let min= mmSs.slice(0,2);
+let sec= mmSs.slice(3,5);
+let minNum = min*60;
+let secNum = sec*1;
+let durationNum =minNum+secNum;
+return (durationNum);
+}
+
+
 
 module.exports = {
   player,
@@ -305,4 +336,19 @@ module.exports = {
   searchByQuery,
   searchByDuration,
 }
+
+// a func to find closest num in array
+
+//   var inputArr = [150, 5, 200, 50, 30];
+
+// var min = Math.min();
+// var result = 0;
+// for(i=0;i<inputArr.length;i++) {
+//   let absVal = Math.abs(duration - inputArr[i])
+//   if(min > absVal) {
+//     min=absVal;
+//     result = inputArr[i];
+//   }
+// }
+// console.log(result);
 
