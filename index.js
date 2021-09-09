@@ -52,7 +52,7 @@ const player = {
   },
 }
 
-function toCorrectDuration(seconds){
+function toCorrectDuration(seconds){ //transform duration for people
   let mm;
   if(Math.floor(seconds/60)<10) mm=`0${Math.floor(seconds/60)}`;
   else mm=`${Math.floor(seconds/60)}`;
@@ -88,7 +88,7 @@ function playlistIndex(playlist){
   return index;
 }
 
-function newId(obj){
+function newId(obj){ //I take the next max id
   let maxId=0;
   for (let i of obj){
     if(i.id>maxId) maxId=i.id;
@@ -201,19 +201,19 @@ function searchByQuery(query) {
 }
 
 function searchByDuration(duration) {
-  let durationDifference=10000;
+  let durationDifference=10000; //first value 
   let durationInSeconds=durationToSeconds(duration);
   let result={};
   for(let i in player.songs){
     if(Math.abs(player.songs[i].duration-durationInSeconds)<durationDifference){
       durationDifference=Math.abs(player.songs[i].duration-durationInSeconds);
-      result=player.songs[i]
+      result=player.songs[i] //I check module of differnce between duration of song and arguments duration
     }
   }
   for(let j in player.playlists){
     if(Math.abs(playlistDuration(player.playlists[j].id)-durationInSeconds)<durationDifference){
       durationDifference=Math.abs(playlistDuration(player.playlists[j].id)-durationInSeconds);
-      result=player.playlists[j]
+      result=player.playlists[j] //I check module of differnce between duration of playlist(using function) and arguments duration
     }
   }
   return result;
