@@ -87,7 +87,7 @@ function removeSong(id) {
 function addSong(title, album, artist, duration, id) {
   if (findSongById(id) !== undefined)
   {
-    throw "This ID already exist"
+    throw "There is already a song with this ID"
   }
   
   if (id === undefined) 
@@ -130,8 +130,30 @@ function addSong(title, album, artist, duration, id) {
 }
 
 function createPlaylist(name, id) {
-  // your code here
+  if(findSongById(id) !== undefined) 
+  {
+    throw "There is already a playlist with this ID";
+  }
+
+  if (id === undefined)
+  { 
+    id = Math.floor(Math.random()*50);
+    while (id === findSongById(id)) //by defult the id will be a random number, but if there is already a song with the same id it will generate a new one until the new id is a unique one.
+    {
+      id= Math.floor(Math.random()*50);
+    }
+  }
+  const newPlaylist = {
+    id:id,
+    name:name,
+    songs:[]
+    };
+    
+  player.playlists.push(newPlaylist);
+  console.log(newPlaylist);
+  return newPlaylist["id"];
 }
+
 
 function playPlaylist(id) {
   // your code here
