@@ -97,7 +97,7 @@ function throwExistPlaylist(id){
 }
 
 function playSong(id) {
-  throwNotExistSong(id)
+  throwNotExistSong(id);
   for (let song of player.songs){
     if(song.id === id){
       console.log(player.playSong(song));
@@ -203,7 +203,46 @@ function playlistDuration(id) {
 }
 
 function searchByQuery(query) {
-  // your code here
+  let resultSearchByQuery = {"playlists": [], "songs": []}
+  for(let i = 0; i< player.songs.length; i++){
+    if (player.songs[i].title.toLowerCase().includes(query.toLowerCase())){
+      resultSearchByQuery.songs.push(player.songs[i]);
+    }else if(player.songs[i].album.toLowerCase().includes(query.toLowerCase())){
+      resultSearchByQuery.songs.push(player.songs[i]);
+    }else if(player.songs[i].artist.toLowerCase().includes(query.toLowerCase())){
+      resultSearchByQuery.songs.push(player.songs[i]);
+    }
+  }
+  for(let i = 0; i< player.playlists.length; i++){
+      if(player.playlists[i].name.toLowerCase().includes(query.toLowerCase())){
+      resultSearchByQuery.playlists.push(player.playlists[i]);
+    }
+  }
+  // Sort the songs by title
+  resultSearchByQuery.songs.sort(function(a, b) {
+    var nameA = a.title.toUpperCase(); 
+    var nameB = b.title.toUpperCase(); 
+    if (nameA < nameB) {
+      return -1;
+    }
+    if (nameA > nameB) {
+      return 1;
+    }
+    return 0;
+  });
+  // Sort the playlists by name
+  resultSearchByQuery.playlists.sort(function(a, b) {
+    var nameA = a.name.toUpperCase(); 
+    var nameB = b.name.toUpperCase(); 
+    if (nameA < nameB) {
+      return -1;
+    }
+    if (nameA > nameB) {
+      return 1;
+    }
+    return 0;
+  });
+  return resultSearchByQuery;
 }
 
 function searchByDuration(duration) {
