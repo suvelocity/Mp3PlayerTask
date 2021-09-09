@@ -92,6 +92,23 @@ function searchByDuration(duration) {
   // your code here
 }
 
+
+//#region ALL THE EXTRA FUNCTIONS
+function findSongById (id)
+{
+  let idToSongConvertor= player["songs"].find(finder=> finder["id"]===id);
+  return idToSongConvertor;
+}
+
+
+
+
+//#endregion
+
+
+
+
+
 module.exports = {
   player,
   playSong,
