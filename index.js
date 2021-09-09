@@ -68,8 +68,18 @@ function secondsToMinutes(duration){
   return mm +ss;
 }
 
+function mmssToSeconds (duration){
+  return parseInt(duration[0])*60 + parseInt(duration[1])*60 + parseInt(duration[3]) + parseInt(duration[4]);
+}
+
 function throwNotExist(id){
   if(player.songs.findIndex( i => (i.id === id))=== -1){
+    throw "ID does not exist";
+  }
+}
+
+function throwExist(id){
+  if(player.songs.findIndex( i => (i.id === id))>= 0){
     throw "ID does not exist";
   }
 }
@@ -99,7 +109,19 @@ function removeSong(id) {
 
 
 function addSong(title, album, artist, duration, id) {
-  // your code here
+  if(!id){
+    id = Math.floor(Math.random()*100);
+  }
+  throwExist(id);
+  let newSong = {
+      id: id,
+      title: title,
+      album: album,
+      artist: artist,
+      duration: mmssToSeconds(duration)
+  }
+  player.songs.push(newSong);
+  return id;
 }
 
 function removePlaylist(id) {
