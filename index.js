@@ -246,6 +246,17 @@ function searchByDuration(duration) {
     for (let x=0;x<player.playlists.length;x++){
     durArr.push(playlistDuration(player.playlists[x].id))}
     min=close(duration,durArr)
+    for (let j=0 ;j<player.songs.length;j++){
+      if (player.songs[j].duration===min)
+      return player.songs[j]
+    }
+      for (let n=0 ;n<player.playlists.length;n++){
+        if (playlistDuration(player.playlists[n].id)===min)
+        return player.playlists[n]
+      }
+    }
+
+
 }
 
 module.exports = {
