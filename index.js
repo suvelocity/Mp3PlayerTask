@@ -72,8 +72,14 @@ function mmssToSeconds (duration){
   return parseInt(duration[0])*60 + parseInt(duration[1])*60 + parseInt(duration[3]) + parseInt(duration[4]);
 }
 
-function throwNotExist(id){
+function throwNotExistSong(id){
   if(player.songs.findIndex( i => (i.id === id))=== -1){
+    throw "ID does not exist";
+  }
+}
+
+function throwNotExistPlaylist(id){
+  if(player.playlists.findIndex( i => (i.id === id))=== -1){
     throw "ID does not exist";
   }
 }
@@ -85,7 +91,7 @@ function throwExist(id){
 }
 
 function playSong(id) {
-  throwNotExist(id)
+  throwNotExistSong(id)
   for (let song of player.songs){
     if(song.id === id){
       console.log(player.playSong(song));
@@ -94,7 +100,7 @@ function playSong(id) {
 }
 
 function removeSong(id) {
-  throwNotExist(id)
+  throwNotExistSong(id)
   for (let song of player.songs){
     if(song.id === id){
       player.songs.splice(song,1);
@@ -125,7 +131,12 @@ function addSong(title, album, artist, duration, id) {
 }
 
 function removePlaylist(id) {
-  // your code here
+  throwNotExistPlaylist(id);
+  for(let i in player.playlists){
+    if( player.playlists[i].id === id){
+       player.playlists.splice(i, 1);
+    }
+  }
 }
 
 function createPlaylist(name, id) {
