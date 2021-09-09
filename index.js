@@ -70,7 +70,7 @@ function removeSong(id) {
     let songIndex= player.songs.indexOf(findSongById(id));
     player.songs.splice(songIndex,1); // removes the song from player.songs
 
-    for (let i of player.playlists) // removes the song from all the playlists
+    for (let i of player.playlists) // removes the song from all the playlists 
     {
       for (let j = 0; j < i.songs.length; j++)
       {
@@ -82,15 +82,39 @@ function removeSong(id) {
     }
   }
   
-
 }
 
 function addSong(title, album, artist, duration, id) {
-  // your code here
-}
+  if (findSongById(id) !== undefined)
+  {
+    throw "This ID already exist"
+  }
+  
+  if (id === undefined) 
+  {
+    id= Math.floor(Math.random()*50);
+    while (id === findSongById(id)) //by defult the id will be a random number, but if there is already a song with the same id it will generate a new one until the new id is a unique one.
+    {
+      id= Math.floor(Math.random()*50);
+    }
+  }
 
-function removePlaylist(id) {
-  // your code here
+    const newSong= // making a new song to push to the array
+    {
+      id: id,
+      title: title,
+      album: album,
+      artist: artist,
+      duration: duration
+    };
+    player.songs.push(newSong);
+    console.log(newSong);
+    return newSong["id"];
+  }
+
+
+  function removePlaylist(id) {
+   
 }
 
 function createPlaylist(name, id) {
