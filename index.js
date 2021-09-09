@@ -63,8 +63,6 @@ function removeSong(id) {
 
   for (let i = 0; i < player.playlists.length; i++)
     player.playlists[i].songs.splice(i, 1);
-
-
 }
 
 function addSong(title, album, artist, duration, id) {
@@ -83,7 +81,8 @@ function addSong(title, album, artist, duration, id) {
 
 
 function removePlaylist(id) {
-  // your code here
+  let indexPl = player.playlists.indexOf(getIndexPl(id))
+  player.playlists.splice(indexPl, 1)
 }
 
 function createPlaylist(name, id) {
@@ -156,6 +155,8 @@ function getIndexPl(id) {
     if (player.playlists[i].id == id)
       return player.playlists[i];
   }
+  throw new Error("No playlist eith that ID!");
+
 }
 
 function checkIdAvilable(id) {
