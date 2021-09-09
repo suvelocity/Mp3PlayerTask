@@ -101,7 +101,7 @@ return id;
 }
 
 function playPlaylist(id) {
-  // your code here
+player.playlists[checkIdFindIndex(id, player.playlists, 'does not')].songs.forEach(songId => playSong(songId));
 }
 
 function editPlaylist(playlistId, songId) {
