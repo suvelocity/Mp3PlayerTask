@@ -55,7 +55,6 @@ const player = {
 }
 
 
-
 function playSong(id) {
   const songs = player.songs;
   for(let i=0; i<songs.length; i++)
@@ -70,7 +69,26 @@ function playSong(id) {
 }
 
 function removeSong(id) {
-  // your code here
+  const songs = player.songs;
+  let isSongExist= false;
+  for(let i=0; i<songs.length; i++)
+  {
+    if(id===songs[i].id)
+    {
+      isSongExist=true;
+      songs.splice(i, 1);
+    }
+  }
+  if(!isSongExist) throw new Error('Song id not found.');
+  const playlists=player.playlists;
+  for(let j=0; j<playlists.length; j++)
+  {
+    const songIndex=playlists[j].songs.indexOf(id);
+    if(songIndex != -1)
+    {
+     playlists[j].songs.splice(songIndex,1) 
+    }
+  }
 }
 
 function addSong(title, album, artist, duration, id) {
