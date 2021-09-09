@@ -105,7 +105,11 @@ function playPlaylist(id) {
 }
 
 function editPlaylist(playlistId, songId) {
-  // your code here
+  checkIdFindIndex(songId, player.songs, 'does not');
+  const playlist = player.playlists[checkIdFindIndex(playlistId, player.playlists, 'does not')];
+  if (playlist.songs.includes(songId)) playlist.songs = playlist.songs.filter(song => song !== songId);
+  else playlist.songs.push(songId);
+  if (playlist.songs.length === 0) removePlaylist(playlistId);
 }
 
 function playlistDuration(id) {
