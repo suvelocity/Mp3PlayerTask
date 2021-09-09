@@ -171,7 +171,18 @@ function playPlaylist(id) {
 }
 
 function editPlaylist(playlistId, songId) {
-  // your code here
+  throwNotExistPlaylist(playlistId);
+  throwNotExistSong(songId);
+  for(let i = 0; i< player.playlists.length; i++){
+    if(player.playlists[i].songs.indexOf(songId) === -1 ){
+      player.playlists[i].songs.push(songId);
+    }else if (player.playlists[i].songs.indexOf(songId) >= 0 ){
+      player.playlists[i].songs.splice(player.playlists[i].songs.indexOf(songId),1);
+    }
+    if(player.playlists[i].songs.length === 0 ){
+      player.playlists.splice(i,1)
+    }
+  }
 }
 
 function playlistDuration(id) {
