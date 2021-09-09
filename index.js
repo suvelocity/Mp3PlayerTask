@@ -48,12 +48,33 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    console.log(/* your code here */)
+    console.log(`Playing ${song.title} from ${song.album} by ${song.artist} | ${durationConvert(song.duration)}.`)
   },
 }
 
+// convert to mm:ss
+function durationConvert(duration)
+{
+  let min = Math.floor(duration / 60);
+  let sec = duration % 60;
+  
+  if (min < 10){
+    min = "0" + String(min);
+  }
+  if (sec < 10) {
+    sec = "0" + String(sec);
+  }
+  return min+':'+sec
+}
+
 function playSong(id) {
-  // your code here
+  for (let song of player.songs){
+    if (song.id === id)
+    {
+      return player.playSong(song);
+    }
+  }
+  throw new Error("No such ID");
 }
 
 function removeSong(id) {
