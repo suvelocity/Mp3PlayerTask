@@ -51,30 +51,19 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    console.log(playSong(song.id));
+    
+    console.log("Playing "+song.title +" from " + song.album + " by " +song.artist + " | " +durationConverter(song.duration) + ".");
   }
 }
 
 function playSong(id) {
-  // SELF /needs to work in a collab with the func playSong(song) , up!!
-  // actually prints the song(object) info into the console 
-  // `Playing As a Stone from Show Us What You Got by Full Trunk | 04:19.`
-    let found=false;
-    let j=-1;
-    for(let i=0 ;i<player.songs.length ; i++){
-      if(player.songs[i].id===id){
-        found=true;
-        j=i;
-        break
-      }
-    }
-    if (found){
-      return "Playing "+player.songs[j].title +" from " + player.songs[j].album + " by " +player.songs[j].artist + " | " +durationConverter(player.songs[j].duration) + "."; 
-    }
-    else{
-      throw("non-existent ID");
-    }
   
+  let indexId=player.songs.findIndex(i=>i.id===id);
+  if(indexId===-1){
+    throw("non-existent ID");
+  }else{
+    player.playSong(player.songs[indexId])
+  }
   
 }
 
@@ -147,7 +136,7 @@ function addSong(title, album, artist, duration, id=-1) {
     title: title,
     album: album,
     artist: artist,
-    duration: duration
+    duration: durationConverterOtherSide(duration)
     
   };
   player.songs.push(newSong);
@@ -260,12 +249,7 @@ function editPlaylist(playlistId, songId) {
   }
 
 }
- console.log(editPlaylist(1,3));
-
-
-
-
-
+ 
 function playlistDuration(id) {
   // 
     let songsId=[];
