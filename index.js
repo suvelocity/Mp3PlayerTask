@@ -197,40 +197,33 @@ function removePlaylist(id) {
   }   
 }
 
-function createPlaylist(name, id) {
-  //Check if ID is already exits
+function createPlaylist(name, id) {  
+  if(isNaN(id)){
+    throw "ID must be a number";
+  }
   if(player.findPlaylistByID(id) !== undefined){
     throw "That ID has been taken";   
   };
-
   // If ID doesnt omitted - generate ID
   if(id === undefined){
     id = generate_ID("playlist");
   }
-  else{
-    // Checks If ID is a string
-    if(isNaN(id)){
-      throw "ID must be a number";
-    }
-  }
+  
 
   player.playlists.push({
     id :id,
     name: name,
     songs: []
   });
-
-  //Return ID
+  
   return id;
 }
 
 function playPlaylist(id) {
   const playlistObj = player.findPlaylistByID(id);  
-  // Checks If ID is a string
   if(isNaN(id)){
     throw "ID must be a number";
-  }
-  // Check if ID is exists in playlists
+  }  
   else if(playlistObj === undefined){
     throw "non existent ID";
   }
@@ -332,7 +325,9 @@ function searchByQuery(query) {
 
 
 function searchByDuration(duration) {
-
+  if(player.songs.length === 0){
+    throw "No songs exists";
+  }
   const secondsDuration = from_Time_String_To_Seconds(duration);
   let lowestReduceNumber = Math.abs(player.songs[0].duration - secondsDuration);
   let selected_ID = 0;  
@@ -360,6 +355,8 @@ function searchByDuration(duration) {
     return player.findPlaylistByID(selected_ID);
   }
 }
+
+
 
 
 
