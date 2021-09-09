@@ -69,7 +69,7 @@ function secondsToMinutes(duration){
 }
 
 function mmssToSeconds (duration){
-  return parseInt(duration[0])*60 + parseInt(duration[1])*60 + parseInt(duration[3]) + parseInt(duration[4]);
+  return parseInt(duration[0])*600 + parseInt(duration[1])*60 + parseInt(duration[3])*10 + parseInt(duration[4]);
 }
 
 function throwNotExistSong(id){
@@ -246,7 +246,31 @@ function searchByQuery(query) {
 }
 
 function searchByDuration(duration) {
-  // your code here
+  let difference = Infinity
+  let closestDurationSong = null
+  let seconds = mmssToSeconds (duration);
+  for(let i = 0 ; i < player.songs.length ; i++ ){ 
+    if (Math.max(seconds,player.songs[i].duration)-Math.min(seconds,player.songs[i].duration) < difference){
+    difference = Math.max(seconds,player.songs[i].duration)-Math.min(seconds,player.songs[i].duration)
+    closestDurationSong = player.songs[i]
+    }
+  }
+
+  let durationSum = 0
+  for(let i = 0; i< player.playlists.length; i++){
+    for(let songId of player.playlists[i].songs){
+      for(let songsIndex in player.songs){
+        if(player.songs[songsIndex].id === songId){
+          durationSum += player.songs[songsIndex].duration;
+        }
+        if (Math.max(seconds,durationSum)-Math.min(seconds,durationSum) < difference){
+          difference = Math.max(seconds,durationSum)-Math.min(seconds,durationSum);
+          closestDurationSong = player.playlists[i];
+        }
+        }
+      }
+  }
+   return closestDurationSong
 }
 
 module.exports = {
