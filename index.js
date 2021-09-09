@@ -148,7 +148,10 @@ function createPlaylist(name, id=newId(player.playlists)) {
 }
 
 function playPlaylist(id) {
-  // your code here
+  let playlist=playlistById(id);
+  for(let id of playlist.songs){
+    playSong(id)
+  }
 }
 
 function editPlaylist(playlistId, songId) {
