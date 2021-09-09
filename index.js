@@ -60,16 +60,27 @@ function playSong(id) {
 function removeSong(id) {
   let indexSong = player.songs.indexOf(songById(id))
   player.songs.splice(indexSong, 1);
-  
-  for (let i = 0; i < player.playlists.length;i++)
-  player.playlists[i].songs.splice(i, 1);
+
+  for (let i = 0; i < player.playlists.length; i++)
+    player.playlists[i].songs.splice(i, 1);
 
 
 }
 
 function addSong(title, album, artist, duration, id) {
-  // your code here
+  if (checkIdAvilable(id) == false) throw ("This ID is in use!");
+  if (id == undefined) id = generateId(id);
+
+  player.songs.push({
+    title: title,
+    album: album,
+    artist: artist,
+    duration: mmToSec(duration),
+    id: id
+  })
+  return id
 }
+
 
 function removePlaylist(id) {
   // your code here
@@ -144,5 +155,31 @@ function getIndexPl(id) {
   for (let i = 0; i < player.playlists.length; i++) {
     if (player.playlists[i].id == id)
       return player.playlists[i];
+  }
+}
+
+function checkIdAvilable(id) {
+  for (let i = 0; i < player.songs.length; i++) {
+    if (player.songs[i].id != id) {
+      return true;
+    }
+    return false;
+  }
+}
+
+function mmToSec(duration) {
+  let get = duration.split(':');
+  let min = parseInt(get[0]) * 60;
+  let sec = parseInt(get[1]);
+  let totalSec = min + sec;
+  return totalSec;
+}
+
+function generateId() {
+  id = Math.floor(Math.random() * 1000) + 1;
+  for (let i = 0; i < player.songs.length; i++) {
+    if (id !== player.songs[i].id) {
+      return id;
+    }
   }
 }
