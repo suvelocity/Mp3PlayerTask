@@ -48,12 +48,30 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    console.log(/* your code here */)
+    console.log("Playing "+song.title+" from "+song.album+" by "+song.artist+" | "+toCorrectDuration(song.duration))
   },
+}
+function toCorrectDuration(seconds){
+  let mm;
+  if(Math.floor(seconds/60)<10) mm=`0${Math.floor(seconds/60)}`;
+  else mm=`${Math.floor(seconds/60)}`;
+  let ss;
+  if(Math.floor(seconds%60)<10) ss=`0${Math.floor(seconds%60)}`;
+  else ss=`${Math.floor(seconds%60)}`;
+  return mm+":"+ss;
+}
+
+function songById(id){
+  let songObj=player.songs.find(x=> x.id===id);
+  if (songObj===undefined){
+    throw "Not a Valid ID"
+  }
+  return songObj;
 }
 
 function playSong(id) {
-  // your code here
+  let songObj=songById(id);
+  player.playSong(songObj);
 }
 
 function removeSong(id) {
