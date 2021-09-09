@@ -84,8 +84,14 @@ function throwNotExistPlaylist(id){
   }
 }
 
-function throwExist(id){
+function throwExistSong(id){
   if(player.songs.findIndex( i => (i.id === id))>= 0){
+    throw "ID does not exist";
+  }
+}
+
+function throwExistPlaylist(id){
+  if(player.playlists.findIndex( i => (i.id === id))>= 0){
     throw "ID does not exist";
   }
 }
@@ -118,7 +124,7 @@ function addSong(title, album, artist, duration, id) {
   if(!id){
     id = Math.floor(Math.random()*100);
   }
-  throwExist(id);
+  throwExistSong(id);
   let newSong = {
       id: id,
       title: title,
@@ -140,7 +146,17 @@ function removePlaylist(id) {
 }
 
 function createPlaylist(name, id) {
-  // your code here
+  if(!id){
+    id = Math.floor(Math.random()*100);
+  }
+  throwExistPlaylist(id);
+  let newPlaylist = {
+      id: id,
+      name: name,
+      songs: []
+  }
+  player.playlists.push(newPlaylist);
+  return id;
 }
 
 function playPlaylist(id) {
