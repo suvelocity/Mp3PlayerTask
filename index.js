@@ -134,8 +134,17 @@ function removePlaylist(id) {
   player.playlists.splice(playlistId,1)
 }
 
-function createPlaylist(name, id) {
-  // your code here
+function createPlaylist(name, id=newId(player.playlists)) {
+  if(player.playlists.find(x=> x.id===id)){
+    throw "ID is taken"
+  }
+  let obj={
+    id: id,
+    name: name,
+    songs: []
+  }
+  player.playlists.push(obj)
+  return id;
 }
 
 function playPlaylist(id) {
