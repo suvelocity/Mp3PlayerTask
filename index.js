@@ -70,9 +70,22 @@ function songById(id){
   return songObj;
 }
 
+function playlistById(id){
+  let playlistObj=player.playlists.find(x=> x.id===id);
+  if (playlistObj===undefined){
+    throw "Not a Valid ID"
+  }
+  return playlistObj;
+}
+
 function songIndex(song){
   let index=player.songs.indexOf(song);
   return index
+}
+
+function playlistIndex(playlist){
+  let index=player.playlists.indexOf(playlist);
+  return index;
 }
 
 function newId(obj){
@@ -105,7 +118,6 @@ function addSong(title, album, artist, duration, id=newId(player.songs)) {
   if(player.songs.find(x=> x.id===id)){
     throw "ID is taken"
   }
-  
   let obj={
     id: id,
     title: title,
@@ -118,7 +130,8 @@ function addSong(title, album, artist, duration, id=newId(player.songs)) {
 }
 
 function removePlaylist(id) {
-  // your code here
+  let playlistId=playlistIndex(playlistById(id));
+  player.playlists.splice(playlistId,1)
 }
 
 function createPlaylist(name, id) {
