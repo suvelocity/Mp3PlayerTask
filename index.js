@@ -55,7 +55,7 @@ const player = {
 function secondsToMinutes(duration){
   let secounds = duration;
   // Calculating the minutes
-  let mm = ( "0" + Math.floor(secounds / 60) + ":");
+  let mm = (Math.floor(secounds / 600).toString() + (Math.floor(secounds / 60)-Math.floor(secounds / 600)) + ":");
   // Calculate the remaining seconds
   let ss; 
   if (secounds % 60 < 10) { 
@@ -71,28 +71,28 @@ function secondsToMinutes(duration){
 function mmssToSeconds (duration){
   return parseInt(duration[0])*600 + parseInt(duration[1])*60 + parseInt(duration[3])*10 + parseInt(duration[4]);
 }
-
+// throw error if id not exist in songs
 function throwNotExistSong(id){
   if(player.songs.findIndex( i => (i.id === id))=== -1){
     throw "ID does not exist";
   }
 }
-
+// throw error if id not exist in playlists
 function throwNotExistPlaylist(id){
   if(player.playlists.findIndex( i => (i.id === id))=== -1){
     throw "ID does not exist";
   }
 }
-
+// throw error if id exist in songs
 function throwExistSong(id){
   if(player.songs.findIndex( i => (i.id === id))>= 0){
-    throw "ID does not exist";
+    throw "ID alredy exist";
   }
 }
-
+// throw error if id exist in playlists
 function throwExistPlaylist(id){
   if(player.playlists.findIndex( i => (i.id === id))>= 0){
-    throw "ID does not exist";
+    throw "ID alredy exist";
   }
 }
 
@@ -106,7 +106,7 @@ function playSong(id) {
 }
 
 function removeSong(id) {
-  throwNotExistSong(id)
+  throwNotExistSong(id);
   for (let song of player.songs){
     if(song.id === id){
       player.songs.splice(song,1);
@@ -131,7 +131,7 @@ function addSong(title, album, artist, duration, id) {
       album: album,
       artist: artist,
       duration: mmssToSeconds(duration)
-  }
+  };
   player.songs.push(newSong);
   return id;
 }
@@ -154,7 +154,7 @@ function createPlaylist(name, id) {
       id: id,
       name: name,
       songs: []
-  }
+  };
   player.playlists.push(newPlaylist);
   return id;
 }
@@ -180,7 +180,7 @@ function editPlaylist(playlistId, songId) {
       player.playlists[i].songs.splice(player.playlists[i].songs.indexOf(songId),1);
     }
     if(player.playlists[i].songs.length === 0 ){
-      player.playlists.splice(i,1)
+      player.playlists.splice(i,1);
     }
   }
 }
@@ -203,7 +203,7 @@ function playlistDuration(id) {
 }
 
 function searchByQuery(query) {
-  let resultSearchByQuery = {"playlists": [], "songs": []}
+  let resultSearchByQuery = {"playlists": [], "songs": []};
   for(let i = 0; i< player.songs.length; i++){
     if (player.songs[i].title.toLowerCase().includes(query.toLowerCase())){
       resultSearchByQuery.songs.push(player.songs[i]);
@@ -220,8 +220,8 @@ function searchByQuery(query) {
   }
   // Sort the songs by title
   resultSearchByQuery.songs.sort(function(a, b) {
-    var nameA = a.title.toUpperCase(); 
-    var nameB = b.title.toUpperCase(); 
+    let nameA = a.title.toUpperCase(); 
+    let nameB = b.title.toUpperCase(); 
     if (nameA < nameB) {
       return -1;
     }
@@ -232,8 +232,8 @@ function searchByQuery(query) {
   });
   // Sort the playlists by name
   resultSearchByQuery.playlists.sort(function(a, b) {
-    var nameA = a.name.toUpperCase(); 
-    var nameB = b.name.toUpperCase(); 
+    let nameA = a.name.toUpperCase(); 
+    let nameB = b.name.toUpperCase(); 
     if (nameA < nameB) {
       return -1;
     }
@@ -246,17 +246,16 @@ function searchByQuery(query) {
 }
 
 function searchByDuration(duration) {
-  let difference = Infinity
-  let closestDurationSong = null
+  let difference = Infinity;
+  let closestDurationSong = null;
   let seconds = mmssToSeconds (duration);
   for(let i = 0 ; i < player.songs.length ; i++ ){ 
     if (Math.max(seconds,player.songs[i].duration)-Math.min(seconds,player.songs[i].duration) < difference){
-    difference = Math.max(seconds,player.songs[i].duration)-Math.min(seconds,player.songs[i].duration)
-    closestDurationSong = player.songs[i]
+    difference = Math.max(seconds,player.songs[i].duration)-Math.min(seconds,player.songs[i].duration);
+    closestDurationSong = player.songs[i];
     }
   }
-
-  let durationSum = 0
+  let durationSum = 0;
   for(let i = 0; i< player.playlists.length; i++){
     for(let songId of player.playlists[i].songs){
       for(let songsIndex in player.songs){
@@ -267,10 +266,10 @@ function searchByDuration(duration) {
           difference = Math.max(seconds,durationSum)-Math.min(seconds,durationSum);
           closestDurationSong = player.playlists[i];
         }
-        }
       }
+    }
   }
-   return closestDurationSong
+   return closestDurationSong;
 }
 
 module.exports = {
