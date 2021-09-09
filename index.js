@@ -186,7 +186,20 @@ function editPlaylist(playlistId, songId) {
 }
 
 function playlistDuration(id) {
-  // your code here
+  throwNotExistPlaylist(id);
+  let durationSum = 0;
+  for(let i = 0; i< player.playlists.length; i++){
+    if(player.playlists[i].id === id){
+      for(let songId of player.playlists[i].songs){
+        for(let songsIndex in player.songs){
+          if(player.songs[songsIndex].id === songId){
+          durationSum += player.songs[songsIndex].duration;
+          }
+        }
+      }
+    }
+  }
+ return  durationSum;
 }
 
 function searchByQuery(query) {
