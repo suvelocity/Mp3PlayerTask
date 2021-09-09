@@ -66,19 +66,37 @@ function secondsToMinutes(duration){
     ss = '00';
   }
   return mm +ss;
-};
+}
+
+function throwNotExist(id){
+  if(player.songs.findIndex( i => (i.id === id))=== -1){
+    throw "ID does not exist";
+  }
+}
 
 function playSong(id) {
+  throwNotExist(id)
   for (let song of player.songs){
     if(song.id === id){
-    console.log(player.playSong(song));
-    };
-  };
+      console.log(player.playSong(song));
+    }
+  }
 }
 
 function removeSong(id) {
-  // your code here
+  throwNotExist(id)
+  for (let song of player.songs){
+    if(song.id === id){
+      player.songs.splice(song,1);
+    }
+  }
+  for (let i = 0 ; i < player.playlists.length; i++){
+    if( player.playlists[i].songs.indexOf(id) >=0){
+      player.playlists[i].songs.splice(player.playlists[i].songs.indexOf(id),1);
+    }
+  }
 }
+
 
 function addSong(title, album, artist, duration, id) {
   // your code here
