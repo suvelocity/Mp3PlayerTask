@@ -206,7 +206,26 @@ function playlistDuration(id) {
 }
 
 function searchByQuery(query) {
-  // your code here
+  const player1 = {
+    songs:[],
+    playlists:[],
+  }
+  ;
+  for (let i = 0; i < player.songs.length; i++) {
+    if (player.songs[i].title.toLowerCase().includes(query.toLowerCase()) || player.songs[i].artist.toLowerCase().includes(query.toLowerCase()) || player.songs[i].album.toLowerCase().includes(query.toLowerCase())) {
+      player1.songs.push(player.songs[i]);
+    }
+  }
+  for (let j = 0; j < player.playlists.length; j++) {
+    if (player.playlists[j].name.toLowerCase().includes(query.toLowerCase())) {
+      player1.playlists.push(player.playlists[j]);
+
+    }
+  }
+  player1.songs.sort((a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0));
+  player1.playlists.sort((c,d) => (c.name > d.name) ? 1 : ((c.name > d.name) ? -1 : 0));
+  return player1;
+  
 }
 
 function searchByDuration(duration) {
@@ -242,6 +261,12 @@ function findIdPlaylist(id) {
   }
   return false
 }
+function findEmpty(array, x) {
+  for (let z = 0; z < array.length; z++) {
+    if (array[z] === "")
+      array[z] === x;
+  }
+}
 
 module.exports = {
   player,
@@ -256,3 +281,4 @@ module.exports = {
   searchByQuery,
   searchByDuration,
 }
+
