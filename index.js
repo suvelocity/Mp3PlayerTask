@@ -1,5 +1,3 @@
-const { mixedTypeAnnotation } = require("@babel/types");
-
 const player = {
   songs: [
     {
@@ -46,8 +44,8 @@ const player = {
     },
   ],
   playlists: [
-    { id: 11, name: 'Metal', songs: [1, 7, 4] },
-    { id: 12, name: 'Israeli', songs: [4, 5] },
+    { id: 1, name: 'Metal', songs: [1, 7, 4] },
+    { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
       console.log("Playing " + song.title + " from " + song.album + " by " + song.artist + " | " + timeConventor(song.duration) + ".");
@@ -85,7 +83,9 @@ function getSongFromId(songs , id){
     }
   }
 }
-
+// Main Task
+//this function get id of song and print it to the console if the song id exist. 
+//if id doesnt exist the function throws error
 function playSong(id) {
   if(isIdExist(player.songs , id)){
     player.playSong(getSongFromId(player.songs , id));
@@ -124,7 +124,9 @@ function removeFromPlaylistSongsList(songs , id){
     return [songs[0]].concat(removeFromPlaylistSongsList(songs.slice(1) , id));
   }
 } 
-
+// Main Task
+//this function gets id of song and remove  it from player songs and from the player playlists
+//if id doesnt exist the function throws error
 function removeSong(id) {
   if (isIdExist(player.songs , id)){
     player.songs=removeSongFromPlayerById(player.songs , id)
@@ -163,7 +165,9 @@ function timeConventorToSeconds(time){
   let sec = parseInt(arr[3]+arr[4]);
   return (min * 60) + sec;
 }
-
+// Main Task
+//this function gets arguments of song and add it to player songs list 
+//if id exist on player songs list the function throws error
 function addSong(title, album, artist, duration, id) {
   let newId=id;
   if (isIdExist(player.songs , id)){
@@ -188,7 +192,9 @@ function removeHelp(List,id){
     return [List[0]].concat(removeHelp(List.slice(1),id));
   }
 }
-
+//Main Task
+//this function gets id of playlist and remove the playlist from the player playlists list
+//if id doesnt exist the function throws an error
 function removePlaylist(id) {
   if (isIdExist(player.playlists, id)){
     player.playlists  = removeHelp(player.playlists,id);
@@ -196,7 +202,9 @@ function removePlaylist(id) {
     throw "non exist Id";
   }
 }
-
+//Main Task
+//this function gets id of new playlist and name and creates new playlist on the playlists list of the player
+//if id is taken the function throws an error
 function createPlaylist(name, id) {
   let newId=id;
   if (isIdExist(player.playlists , id)){
@@ -220,7 +228,9 @@ function returnPropItem(playerList,id){
     return returnPropItem(playerList.slice(1),id);
   }
 }
-
+//Main Task
+//this function gets id of playlist and print to the console every song that exist in the playlist
+//if id doesnt exist the function throws an error
 function playPlaylist(id) {
   if (!isIdExist(player.playlists , id)){
     throw "non exist id";
@@ -248,6 +258,9 @@ function isIdExistInsidePlaylist(List , id){
   }
   return false;
 }
+//Main Task
+//this function gets id of playlist and edit it based on the argument of the songId that he gets.
+//if id of song or playlist is non exist the function throws an error
 function editPlaylist(playlistId, songId) {
   if (!isIdExist(player.songs , songId)){
     throw "non exist id for song";
@@ -256,14 +269,12 @@ function editPlaylist(playlistId, songId) {
   }else if(!isIdExistInsidePlaylist(returnPropItem(player.playlists, playlistId).songs , songId)){
   for (let i = 0 ; i < player.playlists.length ; i++){
     if (player.playlists[i].id === playlistId){
-      console.log("Yam")
       player.playlists[i].songs.push(songId);
     }  
   }
   }else{
     for (let i = 0 ; i < player.playlists.length ; i++){
       if (player.playlists[i].id === playlistId){
-        console.log("ebgui")
         player.playlists[i].songs = removeHelpForSongsOnPlaylists(player.playlists[i].songs,songId);
         if(player.playlists[i].songs.length === 0){
          removePlaylist(playlistId);
@@ -272,7 +283,9 @@ function editPlaylist(playlistId, songId) {
     }
   }  
 }
-
+//Main Task
+//this function gets id of playlist and return the duration of all the songs that exist in the playlist.
+//if id playlist is non exist the function throws an error
 function playlistDuration(id) {
   let duration = 0 
   if (!isIdExist(player.playlists , id)){
@@ -284,19 +297,63 @@ function playlistDuration(id) {
   }
   return duration;
 }
-
+// this function gets item (song/playlist) and query and return if the query is exist inside one of the properties of the item.(no matter to lowercase or uppercase)
+function serchForQuery(item , query){
+  let lowerQuery=query.toLowerCase();
+  if(item.hasOwnProperty('title')){
+    if(item.title.toLowerCase().indexOf(lowerQuery) > -1 || item.album.toLowerCase().indexOf(lowerQuery) > -1 || item.artist.toLowerCase().indexOf(lowerQuery) > -1){
+      return true;
+    }else{
+      return false
+    }
+  }else{
+    return item.name.toLowerCase().indexOf(lowerQuery) > -1;
+  }
+}
+//Main Task
+//this function gets string and return an object that has all the playlists that has the string inside the name of the playlists and also songs(title)
+//this function sort the playlists and songs alphanumerically
 function searchByQuery(query) {
-  // your code here
+  let arrSongs=[];
+  let arrPlaylists=[];
+  for (let i = 0 ; i < player.songs.length ; i++){
+    if(serchForQuery(player.songs[i] , query)){
+      arrSongs.push(player.songs[i])
+    }
+  }
+  for (let i = 0 ; i < player.playlists.length ; i++){
+    if(serchForQuery(player.playlists[i] , query)){
+      arrPlaylists.push(player.playlists[i])
+    }
+  }
+  let results = new Object();
+  results.playlists=arrPlaylists.sort((a,b)=> {if(a['name'] < b['name']) return -1});; //this is sort the playlists array based on the name of the playlist
+  results.songs = arrSongs.sort((a,b)=> {if(a['title'] < b['title']) return -1});//this is sort the songs array based on the title of the song
+  return results;
 }
-
+//Main Task
+//this function gets time (min:sec) and return the item(song or playlist) that has the closest duration
 function searchByDuration(duration) {
-  // your code here
+  let closest= player.songs[0];
+  for (let i = 1 ; i < player.songs.length-1 ; i++){
+    if(Math.abs(closest.duration-timeConventorToSeconds(duration)) > Math.abs(player.songs[i].duration-timeConventorToSeconds(duration))){
+      closest= player.songs[i];
+    }
+  }
+  if(player.playlists.length != 0){
+    var closestPlaylist=player.playlists[0];
+    for (let i = 1; i < player.playlists.length-1 ; i++){
+      if(Math.abs(playlistDuration(closestPlaylist.id)-timeConventorToSeconds(duration)) > Math.abs(playlistDuration(player.playlists[i].id)-timeConventorToSeconds(duration))){
+        closestPlaylist= player.playlists[i];
+      }
+    }
+  }
+  if(Math.abs(closest.duration-timeConventorToSeconds(duration)) > Math.abs(playlistDuration(closestPlaylist.id)-timeConventorToSeconds(duration))){
+    return closestPlaylist;
+  }else{
+    return closest;
+  }
 }
-playPlaylist(11);
-editPlaylist(11, 1);
-editPlaylist(11, 7);
-editPlaylist(11, 4);
-console.log(player.playlists);
 
 module.exports = {
   player,
