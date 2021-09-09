@@ -155,7 +155,7 @@ function playPlaylist(id) {
 }
 
 function editPlaylist(playlistId, songId) {
-  songById(songId)
+  songById(songId);
   let playlist=playlistById(playlistId);
   let index=playlistIndex(playlist);
   for(let i=0;i<playlist.songs.length;i++){
@@ -171,7 +171,12 @@ function editPlaylist(playlistId, songId) {
 }
 
 function playlistDuration(id) {
-  // your code here
+  let sumDuration=0;
+  let playlist=playlistById(id);
+  for(let i=0;i<playlist.songs.length;i++){
+    sumDuration+=player.songs[songIndex(songById(playlist.songs[i]))].duration;
+  }
+  return sumDuration;
 }
 
 function searchByQuery(query) {
