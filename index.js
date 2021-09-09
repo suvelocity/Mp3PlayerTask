@@ -53,17 +53,20 @@ const player = {
 }
 
 function convertToMin(seconds) {
-  let min = Math.floor(seconds/60);
-  min = min < 10 ? ('0' + min) : min;
-  let sec = seconds%60;
-  sec = sec < 10 ? ('0' + sec) : sec;
-  return `${min}:${sec}`;
+  const min = Math.floor(seconds/60);
+  const sec = seconds%60;
+  return `${min < 10 ? ('0' + min) : min}:${sec < 10 ? ('0' + sec) : sec}`;
 }
 
 function convertToSec(minutes) {
-  let min = minutes.slice(0, 2) * 60
-  let sec = minutes.slice(3, 5)
-  return Number(min)+Number(sec);
+  return Number(minutes.slice(0, 2)) * 60 + Number(minutes.slice(3, 5));
+}
+
+function checkIdFindIndex(id ,location, exists) {
+  const songOrPlaylist = location.findIndex(listElement => listElement.id === id);
+  if (songOrPlaylist > -1 && exists === 'already') throw new Error('That id already exists.');
+  if (songOrPlaylist === -1 && exists === 'does not') throw new Error('That id does not exist.');
+  return songOrPlaylist;
 }
 
 function playSong(id) {
@@ -71,14 +74,13 @@ function playSong(id) {
 }
 
 function removeSong(id) {
-  if (player.songs.findIndex(song => song.id === id) === -1) throw 'That song does not exist.';
-  player.songs = player.songs.filter(song => !(song.id === id));
+  player.songs.splice(checkIdFindIndex(id, player.songs, 'does not'), 1)
   player.playlists.forEach(playlist => playlist.songs = playlist.songs.filter(songId => !(songId === id)));
 }
 
 function addSong(title, album, artist, duration, id) {
-  if (player.songs.findIndex(song => song.id === id) > -1) throw 'That id already exists.'
-  while (id === undefined || player.songs.findIndex(song => song.id === id) > -1) {
+  checkIdFindIndex(id, player.songs, 'already')
+  while (id === undefined || checkIdFindIndex(id, player.songs) > -1) {
     id = (Math.floor(Math.random()*1000));
   }
   player.songs.push({title, album, artist, duration: convertToSec(duration), id});
@@ -86,8 +88,7 @@ function addSong(title, album, artist, duration, id) {
 }
 
 function removePlaylist(id) {
-  if (player.playlists.findIndex(playlist => playlist.id === id) === -1) throw 'That playlist does not exist.';
-  player.playlists = player.playlists.filter(playlist => !(playlist.id === id));
+  player.playlists.splice(checkIdFindIndex(id, player.playlists, 'does not'), 1);
 }
 
 function createPlaylist(name, id) {
