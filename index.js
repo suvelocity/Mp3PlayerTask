@@ -233,7 +233,11 @@ function close(goal,counts){
   }
   
 function searchByDuration(duration) {
-  // your code here
+  function searchByDuration(duration) {
+    let arr=duration.split(":")
+    var c = parseInt(arr[0])
+    var b = parseInt(arr[1])
+    duration =(c*60 + b)
 }
 
 module.exports = {
