@@ -48,7 +48,7 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song){
-    console.log(`Playing ${song.title} from ${song.album} by ${song.artist} | ${convertDuration1(song.duration)}.`);
+    console.log(`"Playing ${song.title} from ${song.album} by ${song.artist} | ${convertDuration1(song.duration)}."`);
     }
   }
 
@@ -207,24 +207,31 @@ catch{ throw ("non-existent playlist Id please try another")}
 }
 
 function searchByQuery(query) {
-  query.toLowerCase()
+  query=query.toLowerCase()
   let results={Playlists:[],
               Songs:[]}
   for (let x=0;x<player.songs.length;x++){
     if (player.songs[x].title.toLowerCase().includes(query)||
         player.songs[x].album.toLowerCase().includes(query)==true||
         player.songs[x].artist.toLowerCase().includes(query)==true){
-          results.Songs.push(player.songs[x].title)
+          results.Songs.push(player.songs[x])
     }
   }
   for (let i=0 ;i<player.playlists.length;i++){
     if (player.playlists[i].name.toLowerCase().includes(query)){
-      results.Playlists.push(player.playlists[i].name)
+      results.Playlists.push(player.playlists[i])
     }
   }
   return results;
 }
-
+function close(goal,counts){
+  var closest = counts.reduce(function(prev, curr) {
+    return (Math.abs(curr - goal) < Math.abs(prev - goal) ? curr : prev);
+  });
+  
+  return (closest);
+  }
+  
 function searchByDuration(duration) {
   // your code here
 }
