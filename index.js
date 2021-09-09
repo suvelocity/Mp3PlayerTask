@@ -281,13 +281,64 @@ function playlistDuration(id) {
 }
 // playlistDuration(1)
 
-function searchByQuery(query) {
-  for ( let i = 0 ; i < player.songs ; i++ ){
-    
-  }
-  // your code here
-}
 
+
+
+
+
+
+function searchByQuery(query) {
+  let songsResults = [];
+  for (let i = 0 ; i < player.songs.length ; ++i ){ 
+    for ( x in player.songs[i] ) {
+      let songToStrLowerCase =   player.songs[i][x].toString().toLowerCase();
+      if (songToStrLowerCase.indexOf(query.toLowerCase()) !== -1){
+        songsResults.push(player.songs[i]);
+        break;
+    }
+  }
+  } console.log(songsResults)
+
+  let playlistResults = [];
+  for (let i = 0 ; i < player.playlists.length ; ++i ){ 
+    for ( x in player.playlists[i] ) {
+      let playlistToStrLowerCase =   player.playlists[i][x].toString().toLowerCase();
+      if (playlistToStrLowerCase.indexOf(query.toLowerCase()) !== -1){
+        playlistResults.push(player.playlists[i]);
+        break;
+    }
+  }
+  } console.log(playlistResults)
+
+let sortedSongsResults ;
+sortedSongsResults = songsResults.sort(function (a, b) {
+  var nameA = a.title
+  var nameB = b.title
+  if (nameA < nameB) {
+    return -1;
+  }
+  if (nameA < nameB) {
+    return 1;
+  }
+})
+// console.log (sortedSongsResults)
+let sortedPlaylistResults ;
+
+sortedPlaylistResults = playlistResults.sort(function (a, b) {
+  var nameA = a.name
+  var nameB = b.name
+  if (nameA < nameB) {
+    return -1;
+  }
+  if (nameA < nameB) {
+    return 1;
+  }
+})
+console.log (sortedPlaylistResults)
+const newPlayer = {songs: sortedSongsResults, playlists : sortedPlaylistResults }
+return newPlayer
+}
+searchByQuery("")
 
 
 
