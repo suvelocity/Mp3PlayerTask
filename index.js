@@ -48,9 +48,10 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    console.log("Playing "+song.title+" from "+song.album+" by "+song.artist+" | "+toCorrectDuration(song.duration))
+    console.log("Playing "+song.title+" from "+song.album+" by "+song.artist+" | "+toCorrectDuration(song.duration)+".")
   },
 }
+
 function toCorrectDuration(seconds){
   let mm;
   if(Math.floor(seconds/60)<10) mm=`0${Math.floor(seconds/60)}`;
@@ -69,17 +70,51 @@ function songById(id){
   return songObj;
 }
 
+function songIndex(song){
+  let index=player.songs.indexOf(song);
+  return index
+}
+
+function newId(obj){
+  let maxId=0;
+  for (let i of obj){
+    if(i.id>maxId) maxId=i.id;
+  }
+  return maxId+1;
+}
+
+function durationToSeconds(str){
+  let duration=(parseInt(str.slice(0,2))*60)+parseInt(str.slice((str.length-2),(str.length)));
+  return duration;
+}
+
 function playSong(id) {
   let songObj=songById(id);
   player.playSong(songObj);
 }
 
 function removeSong(id) {
-  // your code here
+  let songId=songIndex(songById(id));
+  player.songs.splice(songId,1)
+  for(let list of player.playlists){
+    list.songs.splice(list.songs.indexOf(id),1)
+  }
 }
 
-function addSong(title, album, artist, duration, id) {
-  // your code here
+function addSong(title, album, artist, duration, id=newId(player.songs)) {
+  if(player.songs.find(x=> x.id===id)){
+    throw "ID is taken"
+  }
+  
+  let obj={
+    id: id,
+    title: title,
+    album: album,
+    artist: artist,
+    duration: durationToSeconds(duration) ,
+  }
+  player.songs.push(obj)
+  return id;
 }
 
 function removePlaylist(id) {
