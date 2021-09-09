@@ -48,9 +48,13 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    console.log("playing" + song.title);
-  },
+    const minutes = Math.floor(song.duration/60);
+    const minutesWithZero = minutes < 10 ? "0" + minutes : minutes;
+    console.log("Playing " + song.title + " from " + song.album + " by " + song.artist + " | " + minutesWithZero + ":" + song.duration%60 + ".");
+  }
 }
+
+
 
 function playSong(id) {
   const songs = player.songs;
@@ -59,9 +63,10 @@ function playSong(id) {
     if(id===songs[i].id)
     {
       player.playSong(songs[i]);
+      return;
     }
-
   }
+  throw new Error('Song id not found.');
 }
 
 function removeSong(id) {
