@@ -79,11 +79,10 @@ function playSong(id) {
 
 function removeSong(id) {
   const songObj = player.findSongByID(id);
-  // If ID is not a number
+  
   if(isNaN(id)){
     throw "ID must be a number";
-  }
-  // If ID does not exists
+  }  
   else if(songObj === undefined){
     throw ("non existent ID");
   }
@@ -151,7 +150,7 @@ function generate_ID(songOrPlaylist){
 function addSong(title, album, artist, duration, id) {
   const newDuration = from_Time_String_To_Seconds(duration);  
 
-  //Check if ID is already exits
+  
   if(player.findSongByID(id) !== undefined){
     throw "That ID has been taken";   
   }  
@@ -161,7 +160,6 @@ function addSong(title, album, artist, duration, id) {
     id = generate_ID("song")
   }
   else{
-    // Checks If ID is a string
     if(isNaN(id)){
       throw "ID must be a number";
     }
@@ -175,13 +173,11 @@ function addSong(title, album, artist, duration, id) {
     id: id   
   });
 
-  // Return ID
   return id;
 }
 
 
-function removePlaylist(id) {  
-  // If ID is not a number
+function removePlaylist(id) {    
   if(isNaN(id)){
     throw "ID must be a number";
   }
@@ -198,9 +194,7 @@ function removePlaylist(id) {
 }
 
 function createPlaylist(name, id) {  
-  if(isNaN(id)){
-    throw "ID must be a number";
-  }
+  
   if(player.findPlaylistByID(id) !== undefined){
     throw "That ID has been taken";   
   };
@@ -208,13 +202,12 @@ function createPlaylist(name, id) {
   if(id === undefined){
     id = generate_ID("playlist");
   }
-  
-
-  player.playlists.push({
-    id :id,
-    name: name,
-    songs: []
-  });
+  else{
+    if(isNaN(id)){
+      throw "ID must be a number";
+    }
+  }
+  player.playlists.push({id, name, songs: []});
   
   return id;
 }
@@ -287,14 +280,14 @@ function playlistDuration(id) {
 }
 
 function searchByQuery(query) {
-  const newQuery  = query.toLowerCase();
+  const lowerCaseQuery  = query.toLowerCase();
   const objectReturned = {
     "songs": [],
     "playlists": []
   }
 
   player.songs.forEach(song => {
-    if(song.title.toLowerCase().includes(newQuery) || song.album.toLowerCase().includes(newQuery) || song.artist.toLowerCase().includes(newQuery)){
+    if(song.title.toLowerCase().includes(lowerCaseQuery) || song.album.toLowerCase().includes(lowerCaseQuery) || song.artist.toLowerCase().includes(lowerCaseQuery)){
       objectReturned["songs"].push(song);
     }
   });
@@ -307,7 +300,7 @@ function searchByQuery(query) {
   })
 
   player.playlists.forEach(playlist => {
-    if(playlist.name.toLowerCase().includes(newQuery)){
+    if(playlist.name.toLowerCase().includes(lowerCaseQuery)){
       objectReturned["playlists"].push(playlist);
     }
   });
@@ -328,10 +321,13 @@ function searchByDuration(duration) {
   if(player.songs.length === 0){
     throw "No songs exists";
   }
+  else if(!check_Time_String_Validtion(duration)){
+    throw "Duration is not valid (MM:SS)";
+  }
   const secondsDuration = from_Time_String_To_Seconds(duration);
   let lowestReduceNumber = Math.abs(player.songs[0].duration - secondsDuration);
-  let selected_ID = 0;  
-  let returnSongOrPlaylist = "";
+  let selected_ID = player.songs[0].id;  
+  let returnSongOrPlaylist = "song";
   player.songs.forEach(song => {
     if(lowestReduceNumber > Math.abs(song.duration - secondsDuration)){
       lowestReduceNumber = Math.abs(song.duration - secondsDuration);
@@ -354,6 +350,13 @@ function searchByDuration(duration) {
   else if (returnSongOrPlaylist === "playlist"){
     return player.findPlaylistByID(selected_ID);
   }
+}
+console.log(searchByDuration('04:01'));
+
+// ===> Check if String is in MM:SS format <===
+function check_Time_String_Validtion(str){
+  const regex = new RegExp('^[0-9]{2}:[0-9]{2}$');
+  return regex.test(str);
 }
 
 
