@@ -72,16 +72,23 @@ function removeSong(id) {
         player.playlists[i].songs.splice(j,1);
       console.log(player.playlists[i].songs.length);
     }
-  }
-
-  
+  } 
+} 
 }
-
-  
-}
-
 function addSong(title, album, artist, duration, id) {
-  // your code here
+if(songById(id)!=-1){
+ let num=1;
+ while(songById(num)==-1)
+ {
+   num++;
+ }
+ id=num;
+ let temp = duration.split(":");
+  let min = temp[0]*60;
+  let sec = temp[1]*1
+  let ssduration = min + sec;
+}
+player.songs.push({id:id,title:title,album:album,artist:artist,duration:ssduration});
 }
 
 function removePlaylist(id) {
