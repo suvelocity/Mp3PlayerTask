@@ -58,7 +58,13 @@ function playSong(id) {
 }
 
 function removeSong(id) {
-  // your code here
+  let indexSong = player.songs.indexOf(songById(id))
+  player.songs.splice(indexSong, 1);
+  
+  for (let i = 0; i < player.playlists.length;i++)
+  player.playlists[i].songs.splice(i, 1);
+
+
 }
 
 function addSong(title, album, artist, duration, id) {
@@ -131,4 +137,12 @@ function secToMmSs(duration) {
   }
 
   return min + ':' + sec
+}
+
+
+function getIndexPl(id) {
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (player.playlists[i].id == id)
+      return player.playlists[i];
+  }
 }
