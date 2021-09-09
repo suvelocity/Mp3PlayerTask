@@ -62,7 +62,27 @@ function playSong(id) {
 }
 
 function removeSong(id) {
-  // your code here
+  if (findSongById(id)===undefined)
+  {
+    throw "This is not a valid ID"
+  }
+  else {
+    let songIndex= player.songs.indexOf(findSongById(id));
+    player.songs.splice(songIndex,1); // removes the song from player.songs
+
+    for (let i of player.playlists) // removes the song from all the playlists
+    {
+      for (let j = 0; j < i.songs.length; j++)
+      {
+        if (i.songs[j] === id)
+        {
+          i.songs.splice(j,1);
+        }
+      }
+    }
+  }
+  
+
 }
 
 function addSong(title, album, artist, duration, id) {
