@@ -118,15 +118,24 @@ function removePlaylist(id) {
     throw "ID does not exist";
   }
 }
-
-function createPlaylist(name, id) 
-{
-  for (let i = 0; i < player.playlists.length; i++) {
-    if(player.playlists[i].id==id){
-
-    }
+function createPlaylist(name, id){
+  if(id==undefined) {
+    id = uniqueId();
   }
+  else{
+    player.playlists.forEach(playlist => {
+      if(playlist.id==id)
+        throw "id exsist";
+    });
+  }
+  player.playlists.push({id:id, name:name, songs:[]});
+  return id;
 }
+
+  
+  
+
+
 
 function playPlaylist(id) {
   // your code here
@@ -147,14 +156,17 @@ function searchByQuery(query) {
 function searchByDuration(duration) {
   // your code here
 }
-//check if the the idT exist in the array playlist
-function playlistsById(idT)
-{
-  for (let i = 0; i < player.playlists.length; i++) {
-    if(player.playlists[i].id==idT)
-      return i;
+//check the id and give the max id +1
+function uniqueId(){
+let id =1;
+player.playlists.forEach(playlist => {
+  if (playlist.id>id) {
+    id = playlist.id;
+    
   }
-  return -1;
+  
+});
+return id+1;
 }
 // found the index in the array of the id
 function songById(idT)
