@@ -49,7 +49,7 @@ const player = {
   ],
   playSong(song) {
     return (`Playing ${song.title} from ${song.album} by ${song.artist} | ${durationConvertor(song.duration)}.`);
-  },
+  }
 }
 
 //Duration convertor (from seconds to mm:ss)
@@ -263,10 +263,28 @@ function editPlaylist(playlistId, songId) {
   }
 }
 
-
+//returns the duration of a song
+function getDuration(id){
+  if(!idCheck(id)){
+    throw new Error("This song does not exists")
+  }
+  for(let song of player.songs){
+    if(song.id == id){
+      return song.duration;
+    }
+  }
+}
 
 function playlistDuration(id) {
-  // your code here
+  let playlist = checkPlaylistId(id);
+  if(playlist == false){
+    throw new Error("Playlist ID non existent in playlists");
+  }
+  let durations = 0;
+  for(let i = 0; i < playlist.songs.length; i++){
+    durations += getDuration(playlist.songs[i]);
+  }
+  return durations;
 }
 
 function searchByQuery(query) {
