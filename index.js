@@ -225,6 +225,24 @@ function searchByQuery(query) {
       return newObj
 }
 function searchByDuration(duration) {
+  let mmss = secondsFormat(duration);
+    let closestSong;
+    let bestTime = 1000;
+    for (let num in player.songs) {
+        if (Math.abs(mmss - player.songs[num].duration) < bestTime) {
+            bestTime = Math.abs(mmss - player.songs[num].duration);
+            closestSong = player.songs[num];
+        }
+    }
+    for (let playlist of player.playlists) {
+        if (Math.abs(mmss - playlistDuration(playlist.id)) < bestTime) {
+            closestSong = playlist;
+            bestTime = Math.abs(mmss - playlistDuration(playlist.id));
+        }
+    }
+
+    return closestSong;
+
 }
 module.exports = {
   player,
