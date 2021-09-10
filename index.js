@@ -51,8 +51,6 @@ const player = {
     console.log(`Playing ${song.title} from ${song.album} by ${song.artist} | ${durationConvert(song.duration)}.`)
   },
 }
-
-// convert to mm:ss
 function durationConvert(duration)
 {
   let min = Math.floor(duration / 60);
@@ -66,7 +64,6 @@ function durationConvert(duration)
   }
   return min+':'+sec
 }
-
 function playSong(id) {
   for (let song of player.songs){
     if (song.id === id)
@@ -74,15 +71,55 @@ function playSong(id) {
       return player.playSong(song);
     }
   }
-  throw new Error("No such ID");
+  throw new Error("This ID are not exist");
 }
-
+function getSongByID(id){
+  for (let index = 0; index < player.songs.length; index++) {
+    if(player.songs[index].id === id){
+      return player.songs[index];
+    }
+}
+throw new Error("This song are not exist")
+}
 function removeSong(id) {
-  // your code here
+  let songIndex=player.songs.indexOf(getSongByID(id))
+  player.songs.splice(songIndex,1);
+  for (let i=0; i<player.playlists.length; i++){
+    for (let j=0; j<player.playlists[i].songs.length; j++){
+      if (player.playlists[i].songs[j] === id)
+        player.playlists[i].songs.splice(j,1);
+    }
+  }
 }
-
+function maxID(){
+  let max=0;
+  for (let index = 0; index < player.songs.length; index++) {
+    if(player.songs[index].id>max){
+      max === player.songs[index].id;
+    }
+}
+return max;
+}
 function addSong(title, album, artist, duration, id) {
-  // your code here
+  for (let index = 0; index < player.songs.length; index++) {
+    if(player.songs[index].id===id){
+      throw new Error("Sorry , this ID already taken")
+    }
+  }
+  if(id===undefined){
+    id===maxID()+1;
+  }
+  duration = duration.split(":");
+  duration = parseInt(duration[0] *60) + parseInt(duration[1]);
+  let newSong= {
+    id: id,
+    title: title,
+    album: album,
+    artist: artist,
+    duration: duration };
+    
+    player.songs.push(newSong);
+    return id;
 }
 
 function removePlaylist(id) {
