@@ -197,6 +197,32 @@ function playlistDuration(id) {
 
 
 function searchByQuery(query) {
+  const newObj = { songs: [], playlists: [] }
+      let myQuery = query;
+      for (let i in player.songs) {
+        if (player.songs[i].album.includes(myQuery) || player.songs[i].artist.includes(myQuery) ||  player.songs[i].title.includes(myQuery))
+           {
+            newObj.songs.push(player.songs[i])
+           }
+      } 
+            newObj.songs.sort(function (first,second){
+              if (first.title < second.title){
+                return -1; }
+             else if (first.title > second.title){
+                return 1; }
+             return 0;
+            })
+      for (let num in player.playlists) {
+        if (player.playlists[num].name.includes(myQuery)) {
+          newObj.playlists.push(player.playlists[num])
+          newObj.playlists.sort((first,second) => {
+            if (first.name < second.name){ 
+               return -1;
+          }
+           })
+      }}
+      
+      return newObj
 }
 function searchByDuration(duration) {
 }
