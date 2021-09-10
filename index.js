@@ -237,11 +237,11 @@ function songPush(list, song){
 
 
 function editPlaylist(playlistId, songId) {
-  //check validity of song in player
+  //Check validity of song in player
   if(!idCheck(songId)){
     throw new Error("Song ID non existent in player");
   }
-  //checks the validity of the playlist ID
+  //Checks the validity of the playlist ID
   let playlist = checkPlaylistId(playlistId);
   if(playlist == false){
     throw new Error("Playlist ID non existent in playlists");
@@ -263,7 +263,7 @@ function editPlaylist(playlistId, songId) {
   }
 }
 
-//returns the duration of a song
+//Returns the duration of a song
 function getDuration(id){
   if(!idCheck(id)){
     throw new Error("This song does not exists")
@@ -287,7 +287,7 @@ function playlistDuration(id) {
   return durations;
 }
 
-//lower case the argument and value and returns if the argument is the initial of the value
+//Lower case the argument and value and returns if the argument is the initial of the value
 function matchCheck(query, value){
   query = query.toLowerCase();
   value = value.toLowerCase();
@@ -299,7 +299,7 @@ function matchCheck(query, value){
 }
 
 
-//recieves query and returns an array of songs with that query
+//Recieves query and returns an array of songs with that query
 function songsByQuery(query) {
   let songResults = [];
   let playlistResults = [];
@@ -323,7 +323,7 @@ function songsByQuery(query) {
   return songResults;
 }
 
-//recieves query and returns an array of playlists with that query
+//Recieves query and returns an array of playlists with that query
 function playlistsByQuery(query) {
   let playlistResults = [];
   for(let playlist of player.playlists){
@@ -355,8 +355,63 @@ function searchByQuery(query) {
   return results;
 }
 
+//Returns the absolute value of the difference between the song duration and the wanted duration
+function absDiffrence(songDuration, duration){
+  let difference = songDuration - duration;
+  return Math.abs(difference);
+}
+
+//receives a durations array and returns the duration with the smallest differnce
+function bestDuration(durationsArray, duration){
+  let diffrenceArray = [];
+  for(let i = 0; i < durationsArray.length; i++){
+    diffrenceArray.push(absDiffrence(durationsArray[i], duration))
+  }
+  let index;
+  let min = Math.min(...diffrenceArray);
+  for(let j = 0; j < diffrenceArray.length; j++){
+    if(min == diffrenceArray[j])
+    index = j;
+  }
+  return durationsArray[index];
+}
+
+//Receives a song duration and returns the song
+function getSongByDuration(duration){
+  for(let song of player.songs){
+    if(song.duration == duration){
+      return song;
+      }
+  }
+}
+//Receives a playlist duration and returns the playlist
+function getPlaylistByDuration(duration){
+  for(let playlist of player.playlists){
+    if(playlistDuration(playlist.id) == duration){
+      return playlist;
+    }
+  }
+}
+
 function searchByDuration(duration) {
-  // your code here
+  duration = reverseDurationConvertor(duration);
+  //creats 2 arrays of songs durations and playlists durations
+  let songsDurations = [];
+  let playlistsDurations = [];
+  for(let song of player.songs){
+    songsDurations.push(getDuration(song.id));
+  }
+  for(let playlist of player.playlists){
+    playlistsDurations.push(playlistDuration(playlist.id));
+  }
+  //gets the closest song && playlist durations
+  let bestSong = bestDuration(songsDurations, duration);
+  let bestPlaylist = bestDuration(playlistsDurations, duration);
+  //checks which is the best out of them and returns their object
+  if(absDiffrence(bestSong, duration) < absDiffrence(bestPlaylist, duration)){
+    return getSongByDuration(bestSong);
+  }
+  return getPlaylistByDuration(bestPlaylist);
 }
 
 module.exports = {
