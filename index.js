@@ -86,8 +86,17 @@ function removePlaylist(id) {
 }
 
 function createPlaylist(name, id) {
-  // your code here
+  if (checkIdAvilablePl(id) == false) throw ("This ID is in use!");
+  if (id == undefined) id = generateId(id);
+  player.playlists.push({
+    id: id,
+    name: name,
+    songs: []
+  })
+  return id;
 }
+
+
 
 function playPlaylist(id) {
   // your code here
@@ -166,8 +175,17 @@ function checkIdAvilable(id) {
     }
     return false;
   }
+
 }
 
+function checkIdAvilablePl(id) {
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (player.playlists[i].id != id) {
+      return true;
+    }
+    return false;
+  }
+}
 function mmToSec(duration) {
   let get = duration.split(':');
   let min = parseInt(get[0]) * 60;
