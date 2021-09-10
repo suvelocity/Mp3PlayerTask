@@ -133,30 +133,29 @@ function playlistDuration(id) {
 }
 
 function searchByQuery(query) {
-  let objectsContainsTheQuery= {};
+  let songTitles = [];
+  let playlistNames= [];
+  let objectsContainsTheQuery= {"songs": [], "playlists": []};
   for (let index = 0; index < player.songs.length; index++) {
     if(player.songs[index].title.includes(query) || player.songs[index].album.includes(query) || player.songs[index].artist.includes(query)){
-      if (objectsContainsTheQuery[0] === undefined) {
-        objectsContainsTheQuery.push([player.songs[index]]);  
-      }
-      else{
-        objectsContainsTheQuery[0].push([player.songs[i]]);
-      }
+        songTitles.push(player.songs[index].title);
     }
   }
   for (let i= 0; i< player.playlists.length;i++){
     if (player.playlists[i].name.includes(query)) {
-      if (objectsContainsTheQuery[1] === undefined) {
-        objectsContainsTheQuery.push([player.playlists[i]]);
-      }
-      else{
-        objectsContainsTheQuery[1].push([player.playlists[i]]);
-      }
+        playlistNames.push(player.playlists[i].name);
     }
+  }
+  songTitles.sort();
+  playlistNames.sort();
+  for (let i = 0; i < songTitles.length; i++) {
+    objectsContainsTheQuery.songs.push(getSongByTitle(songTitles[i]));  
+  }
+  for (let i = 0; i < playlistNames.length; i++) {
+    objectsContainsTheQuery.playlists.push(getPlaylistByName(playlistNames[i]));  
   }
   return objectsContainsTheQuery;
 }
-
 function searchByDuration(duration) {
   let closestDurationObject = player.songs[0];
   let durationInSeconds = formatMinutsToSeconds(duration);
@@ -243,6 +242,20 @@ function removeSongFromPlaylist(playlistId, songId){
     if (getPlaylistById(playlistId).songs[i] === songId) {
       getPlaylistById(playlistId).songs.splice(i,1);
     }
+  }
+}
+function getSongByTitle(title){
+  for (let j = 0; j < player.songs.length;j++){
+    if(player.songs[j].title === title){
+      return player.songs[j];
+    }    
+  }
+}
+function getPlaylistByName(name){
+  for (let j = 0; j < player.playlists.length;j++){
+    if(player.playlists[j].name === name){
+      return player.playlists[j];
+    }    
   }
 }
 module.exports = {
