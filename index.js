@@ -114,8 +114,20 @@ function addSong(title, album, artist, duration, id = Math.floor(Math.random() *
       return id;
   }
 }
+const getPlaylistById=(id) =>{
+  for (let num in player.playlists) {
+    if (player.playlists[num].id === id)
+      return player.playlists[num];
+  }
 
+  throw new Error("${id} ID not exists");
+}
 function removePlaylist(id) {
+  if(getPlaylistById===undefined){
+    throw new Error("${id} ID not exists");
+  }
+  let playlistIndex = player.playlists.indexOf(getPlaylistById(id));
+  player.playlists.splice(playlistIndex, 1);
 }
 
 
@@ -123,7 +135,7 @@ function createPlaylist(name, id ) {
  
   }
 
-//createPlaylist
+
 function playPlaylist(id) {
 }
 
