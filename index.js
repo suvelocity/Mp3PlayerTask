@@ -129,10 +129,23 @@ function removePlaylist(id) {
   let playlistIndex = player.playlists.indexOf(getPlaylistById(id));
   player.playlists.splice(playlistIndex, 1);
 }
+const playlistIdExist= (id)=>{
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (player.playlists[i].id === id)
+      return true;
+  }
+  return false;
+}
 
+function createPlaylist(name, id = Math.floor(Math.random() * 100) + 1 ) {
+  if(playlistIdExist(id)){
+    throw new Error("${id} ID already exists");
+  }
+  else{
+    player.playlists.push({id: id,name: name,songs:[]});
+  return id;
+  }
 
-function createPlaylist(name, id ) {
- 
   }
 
 
