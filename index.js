@@ -113,7 +113,10 @@ function editPlaylist(playlistId, songId) {
 }
 
 function playlistDuration(id) {
-  // your code here
+  let totalDuration = 0;
+  const playlist = player.playlists.filter(playlist => playlist.id === id)[0];
+  playlist.songs.forEach(songId => totalDuration += player.songs.filter(song => song.id === songId)[0].duration);
+  return totalDuration;
 }
 
 function searchByQuery(query) {
