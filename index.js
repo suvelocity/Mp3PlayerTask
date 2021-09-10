@@ -157,11 +157,33 @@ function playPlaylist(id) {
     for(let num = 0; num < playlist.songs.length; num++){
       playSong(playlist.songs[num]);
     }
-  
 }
-
+const songInPlaylist=(songId, playlistId)=>{
+  let playlist = getPlaylistById(playlistId);
+  for (let num in playlist.songs) {
+    if (playlist.songs[num] === songId)
+      return num;
+  }
+  return -1;
+}
 function editPlaylist(playlistId, songId) {
+  let playlist = getPlaylistById(playlistId);   
+  let songIn= songInPlaylist(songId, playlistId);   
  
+ if(idExist(songId) && playlistIdExist(playlistId)){       
+   if(songIn === -1) {                          
+     playlist.songs.push(songId);                 
+   } 
+   else if(playlist.songs.length > 1){       
+     playlist.songs.splice(songIn,1); 
+   } 
+   else{ 
+     removePlaylist(playlist.id);  
+   }
+ } 
+ else{ 
+   throw new Error("${id} ID not exists");  
+ } 
 }
 
 function playlistDuration(id) {
