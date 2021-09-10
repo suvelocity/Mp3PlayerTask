@@ -121,9 +121,18 @@ function addSong(title, album, artist, duration, id) {
     player.songs.push(newSong);
     return id;
 }
+function getPlaylistByID(id){
+  for (let index = 0; index < player.playlists.length; index++) {
+    if(player.playlists[index].id === id){
+      return player.playlists[index];
+    }
+}
+throw new Error("This playlist are not exist")
+}
 
 function removePlaylist(id) {
-  // your code here
+  let playlistIndex=getPlaylistByID(id);
+  player.playlists.splice(playlistIndex,1);
 }
 
 function createPlaylist(name, id) {
