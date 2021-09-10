@@ -120,7 +120,23 @@ function playlistDuration(id) {
 }
 
 function searchByQuery(query) {
-  // your code here
+  const queryMatch = {
+    playlists: [],
+    songs: []
+  };
+  for (const song of player.songs) {
+    if (song.title.includes(query) || song.album.includes(query) || song.artist.includes(query)) {
+      queryMatch.songs.push(song);
+    }
+  }
+  for (const playlist of player.playlists) {
+    if (playlist.name.includes(query)) {
+      queryMatch.playlists.push(playlist);
+    }
+  }
+  queryMatch.playlists.sort((a, b) => a.name.localeCompare(b.name));
+  queryMatch.songs.sort((a, b) => a.title.localeCompare(b.title));
+  return queryMatch;
 }
 
 function searchByDuration(duration) {
