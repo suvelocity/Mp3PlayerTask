@@ -207,10 +207,10 @@ function playlistDuration(id) {
 
 function searchByQuery(query) {
   const player1 = {
-    songs:[],
-    playlists:[],
+    songs: [],
+    playlists: [],
   }
-  ;
+    ;
   for (let i = 0; i < player.songs.length; i++) {
     if (player.songs[i].title.toLowerCase().includes(query.toLowerCase()) || player.songs[i].artist.toLowerCase().includes(query.toLowerCase()) || player.songs[i].album.toLowerCase().includes(query.toLowerCase())) {
       player1.songs.push(player.songs[i]);
@@ -222,14 +222,40 @@ function searchByQuery(query) {
 
     }
   }
-  player1.songs.sort((a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0));
-  player1.playlists.sort((c,d) => (c.name > d.name) ? 1 : ((c.name > d.name) ? -1 : 0));
+  player1.songs.sort((a, b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0));
+  player1.playlists.sort((c, d) => (c.name > d.name) ? 1 : ((c.name > d.name) ? -1 : 0));
   return player1;
-  
+
 }
 
 function searchByDuration(duration) {
-  // your code here
+  let time = convertSeconds(duration);
+  let songDurationList = [];
+  for (let i = 0; i < player.songs.length; i++) {
+    var obj = {
+      songDuration: player.songs[i].duration,
+      songRange: Math.abs(time - player.songs[i].duration),
+      song: player.songs[i]
+    }
+    songDurationList.push(obj);
+  }
+  songDurationList.sort(function (a, b) { return a.songRange - b.songRange; })
+  let playListDurationList = [];
+  for (let k = 0; k < player.playlists.length; k++) {
+    var obj2 = {
+      playListDuration: playlistDuration(player.playlists[k].id),
+      playListRange: Math.abs(time - (playlistDuration(player.playlists[k].id))),
+      playList: player.playlists[k]
+    }
+    playListDurationList.push(obj2);
+  }
+  playListDurationList.sort(function (c, d) { return c.playListRange - d.playListRange; });
+  if (songDurationList[0].songRange > playListDurationList[0].playListRange) {
+    return playListDurationList[0].playList;
+  }
+  else {
+    return songDurationList[0].song;
+  }
 }
 function convertTime(duration) {
   let seconds = duration % 60;
@@ -261,13 +287,6 @@ function findIdPlaylist(id) {
   }
   return false
 }
-function findEmpty(array, x) {
-  for (let z = 0; z < array.length; z++) {
-    if (array[z] === "")
-      array[z] === x;
-  }
-}
-
 module.exports = {
   player,
   playSong,
@@ -281,4 +300,3 @@ module.exports = {
   searchByQuery,
   searchByDuration,
 }
-
