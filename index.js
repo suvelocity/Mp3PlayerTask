@@ -83,7 +83,16 @@ function idCheck(id){
   return false;
 }
 
-//Returning an index of a song in songs by id
+
+function playSong(id) {
+  if(!idCheck(id)) throw new Error("Invalid ID");
+  for(let song of player.songs){
+    if(song.id === id){
+      console.log(player.playSong(song));
+    }
+  }
+}
+//Returns an index of a song in songs by id
 function IndexOfSong(id) {
   for(let song of player.songs){
    if(song.id == id){ 
@@ -103,24 +112,62 @@ function DeleteInPlayLists(id) {
   }
  }
 
-function playSong(id) {
-  if(!idCheck(id)) throw new Error("Invalid ID");
-  for(let song of player.songs){
-    if(song.id === id){
-      console.log(player.playSong(song));
-    }
-  }
-}
-
 function removeSong(id) {
   if(!idCheck(id)) throw new Error("Invalid ID");
   player.songs.splice(IndexOfSong(id), 1);
   DeleteInPlayLists(id);
 }
 
-function addSong(title, album, artist, duration, id) {
-  // your code here
+//Random ID generator between 1-100
+function randomId(){
+  return Math.floor(Math.random() * 101);
 }
+
+
+//The regular method
+
+function addSong(title, album, artist, duration, id = randomId()) {
+  if(idCheck(id)){
+    throw new Error("ID is taken")
+  }
+  while(idCheck(id)){
+    id = randomId();
+  }
+  player.songs.push({
+      id: id,
+      title: title,
+      album: album,
+      artist: artist,
+      duration: reverseDurationConvertor(duration)
+    });
+    return id;
+}
+
+
+/*
+//Constructor method
+//Contructor function that creates a song object 
+function Song(title, album, artist, duration, id){
+  constructor: Object,
+  this.id = id;
+  this.title = title;
+  this.album = album;
+  this.artist = artist;
+  this.duration = reverseDurationConvertor(duration);
+}
+
+function addSong(title, album, artist, duration, id = randomId()){
+    if(idCheck(id)){
+    throw new Error("ID is taken")
+  }
+  while(idCheck(id)){
+    id = randomId();
+  }
+    player.songs.push(new Song(id, title, album, artist, duration));
+    return id;
+  }
+*/
+
 
 function removePlaylist(id) {
   // your code here
