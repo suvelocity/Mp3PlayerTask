@@ -174,11 +174,18 @@ newP_ID=maxP_ID;
 
 
 function playPlaylist(id) {
-  
+  let Pindex=getPlaylistByID(id);
+  for (let i = 0; i < Pindex.songs.length; i++) { 
+    playSong (Pindex.songs[i]);  
+  }
 }
 
+
 function editPlaylist(playlistId, songId) {
-  // your code here
+ 
+
+   }
+ }
 }
 
 function playlistDuration(id) {
