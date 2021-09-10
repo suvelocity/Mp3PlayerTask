@@ -210,7 +210,13 @@ function createPlaylist(name, id = randomId()) {
 }
 
 function playPlaylist(id) {
-  // your code here
+  let playlist = checkPlaylistId(id);
+  if(playlist == false){
+    throw new Error("ID non existent in playlist");
+  }else{ 
+    for(let i = 0; i < playlist.songs.length; i++)
+      playSong(playlist.songs[i]); 
+  }
 }
 
 function editPlaylist(playlistId, songId) {

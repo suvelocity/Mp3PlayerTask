@@ -123,7 +123,7 @@ describe('Player Tests', () => {
     expect(() => removePlaylist(mockNonExistentPlaylistId)).toThrow()
   })
 
-  it.only('createPlaylist should add a new playlist to the player', () => {
+  it('createPlaylist should add a new playlist to the player', () => {
     createPlaylist(mockPlaylist2.name, mockPlaylist2.id)
     expect(player.playlists).toEqual([
       mockPlaylist1,
@@ -131,23 +131,23 @@ describe('Player Tests', () => {
     ])
   })
 
-  it.only('createPlaylist should generate a new unique ID when it is not supplied', () => {
+  it('createPlaylist should generate a new unique ID when it is not supplied', () => {
     const newPlaylistId = createPlaylist(mockPlaylist2.name)
     expect(newPlaylistId).toBeDefined()
     expect(mockPlayer.playlists.map(p => p.id).includes(newPlaylistId)).toBe(false)
   })
 
-  it.only('createPlaylist should throw for an ID that is taken', () => {
+  it('createPlaylist should throw for an ID that is taken', () => {
     expect(() => createPlaylist(mockPlaylist2.name, mockPlaylist1.id)).toThrow()
   })
 
-  it('playPlaylist should play all songs inside it', () => {
+  it.only('playPlaylist should play all songs inside it', () => {
     const spy = jest.spyOn(console, 'log')
     playPlaylist(mockPlaylist1.id)
     expect(spy).toHaveBeenCalledTimes(mockPlaylist1.songs.length)
   })
 
-  it('playPlaylist should throw for non-existent ID', () => {
+  it.only('playPlaylist should throw for non-existent ID', () => {
     expect(() => playPlaylist(mockNonExistentPlaylistId)).toThrow()
   })
 
