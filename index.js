@@ -140,7 +140,22 @@ function searchByQuery(query) {
 }
 
 function searchByDuration(duration) {
-  // your code here
+  duration=convertToSec(duration)
+  let closestItem;
+  let closestDuration = Infinity;
+  for (const song of player.songs){
+    if (Math.abs(song.duration-duration) < closestDuration) {
+      closestDuration = Math.abs(song.duration-duration);
+      closestItem = song;
+    }
+  }
+  for (const playlist of player.playlists) {
+    if (Math.abs(playlistDuration(playlist.id)-duration) < closestDuration) {
+      closestDuration = Math.abs(playlistDuration(playlist.id)-duration);
+      closestItem = playlist;
+    }
+  }
+  return closestItem;
 }
 
 module.exports = {
