@@ -48,12 +48,48 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    console.log(/* your code here */)
+    return (`Playing ${song.title} from ${song.album} by ${song.artist} | ${durationConvertor(song.duration)}.`);
   },
 }
 
+//Duration convertor (from seconds to mm:ss)
+function durationConvertor(duration){
+  let minutes = Math.floor(duration / 60);
+  let seconds = duration % 60;
+  if (seconds < 10){
+    seconds = "0" + seconds;
+  }
+  if (minutes < 10){
+    minutes = "0" + minutes;
+  }
+  return minutes + ":" + seconds;
+}
+
+//Duration reverse convertor (from mm:ss to seconds)
+function reverseDurationConvertor(duration){
+  duration = duration.split(":");
+  let minutes = parseInt(duration[0]) * 60;
+  let seconds = parseInt(duration[1]);
+  return minutes + seconds;
+}
+
+//Returns true if id exists and false if not
+function idCheck(id){
+  for(let song of player.songs){
+      if(song.id == id){
+        return true;
+      }
+  }
+  return false;
+}
+
 function playSong(id) {
-  // your code here
+  if(!idCheck(id)) throw new Error("Invalid ID");
+  for(let song of player.songs){
+    if(song.id === id){
+      console.log(player.playSong(song));
+    }
+  }
 }
 
 function removeSong(id) {
