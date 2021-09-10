@@ -128,7 +128,7 @@ function randomId(){
 
 function addSong(title, album, artist, duration, id = randomId()) {
   if(idCheck(id)){
-    throw new Error("ID is taken")
+    throw new Error("ID is taken");
   }
   while(idCheck(id)){
     id = randomId();
@@ -187,9 +187,26 @@ function removePlaylist(id) {
   }
 }
 
+//Gets ID and check if valid, if valid returns playlists id, else return -1
+function playlistId(id){
+  for(let playlist of player.playlists){
+    if(playlist.id == id){
+      return -1;
+    }
+  }
+  return id;
+}
 
-function createPlaylist(name, id) {
-  // your code here
+function createPlaylist(name, id = randomId()) {
+  if(playlistId(id) < 0){
+    throw new Error("Invalid ID");
+  }
+  player.playlists.push({
+    id: id,
+    name: name,
+    songs: []
+  });
+  return id;
 }
 
 function playPlaylist(id) {
