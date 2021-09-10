@@ -111,14 +111,27 @@ function playPlaylist(id) {
       return
     }
     else {
-      throw 'have problem!';
+      throw new Error('There is a problem');
     }
   }
 }
 
 function editPlaylist(playlistId, songId) {
-  // your code here
+  songById(songId);
+  let playlist = getIndexPl(playlistId);
+  let index = player.playlists.indexOf(playlist);
+  for (let i = 0; i < playlist.songs.length; i++) {
+    if (playlist.songs[i] === songId) {
+      player.playlists[index].songs.splice(i, 1)
+      if (player.playlists[index].songs.length === 0) {
+        removePlaylist(playlistId);
+      }
+    } else {
+      player.playlists[index].songs.push(songId);
+    }
+  }
 }
+
 
 function playlistDuration(id) {
   // your code here
@@ -132,19 +145,6 @@ function searchByDuration(duration) {
   // your code here
 }
 
-module.exports = {
-  player,
-  playSong,
-  removeSong,
-  addSong,
-  removePlaylist,
-  createPlaylist,
-  playPlaylist,
-  editPlaylist,
-  playlistDuration,
-  searchByQuery,
-  searchByDuration,
-}
 
 // help functions 
 
@@ -153,8 +153,8 @@ function songById(id) {
     if (player.songs[i].id == id) {
       return player.songs[i]
     }
-    throw ("There is no song with such an Id");
   }
+  throw new Error("There is no song with such an Id");
 }
 
 
@@ -220,3 +220,16 @@ function generateId() {
   }
 }
 
+module.exports = {
+  player,
+  playSong,
+  removeSong,
+  addSong,
+  removePlaylist,
+  createPlaylist,
+  playPlaylist,
+  editPlaylist,
+  playlistDuration,
+  searchByQuery,
+  searchByDuration,
+}
