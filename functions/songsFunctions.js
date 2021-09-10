@@ -1,4 +1,7 @@
 'use strict'
+import { playSong, playPlaylist,sTOmmss,mmssTOs,comparepl,compares,searchByQuery,searchByDuration } from './functions/otherFunctions';
+import { isIdExsistInPlayLists,playListById,playListIndexById,addToPlayList,removeFromPlayLists,removeFromPlayList,removePlaylist,createPlaylist,editPlaylist,playlistDuration} from './functions/playlistsFunctions';
+
 
 //SONGS FUNCTIONS: GETING & EDITING SONGS.
 
@@ -6,21 +9,30 @@
    //Get songs by:
 
 
-   function songById(id) {//gets: SONG ID, returns: THE MATCHING SONG.
+   export function songById(id) {
+     //Parameters: SONG ID
+     //Returns: THE MATCHING SONG.
+
     for (let i = 0; i < player.songs.length; i++) {
       if (player.songs[i]['id'] === id) return player.songs[i]
     }
     return undefined
   }
   
-  function songIndexById(id) {//gets: SONG ID, returns: SONG INDEX.
+  export function songIndexById(id) {
+    //Parameters: SONG ID
+    //Returns: SONG INDEX.
+
     for (let i = 0; i < player.songs.length; i++) {
       if (player.songs[i]['id'] === id) return i
     }
     return -1
   }
   
-  function isIdExsistInSongs(id) {//gets: SONG ID, returns: IS SONG ID EXSIST.
+  export function isIdExsistInSongs(id) {
+    //Parameters: SONG ID
+    //Returns: IS SONG ID EXSIST.
+
     for (let i = 0; i < player.songs.length; i++) {
       if (player.songs[i]['id'] === id) return true
     }
@@ -31,7 +43,10 @@
      //Edit songs
   
   
-  function removeSong(id) {//gets: SONG ID --> REMOVING THE SONG, FROM PLAYER & PLAYLIST (activatie remove-from-playilist function).
+  export function removeSong(id) {
+    //Parameters: SONG ID 
+    //--> REMOVING THE SONG, FROM PLAYER & PLAYLIST (activatie remove-from-playilist function).
+
     if (songIndexById(id) === -1) {
       throw new Error('non-existent ID')
     }
@@ -39,7 +54,11 @@
     removeFromPlayLists(id)
   }
   
-  function addSong(title, album, artist, duration, id = 0) {//gets: NEW SONG CHARACTERIZATION --> ADDS IN TO PLAYER ,returns: NEW SONGS ID.
+  export function addSong(title, album, artist, duration, id = 0) {
+    //Parameters: NEW SONG CHARACTERIZATION 
+    //--> ADDS IN TO PLAYER 
+    //Returns: NEW SONGS ID.
+
     const newSong = { title, album, artist, duration: mmssTOs(duration) }
     if (!isIdExsistInSongs(id)) newSong.id = id
     else {

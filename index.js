@@ -1,12 +1,16 @@
 'use strict'
 
 
-/*this is the main player object.
-all of the songs and playlist the user have are stored here.
-all of the big & complex functions will mostly refer to it.
+/*
+
+This is the main player object.
+All of the songs and playlist the user have are stored here.
+All of the big & complex functions will mostly refer to it.
+
 structure- 
-songs :Object->array->object
-playlists :Object->array->object->array
+  songs:  Object->array->object
+  playlists:  Object->array->object->array
+
 */
 
 const player = {
@@ -66,9 +70,6 @@ const player = {
     )
   },
 }
-
-
-
 
 //FUNCTIONS:
 

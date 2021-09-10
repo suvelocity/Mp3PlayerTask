@@ -1,4 +1,7 @@
 'use strict'
+import { isIdExsistInPlayLists,playListById,playListIndexById,addToPlayList,removeFromPlayLists,removeFromPlayList,removePlaylist,createPlaylist,editPlaylist,playlistDuration} from './functions/playlistsFunctions';
+import { songById,songIndexById,isIdExsistInSongs,removeSong,addSong} from './functions/songsFunctions';
+
 
 //OTHER FUNCTIONS: PLAY , TIME , SORTING  & SEARCHING FUNCTIONS
 
@@ -6,14 +9,20 @@
 //PLAY FUNCTIONS:
 
 
-function playSong(id) {//gets: SONG ID --> PLAYS SONG.
+export function playSong(id) {
+  //Parameters: SONG ID
+  //--> PLAYS SONG.
+
     if (songById(id) === undefined) {
       throw new Error('non-existent ID')
     }
     player.playSong(songById(id))
   }
   
-  function playPlaylist(id) {//gets: PLAYLIST ID --> PLAYS ALL SONGS IN PLAYLIST.
+  export function playPlaylist(id) {
+    //Parameters: PLAYLIST ID 
+    //--> PLAYS ALL SONGS IN PLAYLIST.
+
     if (playListIndexById(id) === -1) {
       throw new Error('non-existent ID')
     }
@@ -32,7 +41,10 @@ function playSong(id) {//gets: SONG ID --> PLAYS SONG.
     //translatin of time units(mmss="mm:ss",s= seconds) 
   
   
-  function sTOmmss(s) {//gets: SECONDS , returns: "MINUTES:SECONDS".
+  export function sTOmmss(s) {
+    //Parameters: SECONDS
+    //Returns: "MINUTES:SECONDS"
+
     const mm = Math.floor(s / 60)
     const ss = s % 60
     let mmss = ''
@@ -43,7 +55,10 @@ function playSong(id) {//gets: SONG ID --> PLAYS SONG.
     return mmss
   }
   
-  function mmssTOs(mmss) {//gets: "MINUTES:SECONDS" , returns: SECONDS.
+  export function mmssTOs(mmss) {
+    //Parameters: "MINUTES:SECONDS" 
+    //Returns: SECONDS.
+
     return parseInt(mmss.slice(0, 2)) * 60 + parseInt(mmss.slice(3, 5))
   }
   
@@ -53,7 +68,10 @@ function playSong(id) {//gets: SONG ID --> PLAYS SONG.
   
   
   
-  function comparepl(a, b) {//defining how .SORT function works- for alpha-betic sorting.-->FOR PLAYLIST
+  export function comparepl(a, b) {
+    //defining how .SORT function works- for alpha-betic sorting.
+    //-->FOR PLAYLIST
+
     let fa = a.name.toLowerCase(),
       fb = b.name.toLowerCase()
     if (fa < fb) {
@@ -65,7 +83,10 @@ function playSong(id) {//gets: SONG ID --> PLAYS SONG.
     return 0
   }
   
-  function compares(a, b) {//defining how .SORT function works- for alpha-betic sorting.-->FOR SONGS
+  export function compares(a, b) {
+    //defining how .SORT function works- for alpha-betic sorting.
+    //-->FOR SONGS
+
     let fa = a.title.toLowerCase(),
       fb = b.title.toLowerCase()
     if (fa < fb) {
@@ -83,15 +104,15 @@ function playSong(id) {//gets: SONG ID --> PLAYS SONG.
   
   
       /*
-      //gets: QUERY STRING ,
+      //Parameters: QUERY STRING ,
   
-      returns: OBJECT THAT HAVE:
+      Returns: OBJECT THAT HAVE:
   
       ALPHA-BETIC SORTED ARRAYS OF MATCHING:
   
       SONGS (titles,albums,artists) &  PLAYLIST (names).
       */ 
-  function searchByQuery(query) {
+  export function searchByQuery(query) {
     let lowerCasedQuery = query.toLowerCase()
     let found = {}
     let playlists = []
@@ -117,7 +138,10 @@ function playSong(id) {//gets: SONG ID --> PLAYS SONG.
   }
   
   
-  function searchByDuration(duration) {//gets: DURATION ("mm:ss"). returns: CLOSEST PLAYLIST/SONG TO IT.
+  export function searchByDuration(duration) {
+    //Parameters: DURATION ("mm:ss").
+    //Returns: CLOSEST PLAYLIST/SONG TO IT.
+
     duration = mmssTOs(duration)
     let closestPlayList = player.playlists[0]
     let closestsong = player.songs[0]
