@@ -187,6 +187,12 @@ function editPlaylist(playlistId, songId) {
 }
 
 function playlistDuration(id) {
+  let playlist = getPlaylistById(id);
+      let result = 0;
+      for(let num in playlist.songs){
+        result+= getSongById(playlist.songs[num]).duration;
+      }
+      return result;
 }
 
 
