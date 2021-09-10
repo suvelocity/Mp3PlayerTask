@@ -51,6 +51,8 @@ const player = {
     console.log(`Playing ${song.title} from ${song.album} by ${song.artist} | ${durationConvert(song.duration)}.`)
   },
 }
+
+
 function durationConvert(duration)
 {
   let min = Math.floor(duration / 60);
@@ -64,6 +66,8 @@ function durationConvert(duration)
   }
   return min+':'+sec
 }
+
+
 function playSong(id) {
   for (let song of player.songs){
     if (song.id === id)
@@ -73,6 +77,8 @@ function playSong(id) {
   }
   throw new Error("This ID are not exist");
 }
+
+
 function getSongByID(id){
   for (let index = 0; index < player.songs.length; index++) {
     if(player.songs[index].id === id){
@@ -81,6 +87,8 @@ function getSongByID(id){
 }
 throw new Error("This song are not exist")
 }
+
+
 function removeSong(id) {
   let songIndex=player.songs.indexOf(getSongByID(id))
   player.songs.splice(songIndex,1);
@@ -91,24 +99,22 @@ function removeSong(id) {
     }
   }
 }
-function maxID(){
-  let max=0;
-  for (let index = 0; index < player.songs.length; index++) {
-    if(player.songs[index].id>max){
-      max === player.songs[index].id;
-    }
-}
-return max;
-}
+
+
 function addSong(title, album, artist, duration, id) {
+  let newID=0;
+  let max=1;
+  if(id){
   for (let index = 0; index < player.songs.length; index++) {
     if(player.songs[index].id===id){
-      throw new Error("Sorry , this ID already taken")
-    }
+      throw new Error("Sorry , this ID already taken") }}}
+    else {
+  for (let i = 0; i < player.songs.length; i++) {
+    if(player.songs[i].id>max){
+      max === player.songs[i].id;}
   }
-  if(id===undefined){
-    id===maxID()+1;
-  }
+  newID=max+1;
+} 
   duration = duration.split(":");
   duration = parseInt(duration[0] *60) + parseInt(duration[1]);
   let newSong= {
@@ -117,10 +123,11 @@ function addSong(title, album, artist, duration, id) {
     album: album,
     artist: artist,
     duration: duration };
-    
     player.songs.push(newSong);
-    return id;
+    return newID;
 }
+
+
 function getPlaylistByID(id){
   for (let index = 0; index < player.playlists.length; index++) {
     if(player.playlists[index].id === id){
@@ -130,17 +137,44 @@ function getPlaylistByID(id){
 throw new Error("This playlist are not exist")
 }
 
+
 function removePlaylist(id) {
   let playlistIndex=getPlaylistByID(id);
   player.playlists.splice(playlistIndex,1);
 }
 
+
 function createPlaylist(name, id) {
-  // your code here
+  let newP_ID=0
+  let maxP_ID=1
+  if(id){
+  for (let index = 0; index < player.playlists.length; index++) {
+    if(player.playlists[index].id===id){
+      throw new Error("Sorry , this ID already taken")
+    }
+ }
+ }
+else {
+  for (let i = 0; i < player.playlists.length; i++) {
+    if(player.playlists[i].id>maxP_ID){
+      maxP_ID === player.playlists[i].id;
+    }
+}
+newP_ID=maxP_ID;
+}
+  
+  let newPlaylist={
+    id:id,
+    name:name,
+    songs:[]
+  }
+  player.playlists.push(newPlaylist);
+  return newP_ID;
 }
 
+
 function playPlaylist(id) {
-  // your code here
+  
 }
 
 function editPlaylist(playlistId, songId) {
