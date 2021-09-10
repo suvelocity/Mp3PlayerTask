@@ -49,17 +49,11 @@ const player = {
   ],
 
   playSong(song) {
+    id_is_int_and_does_exists(song, "song");
     const songObj = this.findSongByID(song);
-    if(isNaN(song)){
-      throw "ID must be a number";
-    }
-    // If not exists
-    else if(songObj === undefined){
-      throw ("non existent ID")
-    }
-    else{
-      console.log("Playing " + songObj.title + " from " + songObj.album + " by " + songObj.artist + " | " + calcPlayTime(songObj.duration) + ".");
-    }
+    
+    console.log("Playing " + songObj.title + " from " + songObj.album + " by " + songObj.artist + " | " + calcPlayTime(songObj.duration) + ".");
+    
   },
 
   // ===> Returns the song by the ID given <===
@@ -78,205 +72,81 @@ function playSong(id) {
 }
 
 function removeSong(id) {
-  const songObj = player.findSongByID(id);
+  id_is_int_and_does_exists(id, "song");  
+  remove_ID_from(id, "songs");
   
-  if(isNaN(id)){
-    throw "ID must be a number";
-  }  
-  else if(songObj === undefined){
-    throw ("non existent ID");
-  }
-  // If ID does exists - remove
-  else{
-    // Remove from songs
-    player.songs.forEach((songObj, index) => {
-      if(songObj.id === id)
-        player.songs.splice(index, 1);
-    });    
-    
-    // Remove from playlist
-    player.playlists.forEach(playlistObj => {
-      const index = playlistObj.songs.indexOf(id)
-      if(index > -1){
-        playlistObj.songs.splice(index, 1);
-      }
-    });
-  }
-}
-
-
-// ===> Convert MM:SS to Seconds <===
-function from_Time_String_To_Seconds(duration){
-  const newDuration = duration.split(":")
-  return parseInt(newDuration[0]) * 60 + parseInt(newDuration[1]);
-}
-
-// ===> Reformat from seconds to MM:SS <===
-function calcPlayTime(durationTime) {
-  const min = Math.floor(durationTime / 60);
-  const sec = durationTime - min * 60;
-  // Should add 0 before the number?   numberS = number as string    
-  const numberS1 = (min < 10) ? "0" : "";
-  const numberS2 = (sec < 10) ? "0" : "";
-  return numberS1 + min + ":" + numberS2 + sec;
-}
-
-// ===> Generate a new ID <===
-function generate_ID(songOrPlaylist){
-  let i = 1
-  // To Songs
-  while(songOrPlaylist === "song"){
-    const songObj = player.findSongByID(i);
-    // If ID does not exists
-    if(songObj === undefined){      
-      return i;
-    } 
-    i++;
-  }
-
-  // To Playlist
-  while(songOrPlaylist === "playlist"){
-    const playlistObj = player.findPlaylistByID(i);
-    // If ID does not exists
-    if(playlistObj === undefined){      
-      return i;
-    } 
-    i++;
-  }
-}
-
-
-// Params:      String  String String    MM:SS  Optional
-function addSong(title, album, artist, duration, id) {
-  const newDuration = from_Time_String_To_Seconds(duration);  
-
-  
-  if(player.findSongByID(id) !== undefined){
-    throw "That ID has been taken";   
-  }  
-
-  // If ID doesnt omitted - generate ID
-  if(id === undefined){
-    id = generate_ID("song")
-  }
-  else{
-    if(isNaN(id)){
-      throw "ID must be a number";
+  // Remove from playlist
+  player.playlists.forEach(playlistObj => {
+    const index = playlistObj.songs.indexOf(id)
+    if(index > -1){
+      playlistObj.songs.splice(index, 1);
     }
-  }
-
-  player.songs.push({
-    title: title,
-    album: album,
-    duration: newDuration,    
-    artist: artist, 
-    id: id   
   });
+  
+}
+
+function addSong(title, album, artist, duration, id) {
+  const convertedDuration = from_Time_String_To_Seconds(duration);  
+  id = id_been_taken_or_generate(id, "song");
+
+  player.songs.push({title, album, duration: convertedDuration, artist, id});
 
   return id;
 }
 
 
 function removePlaylist(id) {    
-  if(isNaN(id)){
-    throw "ID must be a number";
-  }
-  else if(player.findPlaylistByID(id) === undefined){
-    throw "non existent ID";
-  }
-  else{
-    // Removes from playlist
-    player.playlists.forEach((playlistObj, index) => {
-      if(playlistObj.id === id)
-        player.playlists.splice(index, 1);
-    });    
-  }   
+  id_is_int_and_does_exists(id, "playlist");
+  remove_ID_from(id, "playlists");
 }
 
+
+
 function createPlaylist(name, id) {  
-  
-  if(player.findPlaylistByID(id) !== undefined){
-    throw "That ID has been taken";   
-  };
-  // If ID doesnt omitted - generate ID
-  if(id === undefined){
-    id = generate_ID("playlist");
-  }
-  else{
-    if(isNaN(id)){
-      throw "ID must be a number";
-    }
-  }
+  id = id_been_taken_or_generate(id, "playlist");
   player.playlists.push({id, name, songs: []});
   
   return id;
 }
 
 function playPlaylist(id) {
-  const playlistObj = player.findPlaylistByID(id);  
-  if(isNaN(id)){
-    throw "ID must be a number";
-  }  
-  else if(playlistObj === undefined){
-    throw "non existent ID";
-  }
-  else{
-    playlistObj.songs.forEach(song => playSong(song));
-  }
+  id_is_int_and_does_exists(id, "playlist");
+  const playlistObj = player.findPlaylistByID(id);
+  playlistObj.songs.forEach(song => playSong(song));
 }
-
 
 function editPlaylist(playlistId, songId) {
   const myPlaylist = player.findPlaylistByID(playlistId);
   const song  = player.findSongByID(songId);
-  if(isNaN(playlistId)){
-    throw "playlist ID must be a number";
+  id_is_int_and_does_exists(playlistId, "playlist");
+  id_is_int_and_does_exists(songId, "song");
+  
+  if(myPlaylist.songs.find(song => song === songId) === songId){
+    const index = myPlaylist.songs.indexOf(songId);
+    if(index > -1){
+      myPlaylist.songs.splice(index, 1);
+      //If it was the last song in the playlist - delete playlist
+      if(myPlaylist.songs.length === 0){
+        removePlaylist(playlistId);
+      }
+    }        
   }
-  else if(isNaN(songId)){
-    throw "song ID must be a number";
-  }
-  else if(myPlaylist === undefined){
-    throw "playlist dosent exists";
-  }
-  else if(song === undefined){
-    throw "song dosent exists";
-  }
+  //If Song ID doesnt exists - add
   else{
-    //If Song ID exists - remove
-    if(myPlaylist.songs.find(song => song === songId) === songId){
-      const index = myPlaylist.songs.indexOf(songId);
-      if(index > -1){
-        myPlaylist.songs.splice(index, 1);
-        //If it was the last song in the playlist - delete playlist
-        if(myPlaylist.songs.length === 0){
-          removePlaylist(playlistId);
-        }
-      }        
-    }
-    //If Song ID doesnt exists - add
-    else{
-      myPlaylist.songs.push(songId);       
-    }
-  }
+    myPlaylist.songs.push(songId);       
+  }  
 }
 
 function playlistDuration(id) {
   const myPlaylist = player.findPlaylistByID(id);
+  id_is_int_and_does_exists(id, "playlist");
   
-  if(isNaN(id)){
-    throw "playlist ID must be a number";
-  }
-  else if(myPlaylist === undefined){
-    throw "playlist dosent exists";
-  }  
-  else{
-    let durationInSeconds = 0;
-    myPlaylist.songs.forEach(song => {
-      const songObj = player.findSongByID(song);
-      durationInSeconds += songObj.duration;
-    });
-    return durationInSeconds;
-  }
+  let durationInSeconds = 0;
+  myPlaylist.songs.forEach(song => {
+    const songObj = player.findSongByID(song);
+    durationInSeconds += songObj.duration;
+  });
+  return durationInSeconds;  
 }
 
 function searchByQuery(query) {
@@ -329,16 +199,18 @@ function searchByDuration(duration) {
   let selected_ID = player.songs[0].id;  
   let returnSongOrPlaylist = "song";
   player.songs.forEach(song => {
-    if(lowestReduceNumber > Math.abs(song.duration - secondsDuration)){
-      lowestReduceNumber = Math.abs(song.duration - secondsDuration);
+    let diffrence = Math.abs(song.duration - secondsDuration);
+    if(lowestReduceNumber > diffrence){
+      lowestReduceNumber = diffrence;
       selected_ID = song.id;
       returnSongOrPlaylist = "song";
     }
   });
 
   player.playlists.forEach(playlist => {
-    if(lowestReduceNumber > Math.abs(playlistDuration(playlist.id) - secondsDuration)){
-      lowestReduceNumber = Math.abs(playlistDuration(playlist.id) - secondsDuration);
+    let diffrence = Math.abs(playlistDuration(playlist.id) - secondsDuration);
+    if(lowestReduceNumber > diffrence){
+      lowestReduceNumber = diffrence;
       selected_ID = playlist.id;
       returnSongOrPlaylist = "playlist";
     }
@@ -351,12 +223,103 @@ function searchByDuration(duration) {
     return player.findPlaylistByID(selected_ID);
   }
 }
-console.log(searchByDuration('04:01'));
+
+
+//==============================================
+// ============ Extra Functions ================
+//==============================================
 
 // ===> Check if String is in MM:SS format <===
 function check_Time_String_Validtion(str){
   const regex = new RegExp('^[0-9]{2}:[0-9]{2}$');
   return regex.test(str);
+}
+
+// ===> removing ID from an attribute <===
+function remove_ID_from(id, attribute){
+  player[attribute].forEach((Obj, index) => {
+    if(Obj.id === id)
+      player[attribute].splice(index, 1);
+  });    
+}
+
+// ===> Returns ID. Checks if ID is taken - if not, generate ID and returns it <===
+function id_been_taken_or_generate(id, songOrPlaylist){
+  let returnedObj;
+  if(songOrPlaylist === "song"){
+    returnedObj = player.findSongByID(id);
+  }
+  else if (songOrPlaylist === "playlist"){
+    returnedObj = player.findPlaylistByID(id);
+  }
+
+  if(returnedObj !== undefined){
+    throw "That ID has been taken";   
+  };
+  // If ID doesnt omitted - generate ID
+  if(id === undefined){
+    return generate_ID(songOrPlaylist);
+  }
+  else{
+    if(isNaN(id)){
+      throw "ID must be a number";
+    }
+  }
+  return id;
+}
+
+// ===> Validation of id in a playlist or song <===
+function id_is_int_and_does_exists(id, songOrPlaylist){
+  let Obj;
+  if(songOrPlaylist === "song")
+    Obj = player.findSongByID(id);
+  else if(songOrPlaylist === "playlist")
+    Obj = player.findPlaylistByID(id);
+  
+  if(isNaN(id)){
+    throw "ID must be a number";
+  }  
+  else if(Obj === undefined){
+    throw "non existent ID";
+  }
+}
+
+// ===> Convert MM:SS to Seconds <===
+function from_Time_String_To_Seconds(duration){
+  const newDuration = duration.split(":")
+  return parseInt(newDuration[0]) * 60 + parseInt(newDuration[1]);
+}
+
+// ===> Reformat from seconds to MM:SS <===
+function calcPlayTime(durationTime) {
+  const min = Math.floor(durationTime / 60);
+  const sec = durationTime - min * 60;
+  // Should add 0 before the number?   numberS = number as string    
+  const numberS1 = (min < 10) ? "0" : "";
+  const numberS2 = (sec < 10) ? "0" : "";
+  return numberS1 + min + ":" + numberS2 + sec;
+}
+
+// ===> Generate a new ID <===
+function generate_ID(songOrPlaylist){
+  let i = 1
+  // To Songs
+  while(songOrPlaylist === "song"){
+    const songObj = player.findSongByID(i);    
+    if(songObj === undefined){      
+      return i;
+    } 
+    i++;
+  }
+
+  // To Playlist
+  while(songOrPlaylist === "playlist"){
+    const playlistObj = player.findPlaylistByID(i);    
+    if(playlistObj === undefined){      
+      return i;
+    } 
+    i++;
+  }
 }
 
 
