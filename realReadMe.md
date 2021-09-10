@@ -11,6 +11,7 @@ iv'e wrote some instructions for You to looking at the code, to make it AEAP ,as
 IMPORTANT!     IMPORTANT!     IMPORTANT!     IMPORTANT!     IMPORTANT!     IMPORTANT!     IMPORTANT!     IMPORTANT!     IMPORTANT!     IMPORTANT!     IMPORTANT!     IMPORTANT!     IMPORTANT!   
 **************************************************************************************************************************************************************************************************
 
+
 1.TO LOOK AND UNDERSTAND THE CODE:
 GO TO "MP3PLAYERTASK/functions"--> there you can see the functions (copy/paste to original) clearly ,splited by subjects.
 
@@ -20,6 +21,7 @@ GO TO "MP3PLAYERTASK/functions"--> there you can see the functions (copy/paste t
 
 2.TO CHACK THAT EVERY TEST IS PASS:
 GO TO "MP3PLAYERTASK/index.js" -->there you can run the tests
+
 
 **************************************************************************************************************************************************************************************************
 IMPORTANT!     IMPORTANT!     IMPORTANT!     IMPORTANT!     IMPORTANT!     IMPORTANT!     IMPORTANT!     IMPORTANT!     IMPORTANT!     IMPORTANT!     IMPORTANT!     IMPORTANT!     IMPORTANT!    
