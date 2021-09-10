@@ -110,7 +110,7 @@ function DeleteInPlayLists(id) {
       }
     }
   }
- }
+ };
 
 function removeSong(id) {
   if(!idCheck(id)) throw new Error("Invalid ID");
@@ -168,10 +168,25 @@ function addSong(title, album, artist, duration, id = randomId()){
   }
 */
 
+//Check id in playlists returns the playlist if exists and false if not
+function checkPlaylistId(id){
+  for(let playlist of player.playlists){
+    if(playlist.id == id){
+      return playlist;
+    }
+  }
+  return false;
+}
 
 function removePlaylist(id) {
-  // your code here
+  let playlist = checkPlaylistId(id);
+  if(playlist == false){
+    throw new Error("ID non existent in playlist");
+  }else{ 
+      player.playlists.splice(player.playlists.indexOf(playlist), 1); 
+  }
 }
+
 
 function createPlaylist(name, id) {
   // your code here
