@@ -78,6 +78,16 @@ const getSongById= (id)=>{
   return player.playSong(getSongById(id));
 }
 function removeSong(id) {
+  if(getSongById(id)===undefined){
+    throw new Error("${id} ID not valid");
+  }
+player.songs.splice(getSongById(id),1);
+  for(let num1 in player.playlists){            
+    for(let num2 in player.playlists[num1].songs){  
+      if(player.playlists[num1].songs[num2] ===id){
+        player.playlists[num1].songs.splice(num2,1);
+       }
+    }}
 }
 
 
