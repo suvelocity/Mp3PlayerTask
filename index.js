@@ -58,7 +58,6 @@ function playSong(id) {
     throw("ID doesn't exist");
   player.playSong(num);
 }
-playSong(1);
 //check if the id exist in the playlist.song and remove the id 
 removeSong(4);
 function removeSong(id) {
@@ -105,19 +104,19 @@ console.log("the id is:"+id);
 player.songs.push({id:id,title:title,album:album,artist:artist,duration:ssduration});
 return id;
 }
-
+//check if the id exsist and remove it from the playlists
 function removePlaylist(id) {
   let found = false;
   for (let i = 0; i < player.playlists.length && !found; i++) {
     if(player.playlists[i].id==id){
-      player.playlists.splice(i,1);
-      found = true;
+        player.playlists.splice(i,1);
+        found = true;
     }
   }
   if(!found){
     throw "ID does not exist";
   }
-}
+} //check if the id exsist and add new playlist to the playlists 
 function createPlaylist(name, id){
   if(id==undefined) {
     id = uniqueId();
@@ -130,21 +129,26 @@ function createPlaylist(name, id){
   }
   player.playlists.push({id:id, name:name, songs:[]});
   return id;
-}
-
-  
-  
-
-
-
+}// get a playlist id and play the song in the playlist.
 function playPlaylist(id) {
-  // your code here
+  let p;
+  player.playlists.forEach(playlist => {
+    if(playlist.id == id)
+      p = playlist;
+  });
+  if(p != undefined)
+  {
+    p.songs.forEach(song => {
+      playSong(song);
+    });
+  }
+  else{
+    throw " id does not exist";
+  }
 }
 
 function editPlaylist(playlistId, songId) {
-  // your code here
 }
-
 function playlistDuration(id) {
   // your code here
 }
