@@ -133,6 +133,16 @@ function playlistDuration(id) {
 }
 
 function searchByQuery(query) {
+   /* 
+  let songTitles - contains titles of the songs witch the quary was inside threre tile album or artst. (not sorted)
+  let playlistNames - - contains names of the playlist witch the quary was inside threre names. (not sorted)
+  let objectsContainsTheQuery - objects of arrays that will contain the songs and the playlists with the quary sorted
+  first loop - finding in the songs witch one has the quary inside and add to songTitles
+  second loop - finding in the playlists witch  has the quary inside and add to playlistNames
+  third loop - pushes the songs after they have been sorted to objectsContainsTheQuery.
+  forth loop - pushes the playlists after they have been sorted to objectsContainsTheQuery.
+  return - objectsContainsTheQuery.
+  */
   let songTitles = [];
   let playlistNames= [];
   let objectsContainsTheQuery= {"songs": [], "playlists": []};
@@ -157,6 +167,14 @@ function searchByQuery(query) {
   return objectsContainsTheQuery;
 }
 function searchByDuration(duration) {
+  /* 
+  let closestDurationObject - contains the object closest duration
+  let durationInSeconds - contains the seconds format of duration
+  let distance - the distance between the object duration and the givan duration in seconds
+  first loop is finding the closest duration from the songs to the duration givan
+  second loop checks if there is a playlist with coser duration
+  return - the object of the song or playlist with the closest duration to the duration that was givan.
+  */
   let closestDurationObject = player.songs[0];
   let durationInSeconds = formatMinutsToSeconds(duration);
   let distance = Math.abs(player.songs[0].duration - durationInSeconds);
