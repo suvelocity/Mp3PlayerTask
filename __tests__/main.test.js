@@ -141,13 +141,13 @@ describe('Player Tests', () => {
     expect(() => createPlaylist(mockPlaylist2.name, mockPlaylist1.id)).toThrow()
   })
 
-  it.only('playPlaylist should play all songs inside it', () => {
+  it('playPlaylist should play all songs inside it', () => {
     const spy = jest.spyOn(console, 'log')
     playPlaylist(mockPlaylist1.id)
     expect(spy).toHaveBeenCalledTimes(mockPlaylist1.songs.length)
   })
 
-  it.only('playPlaylist should throw for non-existent ID', () => {
+  it('playPlaylist should throw for non-existent ID', () => {
     expect(() => playPlaylist(mockNonExistentPlaylistId)).toThrow()
   })
 

@@ -92,6 +92,7 @@ function playSong(id) {
     }
   }
 }
+
 //Returns an index of a song in songs by id
 function IndexOfSong(id) {
   for(let song of player.songs){
@@ -143,9 +144,8 @@ function addSong(title, album, artist, duration, id = randomId()) {
     return id;
 }
 
-
-/*
 //Constructor method
+/*
 //Contructor function that creates a song object 
 function Song(title, album, artist, duration, id){
   constructor: Object,
@@ -212,16 +212,58 @@ function createPlaylist(name, id = randomId()) {
 function playPlaylist(id) {
   let playlist = checkPlaylistId(id);
   if(playlist == false){
-    throw new Error("ID non existent in playlist");
+    throw new Error("ID non existent in playlists");
   }else{ 
     for(let i = 0; i < playlist.songs.length; i++)
       playSong(playlist.songs[i]); 
   }
 }
 
-function editPlaylist(playlistId, songId) {
-  // your code here
+//checks if the song exists in the list
+function songCheck(list, song){
+  for(let i = 0; i < list.length; i++){
+    if(list[i] == song){
+      return true;
+    }
+  }
+  return false;
 }
+
+//Adds a song to a song list
+function songPush(list, song){
+  list.push(song);
+  return list;
+}
+
+
+function editPlaylist(playlistId, songId) {
+  //check validity of song in player
+  if(!idCheck(songId)){
+    throw new Error("Song ID non existent in player");
+  }
+  //checks the validity of the playlist ID
+  let playlist = checkPlaylistId(playlistId);
+  if(playlist == false){
+    throw new Error("Playlist ID non existent in playlists");
+
+    //checks if the song exists in the songs list
+  }else if(songCheck(playlist.songs, songId) == true){
+
+    //if song exists it removes the song from the songs list
+    DeleteInPlayLists(songId);
+
+    //if songs list is now empty the function deletes the playlist
+    if(playlist.songs.length == 0){
+      removePlaylist(playlistId);
+    }
+
+    //if song does not exists it pushes the song to the songs list
+  }else{
+    playlist.songs = songPush(playlist.songs, songId);
+  }
+}
+
+
 
 function playlistDuration(id) {
   // your code here
