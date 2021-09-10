@@ -94,13 +94,7 @@ function addSong(
   if (checkId(player.songs, id))
     throw new Error('ID already exist, change the ID or omit it')
   duration = oppositOfdurationFormat(duration) //convert from mm:ss format to seconds
-  player.songs.push({
-    title,
-    album,
-    artist,
-    duration,
-    id,
-  })
+  player.songs.push({ title, album, artist, duration, id })
   return id
 }
 
@@ -138,8 +132,7 @@ function editPlaylist(playlistId, songId) {
     //runs on the songs array in the playlist
     if (songId === correctPlaylist.songs[j]) {
       //if the song ID exists in the playlist
-      removeSongsFromPlaylist(songId)
-      //removes it
+      correctPlaylist.songs.splice(j, 1) //removes it
     } else {
       correctPlaylist.songs.push(songId)
     }
@@ -152,14 +145,14 @@ function editPlaylist(playlistId, songId) {
 
 function playlistDuration(id) {
   let correctPlaylist = findPlaylistById(id) //correctPlaylist contain the wanted playlist
-  let save = 0,
+  let saveSongId = 0,
     sum = 0
   for (let i = 0; i < correctPlaylist.songs.length; i++) {
     //run on the songs array inside this playlist
-    save = correctPlaylist.songs[i]
+    saveSongId = correctPlaylist.songs[i]
     for (let j = 0; j < player.songs.length; j++) {
       //run on the songs array
-      if (player.songs[j].id === save) sum += player.songs[j].duration
+      if (player.songs[j].id === saveSongId) sum += player.songs[j].duration
     }
   }
   return sum
@@ -290,19 +283,14 @@ function checkId(songsOrPlaylists, id) {
   return false
 }
 
-function biggestId(songsOrPlaylists) {
+function generateNewId(songsOrPlaylists) {
   //the function return the biggest ID from thw array
   let max = songsOrPlaylists[0].id
   for (let i = 0; i < songsOrPlaylists.length; i++) {
     //run on songs or playlists array
     if (max < songsOrPlaylists[i].id) max = songsOrPlaylists[i].id
   }
-  return max
-}
-
-function generateNewId(songsOrPlaylists) {
-  //gets songs or playlists array and generate new ID
-  return biggestId(songsOrPlaylists) + 1
+  return max + 1
 }
 
 /////////////////////////////////////////////////---  Help Functions(End) ---////////////////////////////////////////////////////
