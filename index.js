@@ -59,7 +59,7 @@ function playSong(id) {
   player.playSong(num);
 }
 playSong(1);
-
+//check if the id exist in the playlist.song and remove the id 
 removeSong(4);
 function removeSong(id) {
   let idR = songById(id);
@@ -74,29 +74,58 @@ function removeSong(id) {
     }
   } 
 } 
-}
+} // check if the id exist and add the song to player.song
 function addSong(title, album, artist, duration, id) {
-if(songById(id)!=-1){
- let num=1;
- while(songById(num)==-1)
- {
-   num++;
- }
- id=num;
- let temp = duration.split(":");
+  let temp = duration.split(":");
   let min = temp[0]*60;
-  let sec = temp[1]*1
+  let sec = temp[1]*1;
   let ssduration = min + sec;
-}
+  
+  if (id == undefined) id = 1;
+  for (let i = 0; i < player.songs.length; i++) {
+    const song = player.songs[i];
+    if(song.id > id)
+      id = song.id +1;
+  }/*
+  if(songById(id)!=-1){
+    let num=1;
+    
+  while(songById(num)==-1)
+  {
+    num++;
+  }
+  id=num;
+
+}*/
+player.songs.forEach(song => {
+  if(song.id == id)
+    throw "exception";
+});
+console.log("the id is:"+id);
 player.songs.push({id:id,title:title,album:album,artist:artist,duration:ssduration});
+return id;
 }
 
 function removePlaylist(id) {
-  // your code here
+  let found = false;
+  for (let i = 0; i < player.playlists.length && !found; i++) {
+    if(player.playlists[i].id==id){
+      player.playlists.splice(i,1);
+      found = true;
+    }
+  }
+  if(!found){
+    throw "ID does not exist";
+  }
 }
 
-function createPlaylist(name, id) {
-  // your code here
+function createPlaylist(name, id) 
+{
+  for (let i = 0; i < player.playlists.length; i++) {
+    if(player.playlists[i].id==id){
+
+    }
+  }
 }
 
 function playPlaylist(id) {
@@ -118,9 +147,19 @@ function searchByQuery(query) {
 function searchByDuration(duration) {
   // your code here
 }
+//check if the the idT exist in the array playlist
+function playlistsById(idT)
+{
+  for (let i = 0; i < player.playlists.length; i++) {
+    if(player.playlists[i].id==idT)
+      return i;
+  }
+  return -1;
+}
 // found the index in the array of the id
 function songById(idT)
 {
+  if (idT == undefined) idT = 0;
   for (let i = 0; i < player.songs.length; i++) {
     if(player.songs[i].id==idT)
       return i;
