@@ -89,10 +89,30 @@ player.songs.splice(getSongById(id),1);
        }
     }}
 }
+const idExist=(id)=> {
+  for (let num in player.songs) {
+    if (player.songs[num].id === id)
+      return true;
+  }
+  return false;
+}
+const secondsFormat= (duration)=>{
+  let sum = duration.split(":");
+  let minute = parseInt(sum[0]) * 60;
+  let second = parseInt(sum[1]);
+
+  return minute + second;
+}
 
 
 function addSong(title, album, artist, duration, id = Math.floor(Math.random() * 100) + 1){
-
+  if(idExist(id)){
+    throw new Error("${id} ID already exists");
+  }
+  else{
+    player.songs.push({id: id, title: title,album: album,artist: artist,duration:secondsFormat(duration)});
+      return id;
+  }
 }
 
 function removePlaylist(id) {
