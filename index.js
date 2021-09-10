@@ -239,9 +239,37 @@ function playlistDuration(id) {
 
 
 function searchByQuery(query) {
-  // your code here
-}
+  query=query.toLowerCase();
+  let obj={
+    songs:[],
+    playlists:[]
+  };
+  for (let song of player.songs)
+  {
+    if( (song.title.toLowerCase().includes(query)) || 
+        (song.album.toLowerCase().includes(query)) || 
+        (song.artist.toLowerCase().includes(query)) )
+    {
+      obj.songs.push(song);
+    }
+  }
 
+  for (let playlist of player.playlists)
+  {
+    if (playlist.name.toLowerCase().includes(query))
+    {
+      obj.playlists.push(playlist);
+    }
+  }
+  obj.songs.sort(function (a, b) {
+    if (a.title < b.title){
+       return -1; }
+    else if (a.title > b.title){
+       return 1; }
+    return 0;
+  })
+  return obj;
+}
 
 function searchByDuration(duration) {
   // your code here
