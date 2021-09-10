@@ -68,21 +68,57 @@ function removeSong(id) {
     if (player.playlists[i].songs.indexOf(id) >= 0) {
       player.playlists[i].songs.splice(player.playlists[i].songs.indexOf(id), 1)
       break
-    } if(id!== Number) {
+    }
+    if (id !== Number) {
       throw `The ID should be a number`
     }
   }
   return player
 }
+function convertDuration(time) {
+  let min = Math.floor(time / 60)
+  let sec = 0
+  let finalTime = ``
+  if (time % 60 === 0 && time / 60 < 10) {
+    finalTime = `0` + time / 60 + `:00`
+  } else if (time % 60 === 0 && time / 60 > 10) {
+    finalTime = time / 60 + `:00`
+  } else if (time % 60 !== 0 && min < 10) {
+    finalTime = `0` + min + `:` + (time % 60)
+  } else if (time % 60 !== 0 && min > 10) {
+    finalTime = min + `:` + (time % 60)
+  } else if (time % 60 !== 0) {
+    finalTime = `00:` + (time % 60)
+  }
+  return finalTime
+}
+function idGen(id) {
+  return (id = player.songs.length + 2)
+}
+function addSong(title, album, artist, duration, id = idGen()) {
+  for (let i = 0; i < player.songs.length; i++) {
+    if (id === player.songs[i].id) {
+      throw `The ID is taken`
+    }
+  }
 
-function addSong(title, album, artist, duration, id) {
-  player.songs.push(addSong())
+  let song = {
+    id: id,
+    title: title,
+    album: album,
+    artist: artist,
+    duration: convertDuration(duration),
+  }
+
+  player.songs.push(song)
+  return id
 }
 
 function removePlaylist(id) {
-  for (let z of player) {
-    id = player.playlists.slice[z]
-    return id
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (player.playlists[i].id === id) {
+      player.playlists.splice(i, 1)
+    }
   }
 }
 
