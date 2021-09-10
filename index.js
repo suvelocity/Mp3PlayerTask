@@ -54,7 +54,6 @@ const player = {
   }
 }
 
-
 function playSong(id) {
   const songs = player.songs;
   for(let i=0; i<songs.length; i++)
@@ -80,6 +79,7 @@ function removeSong(id) {
     }
   }
   if(!isSongExist) throw new Error('Song id not found.');
+
   const playlists=player.playlists;
   for(let j=0; j<playlists.length; j++)
   {
@@ -92,16 +92,60 @@ function removeSong(id) {
 }
 
 function addSong(title, album, artist, duration, id) {
-  // your code here
+ let new_id = 0;
+ duration=duration.split(":");
+ duration= parseInt(duration[0]*60) + parseInt(duration[1]);
+ const songs = player.songs;
+ if(id)
+ {  
+   for(let i=0; i<songs.length; i++)
+   {
+      if(id==songs[i].id)
+      {
+        throw new Error('ERROR: that id is taken.');
+      }
+   }
+   new_id= id;
+ }
+ else{
+   let max=1;
+   for(let j=0; j<songs.length; j++)
+   {
+     if(max<songs[j].id)
+     {
+       max=songs[j].id
+     }
+   }
+   new_id=max+1;
+ }
+ let newSong = {
+   id: new_id,
+   title: title,
+   album: album,
+   artist: artist,
+   duration: duration,
+ }
+ songs.push(newSong);
+ return new_id;
 }
 
 function removePlaylist(id) {
-  // your code here
+  const playlists=player.playlists;
+  let ifIdExist=false;
+  for(let i=0; i<playlists.length; i++)
+  {
+    if(playlists[i].id===id)
+    {
+      playlists.splice(i,1);
+      ifIdExist=true;
+    }
+    
+  } 
+  if(!ifIdExist) throw new Error('ERROR: that id is not found.');
 }
 
 function createPlaylist(name, id) {
-  // your code here
-}
+  let newSong
 
 function playPlaylist(id) {
   // your code here
@@ -135,4 +179,5 @@ module.exports = {
   playlistDuration,
   searchByQuery,
   searchByDuration,
+}
 }
