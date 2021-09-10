@@ -287,8 +287,72 @@ function playlistDuration(id) {
   return durations;
 }
 
+//lower case the argument and value and returns if the argument is the initial of the value
+function matchCheck(query, value){
+  query = query.toLowerCase();
+  value = value.toLowerCase();
+  let arr = value.match(query);
+  if(arr == null){
+    return false;
+  }
+  return true;
+}
+
+
+//recieves query and returns an array of songs with that query
+function songsByQuery(query) {
+  let songResults = [];
+  let playlistResults = [];
+  for(let song of player.songs){
+    if(matchCheck(query, song.title) || matchCheck(query, song.album) || matchCheck(query, song.artist)){
+      songResults.push(song);
+    }
+  }
+  //Sorts the array alphanumerically by song title
+  songResults.sort(function(a, b) {
+    let titleA = a.title; 
+    let titleB = b.title; 
+    if (titleA < titleB) {
+      return -1;
+    }
+    if (titleA > titleB) {
+      return 1;
+    }
+    return 0;
+  });
+  return songResults;
+}
+
+//recieves query and returns an array of playlists with that query
+function playlistsByQuery(query) {
+  let playlistResults = [];
+  for(let playlist of player.playlists){
+    if(matchCheck(query, playlist.name)){
+      playlistResults.push(playlist);
+    }
+  }
+  //Sorts the array alphanumerically by playlist name
+  playlistResults.sort(function(a, b){
+    let nameA = a.name; 
+    let nameB = b.name; 
+    if (nameA < nameB) {
+      return -1;
+    }
+    if (nameA > nameB) {
+      return 1;
+    }
+    return 0;
+  });
+  
+  return playlistResults;
+}
+
 function searchByQuery(query) {
-  // your code here
+  let results = {
+    playlists: playlistsByQuery(query),
+    songs: songsByQuery(query)
+  }
+  return results;
 }
 
 function searchByDuration(duration) {
