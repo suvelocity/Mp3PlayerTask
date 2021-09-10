@@ -48,50 +48,67 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    console.log(/* your code here */)
-  },
+    console.log(`Playing ${song.title} from ${song.album} by ${(song.artist)} | ${mmssDuration(song.duration)}.`);
+  }
+}
+const mmssDuration=(duration)=> {
+  let minutes = Math.floor(duration / 60);
+  let seconds = duration % 60;
+  if (minutes < 10) {
+    minutes = "0" + minutes;
+  }
+  if (seconds < 10) {
+    seconds = "0" + seconds;
+  }
+  return minutes.toString() + ':' + seconds.toString();
 }
 
-function playSong(id) {
-  // your code here
+const getSongById= (id)=>{
+  /*function getSongById(id) {*/
+    for (let num in player.songs) { 
+      if (player.songs[num].id === id){ 
+        return player.songs[num]; 
+    }}
+    throw new Error("No song was found");
+  }
+  function playSong(id) {
+    if(getSongById(id)===undefined){
+    throw " ${id} ID not exists";
+  }
+  return player.playSong(getSongById(id));
 }
-
 function removeSong(id) {
-  // your code here
 }
 
-function addSong(title, album, artist, duration, id) {
-  // your code here
+
+function addSong(title, album, artist, duration, id = Math.floor(Math.random() * 100) + 1){
+
 }
 
 function removePlaylist(id) {
-  // your code here
 }
 
-function createPlaylist(name, id) {
-  // your code here
-}
 
+function createPlaylist(name, id ) {
+ 
+  }
+
+//createPlaylist
 function playPlaylist(id) {
-  // your code here
 }
 
 function editPlaylist(playlistId, songId) {
-  // your code here
+ 
 }
 
 function playlistDuration(id) {
-  // your code here
 }
+
 
 function searchByQuery(query) {
-  // your code here
 }
-
 function searchByDuration(duration) {
-  // your code here
 }
-
 module.exports = {
   player,
   playSong,
