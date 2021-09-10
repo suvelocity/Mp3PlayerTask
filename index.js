@@ -52,8 +52,7 @@ const player = {
     id_is_int_and_does_exists(song, "song");
     const songObj = this.findSongByID(song);
     
-    console.log("Playing " + songObj.title + " from " + songObj.album + " by " + songObj.artist + " | " + calcPlayTime(songObj.duration) + ".");
-    
+    console.log("Playing " + songObj.title + " from " + songObj.album + " by " + songObj.artist + " | " + calcPlayTime(songObj.duration) + ".");    
   },
 
   // ===> Returns the song by the ID given <===
@@ -86,21 +85,18 @@ function removeSong(id) {
 }
 
 function addSong(title, album, artist, duration, id) {
+  check_Time_String_Validtion(duration);
   const convertedDuration = from_Time_String_To_Seconds(duration);  
   id = id_been_taken_or_generate(id, "song");
-
   player.songs.push({title, album, duration: convertedDuration, artist, id});
-
+  
   return id;
 }
-
 
 function removePlaylist(id) {    
   id_is_int_and_does_exists(id, "playlist");
   remove_ID_from(id, "playlists");
 }
-
-
 
 function createPlaylist(name, id) {  
   id = id_been_taken_or_generate(id, "playlist");
@@ -186,18 +182,18 @@ function searchByQuery(query) {
   return objectReturned;
 }
 
-
 function searchByDuration(duration) {
   if(player.songs.length === 0){
     throw "No songs exists";
   }
-  else if(!check_Time_String_Validtion(duration)){
-    throw "Duration is not valid (MM:SS)";
+  else {
+    check_Time_String_Validtion(duration);    
   }
   const secondsDuration = from_Time_String_To_Seconds(duration);
   let lowestReduceNumber = Math.abs(player.songs[0].duration - secondsDuration);
   let selected_ID = player.songs[0].id;  
   let returnSongOrPlaylist = "song";
+  
   player.songs.forEach(song => {
     let diffrence = Math.abs(song.duration - secondsDuration);
     if(lowestReduceNumber > diffrence){
@@ -224,7 +220,6 @@ function searchByDuration(duration) {
   }
 }
 
-
 //==============================================
 // ============ Extra Functions ================
 //==============================================
@@ -232,7 +227,8 @@ function searchByDuration(duration) {
 // ===> Check if String is in MM:SS format <===
 function check_Time_String_Validtion(str){
   const regex = new RegExp('^[0-9]{2}:[0-9]{2}$');
-  return regex.test(str);
+  if(!regex.test(str))
+    throw "Duration is not valid (MM:SS)";  
 }
 
 // ===> removing ID from an attribute <===
@@ -321,8 +317,6 @@ function generate_ID(songOrPlaylist){
     i++;
   }
 }
-
-
 
 
 
