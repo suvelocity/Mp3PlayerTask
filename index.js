@@ -181,24 +181,67 @@ function playPlaylist(id) {
 }
 
 
-function editPlaylist(playlistId, songId) {
- 
-
-   }
- }
+function indexSongInPlaylist( playlistId,songId) {
+  let playlist = getPlaylistByID(playlistId)
+  for (let index = 0; index < playlist.songs.length; index++) {
+    if (playlist.songs[index] == songId)
+      return index;
+  }
+  return -1;
 }
+
+
+function songExist(songId){
+  for(let i=0;i<player.songs.length;i++){
+    if(player.songs[i].id===songId){
+      return true;
+    }
+  }
+  return false;
+}
+
+
+function playlistExist(id) {
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (player.playlists[i].id == id)
+      return true
+  }
+  return false
+}
+
+
+function editPlaylist(playlistId, songId) {
+  let songIndex = indexSongInPlaylist(playlistId, songId)
+  let playlist = getPlaylistByID(playlistId)
+  if(songExist(songId) && playlistExist(playlistId)){
+    if(songIndex == -1){
+      playlist.songs.push(songId);
+    }
+    else if(playlist.songs.length > 1){
+      playlist.songs.splice(songIndex,1)
+    }
+    else{
+      removePlaylist(playlist.id)
+    }
+  }
+  else throw new Error("Somthing wrong");
+}
+
 
 function playlistDuration(id) {
   // your code here
 }
 
+
 function searchByQuery(query) {
   // your code here
 }
 
+
 function searchByDuration(duration) {
   // your code here
 }
+
 
 module.exports = {
   player,
