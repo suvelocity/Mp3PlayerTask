@@ -229,7 +229,12 @@ function editPlaylist(playlistId, songId) {
 
 
 function playlistDuration(id) {
-  // your code here
+  let allDuration=0;
+  let playlist=getPlaylistByID(id)
+  for(let i=0;i<playlist.songs.length;i++){
+    allDuration=allDuration + getSongByID(playlist.songs[i]).duration;
+  }
+  return allDuration;
 }
 
 
