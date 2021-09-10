@@ -205,13 +205,13 @@ function playlistDuration(id) {
   }
 }
 
-function searchByQuery(query) {
+function searchByQuery(query) { /*this function has 2 central processes */
   const player1 = {
     songs: [],
     playlists: [],
   }
     ;
-  for (let i = 0; i < player.songs.length; i++) {
+  for (let i = 0; i < player.songs.length; i++) {/*here I gave the player object all the right songs and playlists */
     if (player.songs[i].title.toLowerCase().includes(query.toLowerCase()) || player.songs[i].artist.toLowerCase().includes(query.toLowerCase()) || player.songs[i].album.toLowerCase().includes(query.toLowerCase())) {
       player1.songs.push(player.songs[i]);
     }
@@ -220,7 +220,7 @@ function searchByQuery(query) {
     if (player.playlists[j].name.toLowerCase().includes(query.toLowerCase())) {
       player1.playlists.push(player.playlists[j]);
 
-    }
+    }/*here I arranged the player arrays in alphanumeric order */
   }
   player1.songs.sort((a, b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0));
   player1.playlists.sort((c, d) => (c.name > d.name) ? 1 : ((c.name > d.name) ? -1 : 0));
@@ -228,10 +228,12 @@ function searchByQuery(query) {
 
 }
 
-function searchByDuration(duration) {
+function searchByDuration(duration) {/* to make this function work I created 2 arrays that each one is 
+  an object that have 3 keys:a specific song from player, the range between a song duration and the given duration
+  and a specific song duration */
   let time = convertSeconds(duration);
   let songDurationList = [];
-  for (let i = 0; i < player.songs.length; i++) {
+  for (let i = 0; i < player.songs.length; i++) {/* here is the first array that has songs */
     var obj = {
       songDuration: player.songs[i].duration,
       songRange: Math.abs(time - player.songs[i].duration),
@@ -241,7 +243,7 @@ function searchByDuration(duration) {
   }
   songDurationList.sort(function (a, b) { return a.songRange - b.songRange; })
   let playListDurationList = [];
-  for (let k = 0; k < player.playlists.length; k++) {
+  for (let k = 0; k < player.playlists.length; k++) {/* here is the second array that has playlists */
     var obj2 = {
       playListDuration: playlistDuration(player.playlists[k].id),
       playListRange: Math.abs(time - (playlistDuration(player.playlists[k].id))),
