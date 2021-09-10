@@ -1,4 +1,14 @@
 'use strict'
+
+
+/*this is the main player object.
+all of the songs and playlist the user have are stored here.
+all of the big & complex functions will mostly refer to it.
+structure- 
+songs :Object->array->object
+playlists :Object->array->object->array
+*/
+
 const player = {
   songs: [
     {
@@ -50,93 +60,53 @@ const player = {
   ],
   playSong(song) {
     console.log(
-      `Playing ${song.title} from ${song.album} by ${song.artist} | ${sTOmmss(song.duration)}.`
+      `Playing ${song.title} from ${song.album} by ${song.artist} | ${sTOmmss(
+        song.duration
+      )}.`
     )
   },
 }
-function songById(id) {
+
+
+
+
+//functions:
+
+
+
+//SONGS:
+
+
+
+   //Get songs by:
+
+
+function songById(id) {//gets: SONG ID, returns: THE MATCHING SONG.
   for (let i = 0; i < player.songs.length; i++) {
     if (player.songs[i]['id'] === id) return player.songs[i]
   }
   return undefined
 }
-function songIndexById(id) {
+
+function songIndexById(id) {//gets: SONG ID, returns: SONG INDEX.
   for (let i = 0; i < player.songs.length; i++) {
     if (player.songs[i]['id'] === id) return i
   }
   return -1
 }
-function isIdExsistInSongs(id) {
+
+function isIdExsistInSongs(id) {//gets: SONG ID, returns: IS SONG ID EXSIST.
   for (let i = 0; i < player.songs.length; i++) {
     if (player.songs[i]['id'] === id) return true
   }
   return false
 }
-function isIdExsistInPlayLists(id) {
-  for (let i = 0; i < player.playlists.length; i++) {
-    if (player.playlists[i]['id'] === id) return true
-  }
-  return false
-}
-function playListById(id) {
-  for (let i = 0; i < player.playlists.length; i++) {
-    if (player.playlists[i]['id'] === id) return player.playlists[i]
-  }
-  return undefined
-}
-function playListIndexById(id) {
-  for (let i = 0; i < player.playlists.length; i++) {
-    if (player.playlists[i]['id'] === id) return i
-  }
-  return -1
-}
 
-function addToPlayList(songId, playlistId) {
-  let song = songById(songId)
-  player.playlists[playListIndexById(playlistId)].songs.push(song.id)
-}
 
-function removeFromPlayLists(songId) {
-  for (let i = 0; i < player.playlists.length; i++) {
-    if (player.playlists[i].songs.includes(songId)) {
-      for (let j = 0; j < player.playlists[i].songs.length; j++) {
-        if (player.playlists[i].songs[j] === songId) {
-          player.playlists[i].songs.splice(j, 1)
-        }
-      }
-    }
-  }
-}
-function removeFromPlayList(songId, playlistId) {
-  for (let i = 0; i < playListById(playlistId).songs.length; i++) {
-    if (player.playlists[playListIndexById(playlistId)].songs[i] === songId) {
-      player.playlists[playListIndexById(playlistId)].songs.splice(i, 1)
-    }
-  }
-}
+   //Edit songs
 
-function playSong(id) {
-  if (songById(id) === undefined) {
-    throw new Error('non-existent ID')
-  }
-  player.playSong(songById(id))
-}
 
-function sTOmmss(s) {
-  const mm = Math.floor(s / 60)
-  const ss = s % 60
-  let mmss = ''
-  if (mm > 9 && ss > 9) mmss = `${mm}:${ss}`
-  if (mm > 9 && ss <= 9) mmss = `${mm}:0${ss}`
-  if (mm <= 9 && ss > 9) mmss = `0${mm}:${ss}`
-  if (mm <= 9 && ss <= 9) mmss = `0${mm}:0${ss}`
-  return mmss
-}
-function mmssTOs(mmss) {
-  return parseInt(mmss.slice(0, 2)) * 60 + parseInt(mmss.slice(3, 5))
-}
-
-function removeSong(id) {
+function removeSong(id) {//gets: SONG ID --> REMOVING THE SONG, FROM PLAYER & PLAYLIST (activatie remove-from-playilist function).
   if (songIndexById(id) === -1) {
     throw new Error('non-existent ID')
   }
@@ -144,12 +114,8 @@ function removeSong(id) {
   removeFromPlayLists(id)
 }
 
-function addSong(title, album, artist, duration, id = 0) {
-  const newSong = {}
-  newSong.title = title
-  newSong.album = album
-  newSong.artist = artist
-  newSong.duration = mmssTOs(duration)
+function addSong(title, album, artist, duration, id = 0) {//gets: NEW SONG CHARACTERIZATION --> ADDS IN TO PLAYER ,returns: NEW SONGS ID.
+  const newSong = { title, album, artist, duration: mmssTOs(duration) }
   if (!isIdExsistInSongs(id)) newSong.id = id
   else {
     for (let i = 0; i < player.songs.length + 1; i++) {
@@ -163,14 +129,71 @@ function addSong(title, album, artist, duration, id = 0) {
   return newSong.id
 }
 
-function removePlaylist(id) {
+
+
+//PLAYLISTS:
+
+
+
+   //searching playlists
+
+
+function isIdExsistInPlayLists(id) {//gets: PLAYLISTS ID , returns: IS PLAYLIST ID EXSIST.
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (player.playlists[i]['id'] === id) return true
+  }
+  return false
+}
+
+function playListById(id) {//gets: PLAYLIST ID , returns: THE MATCHING PLAYLIST.
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (player.playlists[i]['id'] === id) return player.playlists[i]
+  }
+  return undefined
+}
+
+function playListIndexById(id) {//gets: PLAYLIST ID , returns: PLAYLIST INDEX.
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (player.playlists[i]['id'] === id) return i
+  }
+  return -1
+}
+
+
+   //editing playlists
+
+
+function addToPlayList(songId, playlistId) {//gets: SONG ID & PLAYLIST ID --> ADDS SONG TO PLAYLIST.
+  let song = songById(songId)
+  player.playlists[playListIndexById(playlistId)].songs.push(song.id)
+}
+
+function removeFromPlayLists(songId) {//gets: SONG ID --> REMOVES IT FROM *ALL* PLAYLISTS.
+  for (let i = 0; i < player.playlists.length; i++) {
+    for (let j = 0; j < player.playlists[i].songs.length; j++) {
+      if (player.playlists[i].songs[j] === songId) {
+        player.playlists[i].songs.splice(j, 1)
+      }
+    }
+  }
+}
+
+function removeFromPlayList(songId, playlistId) {//gets: SONG ID & PLAYLIST ID --> REMOVES SONG FROM PLAYLIST.
+  for (let i = 0; i < playListById(playlistId).songs.length; i++) {
+    if (player.playlists[playListIndexById(playlistId)].songs[i] === songId) {
+      player.playlists[playListIndexById(playlistId)].songs.splice(i, 1)
+    }
+  }
+}
+
+function removePlaylist(id) {//gets: PLAYLIST ID --> REMOVES PLAYLIST FROM PLAYER.
   if (playListIndexById(id) === -1) {
     throw new Error('non-existent ID')
   }
   player.playlists.splice(playListIndexById(id), 1)
 }
 
-function createPlaylist(name, id = 0) {
+function createPlaylist(name, id = 0) {//gets: NEW PLAYLIST'S NAME --> ADDS NEW EMPTY PLAYLIST TO PLAYER , returns: NEW PLAYLIST ID.
   let newPlayList = { name, songs: [] }
   if (!playListById(id)) newPlayList.id = id
   else {
@@ -184,15 +207,16 @@ function createPlaylist(name, id = 0) {
   player.playlists.push(newPlayList)
   return newPlayList.id
 }
-function playPlaylist(id) {
-  if (playListIndexById(id) === -1) {
-    throw new Error('non-existent ID')
-  }
-  let playlist = playListById(id)
-  for (let i = 0; i < playlist.songs.length; i++) {
-    playSong(playlist.songs[i])
-  }
-}
+
+
+
+    /*gets: SONG ID & PLAILIST ID --> EDITING PLAYLIST BY:
+
+    IF --> SONG ID EXSIST IN PLAYLIST : REMOVES SONG FROM PLAYLIST. 
+
+    IF --> ONLY SONG IN PLAYLIST : DELETES PLAYLIST. 
+
+    IF --> PLAYLIST DO NOT CONTAINS SONG : ADDS SONG TO PLAYLIST.*/
 
 function editPlaylist(playlistId, songId) {
   if (playListById(playlistId) === undefined) {
@@ -211,7 +235,11 @@ function editPlaylist(playlistId, songId) {
   }
 }
 
-function playlistDuration(id) {
+
+    //calculations
+
+
+function playlistDuration(id) {//gets: PLAYLIST ID, returns: PLAYLIST DURATION.
   if (playListById(id) === undefined) {
     throw new Error('non-existent playlistId')
   }
@@ -223,7 +251,60 @@ function playlistDuration(id) {
   }
   return sum
 }
-function comparepl(a, b) {
+
+
+//PLAY FUNCTIONS:
+
+
+
+function playSong(id) {//gets: SONG ID --> PLAYS SONG.
+  if (songById(id) === undefined) {
+    throw new Error('non-existent ID')
+  }
+  player.playSong(songById(id))
+}
+
+function playPlaylist(id) {//gets: PLAYLIST ID --> PLAYS ALL SONGS IN PLAYLIST.
+  if (playListIndexById(id) === -1) {
+    throw new Error('non-existent ID')
+  }
+  let playlist = playListById(id)
+  for (let i = 0; i < playlist.songs.length; i++) {
+    playSong(playlist.songs[i])
+  }
+}
+
+
+
+//TIME
+
+
+
+  //translatin of time units(mmss="mm:ss",s= seconds) 
+
+
+function sTOmmss(s) {//gets: SECONDS , returns: "MINUTES:SECONDS".
+  const mm = Math.floor(s / 60)
+  const ss = s % 60
+  let mmss = ''
+  if (mm > 9 && ss > 9) mmss = `${mm}:${ss}`
+  if (mm > 9 && ss <= 9) mmss = `${mm}:0${ss}`
+  if (mm <= 9 && ss > 9) mmss = `0${mm}:${ss}`
+  if (mm <= 9 && ss <= 9) mmss = `0${mm}:0${ss}`
+  return mmss
+}
+
+function mmssTOs(mmss) {//gets: "MINUTES:SECONDS" , returns: SECONDS.
+  return parseInt(mmss.slice(0, 2)) * 60 + parseInt(mmss.slice(3, 5))
+}
+
+
+
+//SORTING:
+
+
+
+function comparepl(a, b) {//defining how .SORT function works- for alpha-betic sorting.-->FOR PLAYLIST
   let fa = a.name.toLowerCase(),
     fb = b.name.toLowerCase()
   if (fa < fb) {
@@ -234,7 +315,8 @@ function comparepl(a, b) {
   }
   return 0
 }
-function compares(a, b) {
+
+function compares(a, b) {//defining how .SORT function works- for alpha-betic sorting.-->FOR SONGS
   let fa = a.title.toLowerCase(),
     fb = b.title.toLowerCase()
   if (fa < fb) {
@@ -245,17 +327,32 @@ function compares(a, b) {
   }
   return 0
 }
+
+
+
+//SEARCHING
+
+
+    /*
+    //gets: QUERY STRING ,
+
+    returns: OBJECT THAT HAVE:
+
+    ALPHA-BETIC SORTED ARRAYS OF MATCHING:
+
+    SONGS (titles,albums,artists) &  PLAYLIST (names).
+    */ 
 function searchByQuery(query) {
   let lowerCasedQuery = query.toLowerCase()
   let found = {}
   let playlists = []
   let songs = []
-  for (let i = 0; i < player.playlists.length; i++) {
+  for (let i = 0; i < player.playlists.length; i++) {//searching for matching playlists.
     if (player.playlists[i].name.toLowerCase().includes(lowerCasedQuery)) {
       playlists.push(player.playlists[i])
     }
   }
-  for (let i = 0; i < player.songs.length; i++) {
+  for (let i = 0; i < player.songs.length; i++) {//searching for matching songs.
     const song = player.songs[i]
     if (
       song.title.toLowerCase().includes(lowerCasedQuery) ||
@@ -265,33 +362,42 @@ function searchByQuery(query) {
       songs.push(song)
     }
   }
-  found.playlists = playlists.sort(comparepl)
-  found.songs = songs.sort(compares)
+  found.playlists = playlists.sort(comparepl)//adds sorted playlist array to returned object
+  found.songs = songs.sort(compares)//adds sorted songs array to returned object
   return found
 }
-function searchByDuration(duration) {
+
+
+function searchByDuration(duration) {//gets: DURATION ("mm:ss"). returns: CLOSEST PLAYLIST/SONG TO IT.
   duration = mmssTOs(duration)
   let closestPlayList = player.playlists[0]
   let closestsong = player.songs[0]
-  for (let i = 0; i < player.playlists.length; i++) {
+  for (let i = 0; i < player.playlists.length; i++) {//searching for closest playlists.
     let a = playlistDuration(player.playlists[i].id)
     let b = playlistDuration(closestPlayList.id)
-    if ((a - duration) ** 2 < (b - duration) ** 2) {
+    if ((a - duration) ** 2 < (b - duration) ** 2) {//a and b named sorting clearing the equation- gettin the absulute destace.
       closestPlayList = player.playlists[i]
     }
   }
-  for (let i = 0; i < player.songs.length; i++) {
+  for (let i = 0; i < player.songs.length; i++) {//searching for closest song.
     let a = player.songs[i].duration
     let b = closestsong.duration
-    if ((a - duration) ** 2 < (b - duration) ** 2) {
+    if ((a - duration) ** 2 < (b - duration) ** 2) {//the same for a and b here
       closestsong = player.songs[i]
     }
   }
-  let a = closestsong.duration
+  let a = closestsong.duration 
   let b = playlistDuration(closestPlayList.id)
-  if ((a - duration) ** 2 < (b - duration) ** 2) return closestsong
+  if ((a - duration) ** 2 < (b - duration) ** 2) return closestsong//the same for a and b here
   return closestPlayList
 }
+
+
+//END OF FUNCTIONS SECTION
+
+//REQUIRE FOR TESTS:
+
+//this line is here only for me to reaching up the 400 lines of code :) /
 
 module.exports = {
   player,

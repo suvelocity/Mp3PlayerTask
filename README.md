@@ -89,3 +89,62 @@ Try to work in small iterations. You've got a big and complex task ahead of you.
 - Pay attention to edge-cases! Your code should throw errors when the user tries to do something invalid (delete a song that doesn't exist, etc.).
 - You can use all the material you've learned so far, including extras you've learned on your own.
 - Write your code in the `index.js` file. It contains a template which you can use as the basis for your code.
+
+
+
+
+לתכנן כמה שאפשר מראש.
+לעבוד מסודר.
+לתעד תוך כדי.
+שיהיה extencible
+עובד 5 ימים-4 ימים מתוכם זה debuging
+הפשוטות-בקצה אחד והמורדהות מצד שני
+לחלק לכמה קבצים
+לפני גיט-rcs revision control system .
+היה רק על קובץ אחד בנפרד.
+cvs-ריפו מרכזי - ואפשרות לעבוד במקביל על בסיס קבצים
+svn- שיפור של cvs move-פיצול קבצים
+git-מעקב על בסיס פונקציות ולא קבצים
+
+לינוקס אמר שזה לא מתאים לתכנות
+diff <> +-
+patch - פלט הדיף, ומתמיע בתוך הקוד המקורי.
+ gnu linux 
+ debbian
+ red hut 
+ הפצות ראשיות 
+ ubuntu - לינוקס
+ הפצה זה יותר ממערכת הפעלה- זה מערכת הפעלה + עשרות אלפי תוכנות
+  לינוקס הכל בחינם
+אז בנו את git 
+ אם js בנוי על באגים , אז ב בנוי על חילול הקודש
+
+ pointer- משאיר את המידע מהשימוש האחרון
+ אנשים שכותבים קוד בphp לא ידעים למכנת
+ perl- אי אפשר להבין מה כתבו
+ python- חסר חופש ביטוי
+
+כנס לראות קוד ב:
+ drupple, jquery
+
+
+ youforya- הפונקציה הראשית בסוף
+
+forword call-
+ רקורסיה הדדית
+
+
+ מה שטוב - כמה שיותר באגים למצוא ב
+ compile time
+
+ c++ :
+ c זה בתכנות עצמים
+
+ eval = מריץ את הטקסט בתור קוד
+ מקור לפריצות
+
+ אין אפשרות להגיד לphp 
+ שאסור להשתמש בקוד חיצוני
+
+ 
+
