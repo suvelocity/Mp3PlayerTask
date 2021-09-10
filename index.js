@@ -150,6 +150,14 @@ function createPlaylist(name, id = Math.floor(Math.random() * 100) + 1 ) {
 
 
 function playPlaylist(id) {
+    if(getPlaylistById(id)===undefined){
+      throw new error("${id} ID not exists");
+    }
+    let playlist = getPlaylistById(id);
+    for(let num = 0; num < playlist.songs.length; num++){
+      playSong(playlist.songs[num]);
+    }
+  
 }
 
 function editPlaylist(playlistId, songId) {
