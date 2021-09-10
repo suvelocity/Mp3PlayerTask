@@ -99,7 +99,21 @@ function createPlaylist(name, id) {
 
 
 function playPlaylist(id) {
-  // your code here
+  for (let i of player.playlists) {
+    if (i.id === id) {
+      for (let j of i.songs) {
+        for (let i in player.songs) {
+          if (player.songs[i].id === j) {
+            player.playSong(player.songs[i])
+          }
+        }
+      }
+      return
+    }
+    else {
+      throw 'have problem!';
+    }
+  }
 }
 
 function editPlaylist(playlistId, songId) {
@@ -139,9 +153,21 @@ function songById(id) {
     if (player.songs[i].id == id) {
       return player.songs[i]
     }
-    throw new Error("There is no song with such an Id");
+    throw ("There is no song with such an Id");
   }
 }
+
+
+function getIndexPl(id) {
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (player.playlists[i].id == id)
+      return player.playlists[i];
+  }
+  throw ("No playlist with that ID!");
+
+}
+
+
 
 
 function secToMmSs(duration) {
@@ -158,15 +184,6 @@ function secToMmSs(duration) {
   return min + ':' + sec
 }
 
-
-function getIndexPl(id) {
-  for (let i = 0; i < player.playlists.length; i++) {
-    if (player.playlists[i].id == id)
-      return player.playlists[i];
-  }
-  throw new Error("No playlist eith that ID!");
-
-}
 
 function checkIdAvilable(id) {
   for (let i = 0; i < player.songs.length; i++) {
@@ -202,3 +219,4 @@ function generateId() {
     }
   }
 }
+
