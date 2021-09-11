@@ -69,7 +69,6 @@ function removeSong(id) {
     for (let j = 0; j < player.playlists[i].songs.length; j++) {
       if(player.playlists[i].songs[j]==id){
         player.playlists[i].songs.splice(j,1);
-      console.log(player.playlists[i].songs.length);
     }
   } 
 } 
@@ -91,7 +90,6 @@ player.songs.forEach(song => {
   if(song.id == id)
     throw "exception";
 });
-console.log("the id is:"+id);
 player.songs.push({id:id,title:title,album:album,artist:artist,duration:ssduration});
 return id;
 }
@@ -186,13 +184,78 @@ function playlistDuration(id) {
 }
 return countDuration;
 }
-
+//function that get a query and return object with all the songs and the playlists that include the query
 function searchByQuery(query){
-  // your code here
-}
+  let obj = {
+    songs:[],
+    playlists:[]
+  }
+  query = query.toLowerCase();
+  for (let i = 0; i < player.songs.length; i++) {
+    const song = player.songs[i];
+    if(song.title.toLowerCase().includes(query) || song.album.toLowerCase().includes(query) || song.artist.toLowerCase().includes(query))
+      obj.songs.push(song);    
+  }
+  for (let i = 0; i < player.playlists.length; i++) {
+    const playlist = player.playlists[i];
+    if(playlist.name.toLowerCase().includes(query))
+    obj.playlists.push(playlist);
+  }
+  obj.songs.sort(function(a, b){
+    let titleA = a.title.toLowerCase();
+    let titleB = b.title.toLowerCase();
+    if (titleA < titleB) 
+    {
+      return -1;
+    }    
+    else if (titleA > titleB)
+    {
+      return 1;
+    }   
+    return 0;
+  });
 
+  obj.playlists.sort(function(a, b){
+    let titleA = a.title.toLowerCase();
+    let titleB = b.title.toLowerCase();
+    if (titleA < titleB) 
+    {
+      return -1;
+    }    
+    else if (titleA > titleB)
+    {
+      return 1;
+    }   
+    return 0;
+  });
+
+  return obj;
+
+}
+//function that get a duration and check what is the closest duration in the songs and playlists and return the closest one. 
 function searchByDuration(duration) {
-  // your code here
+ let time = duration.split(":");
+ let min = time[0]* 60;
+ let sec = time[1]*1;
+ let sumsec = min+sec;
+ let MinDiffrent = Math.abs(player.songs[0].duration - sumsec);
+ let obj = player.songs[0];
+ for (let i = 0; i < player.songs.length; i++) {
+    const song = player.songs[i];
+    if(MinDiffrent > Math.abs(song.duration - sumsec)){
+      MinDiffrent = Math.abs(song.duration - sumsec);
+      obj = song;
+    }
+ }
+ for (let i = 0; i < player.playlists.length; i++) {
+   const playlist = player.playlists[i];
+   if((Math.abs(playlistDuration(playlist.id) - sumsec)) < MinDiffrent){
+    MinDiffrent = Math.abs(playlistDuration(playlist.id) - sumsec);
+    obj = playlist;
+   }
+ }
+
+ return obj; 
 }
 //check the id and give the max id +1
 function uniqueId(){
