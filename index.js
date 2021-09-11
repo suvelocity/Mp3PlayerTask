@@ -143,12 +143,30 @@ console.log(removePlaylist());
 
 
 console.log(createPlaylist('jazz', 2))
+
+function playPlaylist(id) {
+  if (typeof id === 'undefined') {
+    console.log('ID is invalid');
+}
+else {
+  let songId4 = id;
+  let obj4 = player.playlists.find(obj4 => obj4.id === songId4); 
   
-  
-  function playPlaylist(id) {
-    // your code here
-  }
-  
+  for (let i = 0; i < obj4.songs.length; i++) {
+      var obj5 = player.songs.find(obj5 => obj5.id === obj4.songs[i]);
+      console.log('playing: ' + obj5.title);
+    }     
+ }
+}
+ playPlaylist(1);
+ 
+   
+
+
+
+
+
+
   function editPlaylist(playlistId, songId) {
     // your code here
   }
