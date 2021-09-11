@@ -48,7 +48,6 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    console.log(/* your code here */)
     console.log(
       "Playing " + song.title 
       +" from " + song.album 
@@ -60,11 +59,7 @@ const player = {
 }
 
 function playSong(id) {
-  // your code here
-}
 
-function removeSong(id) {
-  // your code here
   if (!(checkId(player.songs,id))) throw "ERROR: id doesn't exict.";
   else for(let i = 0 ; i < player.songs.length ; i ++){
     if (player.songs[i].id === id)
@@ -83,8 +78,6 @@ function durationFormat(duration){
               else return minutes+":"+seconds;
 }
 
-function removePlaylist(id) {
-  // your code here
 function checkId(songs,id){
   for (let i = 0 ; i < songs.length ; i ++){
     if (id === songs[i].id)
@@ -93,8 +86,6 @@ function checkId(songs,id){
   return false;
 }
 
-function createPlaylist(name, id) {
-  // your code here
 function playlistDuration(id) {
 
   let correctPlaylist = findPlaylistById(id) //correctPlaylist contain the wanted playlist
@@ -109,8 +100,6 @@ function playlistDuration(id) {
   return sum
 }
 
-function playPlaylist(id) {
-  // your code here
 function findPlaylistById(id) {
   let correctPlaylist
   for (let i = 0; i < player.playlists.length; i++) {
@@ -141,8 +130,6 @@ function editPlaylist(playlistId, songId) {
       }
 }
 
-function playlistDuration(id) {
-  // your code here
 function newId(arr){
   let max = arr[0];
   for (let i = 0; i < arr.length; i++) {
@@ -235,7 +222,6 @@ function searchByQuery(query) {
     }
   }
   for (let i = 0; i < player.songs.length; i++) {
-    //for songs
     if (
       player.songs[i].album.toUpperCase().includes(tempQuery) ||
       player.songs[i].artist.toUpperCase().includes(tempQuery) ||
