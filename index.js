@@ -99,14 +99,21 @@ const player = {
     
      
     
-   
-    
-     
-  
-  function addSong(title, album, artist, duration, id) {
-    // your code here
+
+  function addSong(title1, album1, artist1, duration1, id1) {
+    player.songs.push ({
+      id: id1 || Math.floor(Math.random() * 1000000000000000000000),
+      title: title1,
+      album: album1,
+      artist: artist1,
+      duration: duration1,
+    });
+    return player;
   }
-  
+
+  console.log(addSong('Sundress', 'Sundress', 'ASAP Rocky', '2:38', 7));
+
+
   function removePlaylist(id) {
     // your code here
   }
