@@ -50,7 +50,7 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    console.log("Playing "+song.title+ " from " +song.album+" by "+song.artist+" | "+durationConvert(song.duration)+".");
+    return ("Playing "+song.title+ " from " +song.album+" by "+song.artist+" | "+durationConvert(song.duration)+"."); 
   },
 }
 function durationConvert(duration) // converts duration value to mm/ss
@@ -106,7 +106,7 @@ function playSong(id) {
     {
       throw "Not a Valid ID"
     }
-    return player.playSong(songObj);
+    console.log((player.playSong(songObj)));
   }
 }
 
@@ -135,7 +135,22 @@ function removeSong(id) {
 }
 
 function addSong(title, album, artist, duration, id) {
-  // your code here
+  if(id===undefined)
+  { 
+    id= Math.floor(Math.random()*100); //a random id to the song
+    while(id === GetsongById(id)) // if the id exists generate a new one
+    {
+      id= Math.floor(Math.random()*100);
+    }
+  if(GetsongById(id) !==undefined) //if the id already exists throw an error
+  {
+    throw "this is an existing ID";
+  }
+  }
+  let newDuration =durationConvert(duration); 
+  const newSong = {id,title, album ,artist, duration:newDuration}; //create new song object
+  player.songs.push(newSong)
+  return newSong["id"];
 }
 
 function removePlaylist(id) {
