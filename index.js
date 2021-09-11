@@ -120,7 +120,25 @@ function findPlaylistById(id) {
 }
 
 function editPlaylist(playlistId, songId) {
-  // your code here
+  if (!checkId(player.playlists, playlistId)){
+    throw "ID of the playlist doesn't exist."
+  }
+  if (!checkId(player.songs, songId)){
+      throw "ID of the song doesn't exist."
+  }
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (playlistId === player.playlists[i].id){
+      for (let x = 0; x < player.playlists[i].songs.length; x++) {
+        if (songId === player.playlists[i].songs[x]){
+            player.playlists[i].songs.splice(x,1);
+            }
+          else 
+                  player.playlists[i].songs.push(songId);
+            }
+          if (player.playlists[i].songs.length === 0)
+             removePlaylist(player.playlists[i].id);
+        }
+      }
 }
 
 function playlistDuration(id) {
