@@ -115,8 +115,22 @@ const player = {
 
 
   function removePlaylist(id) {
-    // your code here
+    if (typeof id === 'undefined') {
+      return 'ID is invalid';
   }
+
+  else {
+  let songId3 = id;
+  let obj3 = player.playlists.find(obj3 => obj3.id === songId3);
+  obj3.id = 'removed';
+  obj3.name = 'removed';
+  obj3.songs = 'removed';
+  return player;
+}
+}
+
+console.log(removePlaylist(5));
+  
   
   function createPlaylist(name, id) {
     // your code here
