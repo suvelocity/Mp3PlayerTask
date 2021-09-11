@@ -198,6 +198,13 @@ function removePlaylist(id) {
   }
 }
 
+function createPlaylist(name, id = newId(player.playlists)) {
+  if (checkId(player.playlists, id)){
+    throw "ID is taken"
+  }
+  let newPlaylist = { id: id, name: name, songs: []}
+  player.playlists.push(newPlaylist)
+  return id;
 }
 
 function searchByQuery(query) {
