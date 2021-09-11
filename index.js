@@ -223,11 +223,73 @@ function playPlaylist(id) {
 
 
 function searchByQuery(query) {
-  // your code here
+  let tempQuery = query.toUpperCase()
+  const results = { songs: [], playlists: [] }
+  for (let i = 0; i < player.playlists.length; i++) {
+    //for playlists
+    if (player.playlists[i].name.toUpperCase().includes(tempQuery)) {
+      results.playlists.push(player.playlists[i])
+      results.playlists.sort((a, b) => {
+        if (a.name.toUpperCase() < b.name.toUpperCase()) return -1
+      })
+    }
+  }
+  for (let i = 0; i < player.songs.length; i++) {
+    //for songs
+    if (
+      player.songs[i].album.toUpperCase().includes(tempQuery) ||
+      player.songs[i].artist.toUpperCase().includes(tempQuery) ||
+      player.songs[i].title.toUpperCase().includes(tempQuery)
+    ) {
+      results.songs.push(player.songs[i])
+      results.songs.sort((a, b) => {
+        if (a.title.toUpperCase() < b.title.toUpperCase()) return -1
+      })
+    }
+  }
+  return results
 }
 
 function searchByDuration(duration) {
-  // your code here
+  duration = oppDuration(duration) 
+  let arrSongs = arrLengthSongs(duration) 
+  let arrPlaylist = arrLengthPlaylist(duration)
+  return arrSongs[0] < arrPlaylist[0] ? arrSongs[1] : arrPlaylist[1]
+}
+
+function arrLengthSongs(duration) {
+  let arr = []
+  let minDuration = duration,
+    index = 0
+  for (let i = 0; i < player.songs.length; i++) {
+    if (minDuration > Math.abs(duration - player.songs[i].duration)) {
+      minDuration = Math.abs(duration - player.songs[i].duration)
+      index = i
+    }
+  }
+  arr.push(minDuration)
+  arr.push(player.songs[index])
+  return arr
+}
+
+function arrLengthPlaylist(duration) {
+  let arr = []
+  let minDuration = duration,
+    index = 0
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (
+      minDuration >
+      Math.abs(duration - playlistDuration(player.playlists[i].id))
+    ) {
+      minDuration = Math.abs(
+        duration - playlistDuration(player.playlists[i].id)
+      )
+      index = i
+    }
+  }
+  arr.push(minDuration)
+  arr.push(player.playlists[index])
+  return arr
 }
 
 module.exports = {
