@@ -178,7 +178,7 @@ function editPlaylist(playlistId, songId) {
 
   if (findSongById(songId) && findPlaylistById(playlistId))
   {
-    if (currentSong === -1)
+    if (currentSong === false)
     {
       currentPlaylist.songs.push(songId);
     }
@@ -209,7 +209,6 @@ function playlistDuration(id) {
   }
   console.log(sum);
   return sum;
- 
 }
 
 
@@ -218,7 +217,36 @@ function searchByQuery(query) {
 }
 
 function searchByDuration(duration) {
-  // your code here
+  let songDuration = reverseDurationConvertor(duration);
+  let closestSong;
+  let closestPlaylist;
+  let lowestGapSong = 1000000;
+  let lowestGapPlaylist = 1000000;
+    for (let i in player.songs) 
+    {
+      if (Math.abs(songDuration - player.songs[i].duration) < lowestGapSong) 
+      {
+        lowestGapSong = Math.abs(songDuration - player.songs[i].duration);
+        closestSong = player.songs[i];
+      }
+    }
+    for (let j of player.playlists) {
+      if (Math.abs(songDuration - playlistDuration(j.id)) < lowestGapPlaylist) 
+      {
+        lowestGapPlaylist = Math.abs(songDuration - playlistDuration(j.id));
+        closestPlaylist = j;
+      }
+    }
+
+    if (lowestGapPlaylist < lowestGapSong)
+    { 
+     return closestPlaylist;
+    }
+    else
+    {
+      return closestSong
+    }
+
 }
 
 
@@ -229,12 +257,20 @@ function findSongById (id)
   return idToSongConvertor;
 }
 
-function isSongInPlaylist (songId, playlistId)
+function isSongInPlaylist (songId, playlistId) // checks if there is a spesific song in a playlist, if there isnt it returns false, if there is it returns the index of the song
 {
   let playlist = findPlaylistById(playlistId);
-  for (let num in playlist.songs) 
+  for (let i in playlist.songs) 
   {
-    return playlist.songs[num] === songId ?  num:-1;
+    if (playlist.songs[i] === songId)
+    {
+      return i;
+    }
+    else 
+    {
+      return false;
+    }
+   
   }
 }
 
@@ -267,6 +303,14 @@ function durationConvertor (duration)
 
 }
 
+function reverseDurationConvertor (duration)
+{
+  duration = duration.split(':')
+  let minutes = parseInt(duration[0]) * 60
+  let seconds = parseInt(duration[1])
+  return minutes + seconds
+}
+
 function findPlaylistById(id) //return playlist object by id
 {
   let idToPlaylistConvertor= player.playlists.find(x=> x["id"]===id);
@@ -279,6 +323,7 @@ function findPlaylistById(id) //return playlist object by id
 // playlistDuration(1)
 // playPlaylist(1)
 // createPlaylist("the Kazma playlist", 3)
+// searchByDuration(200)
 //#endregion
 
 
