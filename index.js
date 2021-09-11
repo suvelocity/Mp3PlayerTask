@@ -187,6 +187,17 @@ function removeSong(id) {
   }
 }
 
+function removePlaylist(id) {
+  if (!checkId(player.playlists, id)){
+    throw "ID doesn't exist.";
+  }
+  for (let i = 0; i<player.playlists.length; i++){
+    if (player.playlists[i].id === id){
+      player.playlists.splice(i, 1);
+    }
+  }
+}
+
 }
 
 function searchByQuery(query) {
