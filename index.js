@@ -159,6 +159,16 @@ function oppDuration(duration){
   return minutes + seconds
 }
 
+function addSong(title, album, artist, duration,  id = newId(player.songs)) {
+  if (checkId(player.songs, id)){
+    throw "ID exists"
+  }
+  duration= oppDuration(duration);
+  let newSong = {id: id, title: title, album: album, artist: artist, duration: duration};
+  player.songs.push(newSong)
+  return id;
+}
+
 }
 
 function searchByQuery(query) {
