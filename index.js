@@ -53,13 +53,29 @@ const player = {
   }
 
 
+// convert to mm:ss
+function durationConvert(duration)
+{
+  let min = Math.floor(duration / 60);
+  let sec = duration % 60;
+
+  if (min < 10){
+    min = "0" + String(min);
+  }
+  if (sec < 10) {
+    sec = "0" + String(sec);
+  }
+  return min+':'+sec
+}
+
 function playSong(id) {
- for (let i=0;i<player.songs.length ;i++){
-   if (player.songs[i].id===id){
-     return  (player.songs[i])
-   }
- }
- throw ("non-existent ID,try another one")
+  for (let song of player.songs){
+    if (song.id === id)
+    {
+      return player.playSong(song);
+    }
+  }
+  throw new Error("No such ID");
 }
 
 function removeSong(id) {
