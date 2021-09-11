@@ -107,13 +107,15 @@ function addSong(title, album, artist, duration, id) {
       artist: artist,
       duration: duration
     };
+    
     player.songs.push(newSong);
     console.log(newSong);
+    console.log(player.songs);
     return newSong["id"];
 }
 
 
-  function removePlaylist(id) {
+function removePlaylist(id) {
     let isExist=false;  
     for (let i = 0; i<player.playlists.length; i++)
     {
@@ -130,7 +132,7 @@ function addSong(title, album, artist, duration, id) {
 }
 
 function createPlaylist(name, id) {
-  if(findSongById(id) !== undefined) 
+  if(findPlaylistById(id) !== undefined) 
   {
     throw "There is already a playlist with this ID";
   }
@@ -138,7 +140,7 @@ function createPlaylist(name, id) {
   if (id === undefined)
   { 
     id = Math.floor(Math.random()*50);
-    while (id === findSongById(id)) //by defult the id will be a random number, but if there is already a song with the same id it will generate a new one until the new id is a unique one.
+    while (id === findPlaylistById(id)) //by defult the id will be a random number, but if there is already a song with the same id it will generate a new one until the new id is a unique one.
     {
       id= Math.floor(Math.random()*50);
     }
@@ -184,6 +186,7 @@ function playlistDuration(id) {
   return sum;
  
 }
+
 
 function searchByQuery(query) {
   // your code here
@@ -238,7 +241,12 @@ function findPlaylistById(id) //return playlist object by id
 }
 //#endregion
 
-
+//#region checking the functions
+// addSong("New title", "New album", "New Album", 250, 10)
+// playlistDuration(1)
+// playPlaylist(1)
+// createPlaylist("the Kazma playlist", 3)
+//#endregion
 
 
 
