@@ -213,9 +213,28 @@ function playlistDuration(id) {
 }
 
 
-function searchByQuery(query) {
-let queryThings = {songs: songs, playlists: playlists};
+function searchByQuery(query) { 
 
+let queryThings = {songs:[], playlists:[]};
+let lowerCaseQuery = query.toLowerCase();
+
+
+player.songs.forEach(song => {
+  if (song.title.toLocaleLowerCase().includes(lowerCaseQuery) || song.album.toLocaleLowerCase().includes(lowerCaseQuery)|| song.artist.toLocaleLowerCase().includes(lowerCaseQuery))
+  {
+    queryThings.songs.push(song)
+  }
+})
+
+player.playlists.forEach(playlist => {
+  if (playlist.name.toLocaleLowerCase().includes(lowerCaseQuery))
+  {
+    queryThings.playlists.push(playlist)
+  }
+});
+queryThings.songs.sort((a, b) => (a.title > b.title) * 2 - 1)
+
+return queryThings;
 }
 
 function searchByDuration(duration) {
@@ -326,6 +345,7 @@ function findPlaylistById(id) //return playlist object by id
 // playPlaylist(1)
 // createPlaylist("the Kazma playlist", 3)
 // searchByDuration(200)
+// searchByQuery("stone");
 //#endregion
 
 
