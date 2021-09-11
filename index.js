@@ -145,8 +145,31 @@ function playlistDuration(id) {
 }
 
 function searchByQuery(query) {
-  // your code here
+  let caseIn = query.toLowerCase();
+  let returnObj = { songs: [], playlists: [] }
+
+  for (let i of player.songs) {
+    if (i.title.toLowerCase().includes(caseIn) ||
+      i.album.toLowerCase().includes(caseIn) ||
+      i.artist.toLowerCase().includes(caseIn)) {
+      returnObj.songs.push(i);
+    }
+  }
+  for (let j of player.playlists) {
+    if (j.name.toLowerCase().includes(caseIn)) {
+      returnObj.playlists.push(j);
+    }
+    //sorting songs & playlists
+    returnObj.songs.sort((a, b) => { if (a.title < b.title) return -1 });
+    returnObj.playlists.sort((a, b) => { if (a.name < b.name) return -1 });
+    return returnObj;
+  }
 }
+
+
+
+
+
 
 function searchByDuration(duration) {
   // your code here
