@@ -72,7 +72,7 @@ function durationConvert(duration) // converts duration value to mm/ss
       if ((duration%60)>=1 && (duration%60)<10) sec = `0${duration%60}`;
       if ((duration%60)==0) sec = `00`;
       return min+":"+sec; 
-}
+}}
 function GetsongById(id) //return song object by id
 {
   let songObj= player.songs.find(x=> x["id"]===id);
@@ -205,8 +205,8 @@ function editPlaylist(playlistId, songId) {
   }
 const playli= GetPlaylistById(playlistId) //a shortcut for later in the function
 const playliSongs= GetPlaylistById(playlistId)["songs"]; // the songs array in playlists 
-const song=GetsongById(songId)["id"]; //the song id in songs id
-if(!playliSongs.includes(song))  //if song is not in playlist
+const song=GetsongById(songId)["id"]; //finds the song id in songsId
+if(!playliSongs.includes(song))  //if song doesnt exist in playlist
 {
   playliSongs.push(song);
 }
@@ -231,7 +231,7 @@ else{
 function playlistDuration(id) {
   let sum=0;
 const playlistSongs=GetPlaylistById(id)["songs"]; //indicates songs array
-for(let i of playlistSongs) //goes through all song id in array
+for(let i of playlistSongs) //search  song id in array
 {
   let songduration= GetsongById(i)["duration"]; //gets the songs duration 
   sum+=songduration;
@@ -241,7 +241,29 @@ for(let i of playlistSongs) //goes through all song id in array
 }
 
 function searchByQuery(query) {
-  // your code here
+  const results={songs:[], playlists:[]};
+  let query2=query.toLowerCase(); //be case insensitive
+  for(let i of player.songs) //go through all the songs and see if the query contains the different keys
+  {
+    if(query2.includes(i["album"].toLowerCase())||query2.includes(i["artist"].toLowerCase()) ||query2.includes(i["title"].toLowerCase()))
+    {
+      results.songs.push(i);
+      results.songs.sort((a,b)=> {if(a["title"].toLowerCase()<b["title"].toLowerCase()) return -1;}); //sort by title
+    }
+  }
+
+  for(let j of player.playlists) //search through all playlists
+  {
+    if(query2.includes(j["name"].toLowerCase()))
+    {
+      results.playlists.push(j);
+      results.playlists.sort((a,b)=> {if(a["name"].toLowerCase()<b["name"].toLowerCase()) return -1;}); 
+    }
+  }
+  return results;
+}
+
+console.log(searchByQuery("full trunk, israeli, metal, all is one, thunderstruck"))
 }
 
 function searchByDuration(duration) {
