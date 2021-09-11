@@ -88,6 +88,18 @@ function checkId(songs,id){
 
 function createPlaylist(name, id) {
   // your code here
+function playlistDuration(id) {
+
+  let correctPlaylist = findPlaylistById(id) //correctPlaylist contain the wanted playlist
+  let save = 0,
+    sum = 0
+  for (let i = 0; i < correctPlaylist.songs.length; i++) {
+    save = correctPlaylist.songs[i]
+    for (let j = 0; j < player.songs.length; j++) {
+      if (player.songs[j].id === save) sum += player.songs[j].duration
+    }
+  }
+  return sum
 }
 
 function playPlaylist(id) {
