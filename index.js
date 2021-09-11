@@ -85,6 +85,7 @@ function removeSong(id) {
 }
 
 function addSong(title, album, artist, duration, id) {
+
   if (findSongById(id) !== undefined)
   {
     throw "There is already a song with this ID"
@@ -92,14 +93,14 @@ function addSong(title, album, artist, duration, id) {
   
   if (id === undefined) 
   {
-    id= Math.floor(Math.random()*50);
+    id = Math.floor(Math.random()*50);
     while (id === findSongById(id)) //by defult the id will be a random number, but if there is already a song with the same id it will generate a new one until the new id is a unique one.
     {
-      id= Math.floor(Math.random()*50);
+      id = Math.floor(Math.random()*50);
     }
   }
 
-    const newSong= // making a new song to push to the array
+    const newSong = // making a new song to push to the array
     {
       id: id,
       title: title,
@@ -172,7 +173,31 @@ function playPlaylist(id) {
 
 function editPlaylist(playlistId, songId) { 
 
+  let currentPlaylist = findPlaylistById(playlistId);   
+  let currentSong= isSongInPlaylist(songId, playlistId) 
+
+  if (findSongById(songId) && findPlaylistById(playlistId))
+  {
+    if (currentSong === -1)
+    {
+      currentPlaylist.songs.push(songId);
+    }
+    else if(currentPlaylist.songs.length > 1)
+    {       
+      currentPlaylist.songs.splice(currentSong,1); 
+    }  
+    else 
+    {
+      removePlaylist(currentPlaylist.id)
+    }
+  }
+  else
+  {
+    throw "This ID does not exist"
+  }
+  
 }
+
 
 function playlistDuration(id) {
   let currentPlaylist = findPlaylistById(id);
@@ -204,6 +229,14 @@ function findSongById (id)
   return idToSongConvertor;
 }
 
+function isSongInPlaylist (songId, playlistId)
+{
+  let playlist = findPlaylistById(playlistId);
+  for (let num in playlist.songs) 
+  {
+    return playlist.songs[num] === songId ?  num:-1;
+  }
+}
 
 function durationConvertor (duration)
 {
