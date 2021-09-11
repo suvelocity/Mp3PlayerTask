@@ -129,12 +129,21 @@ const player = {
 }
 }
 
-console.log(removePlaylist(5));
+console.log(removePlaylist());
   
   
-  function createPlaylist(name, id) {
-    // your code here
-  }
+
+  function createPlaylist(name1, id1) {
+    let playlistId1 = id1 || Math.floor(Math.random() * 1000000000000000000000);
+    player.playlists.push ({
+    id: playlistId1, name: name1, songs:[object]
+  });
+  return playlistId1;
+}
+
+
+console.log(createPlaylist('jazz', 2))
+  
   
   function playPlaylist(id) {
     // your code here
