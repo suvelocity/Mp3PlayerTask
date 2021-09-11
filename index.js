@@ -245,7 +245,7 @@ function searchByQuery(query) {
   let query2=query.toLowerCase(); //be case insensitive
   for(let i of player.songs) //go through all the songs and see if the query contains the different keys
   {
-    if(query2.includes(i["album"].toLowerCase())||query2.includes(i["artist"].toLowerCase()) ||query2.includes(i["title"].toLowerCase()))
+    if(i["album"].toLowerCase().includes(query2)||i["artist"].toLowerCase().includes(query2) || i["title"].toLowerCase().includes(query2))
     {
       results.songs.push(i);
       results.songs.sort((a,b)=> {if(a["title"].toLowerCase()<b["title"].toLowerCase()) return -1;}); //sort by title
@@ -254,7 +254,7 @@ function searchByQuery(query) {
 
   for(let j of player.playlists) //search through all playlists
   {
-    if(query2.includes(j["name"].toLowerCase()))
+    if((j["name"].toLowerCase()).includes(query2))
     {
       results.playlists.push(j);
       results.playlists.sort((a,b)=> {if(a["name"].toLowerCase()<b["name"].toLowerCase()) return -1;}); 
@@ -267,7 +267,38 @@ console.log(searchByQuery("full trunk, israeli, metal, all is one, thunderstruck
 }
 
 function searchByDuration(duration) {
-  // your code here
+
+  let durationConverted = parseInt(duration.slice(0,Math.floor(duration.length/2)))*60+parseInt(duration.slice(Math.ceil(duration.length/2))); //duration string converted to a number
+  let closestsong=100000;
+  let closestplaylist=10000;
+  let closestIndexSong=0;
+  let closestIndexPlaylist=0;
+  const songs= player.songs;
+  const playlist= player.playlists;
+  for(let i =0; i<songs.length; i++) //runs on songs to find each duration
+  {
+    if(Math.abs(songs[i]["duration"]-durationConverted)<closestsong)   //find the min margin to find closest song
+    {
+      closestsong=Math.abs(songs[i]["duration"]-durationConverted);
+      closestIndexSong=i;
+    }
+  }
+  for(let j=0; j<playlist.length; j++) // runs on all playlist to find the closest range
+  {
+    let playlistduration= playlistDuration(playlist[j]["id"]);
+    if(Math.abs(playlistduration-durationConverted)<closestplaylist)  //find the min margin to find closest playlist
+    {
+      closestplaylist=Math.abs(playlistduration-durationConverted);
+      closestIndexPlaylist=j;
+    }
+  }
+  if(closestsong<closestplaylist)
+  {
+    return songs[closestIndexSong];
+  }
+  else{
+    return playlist[closestIndexPlaylist];
+  }
 }
 
 module.exports = {
