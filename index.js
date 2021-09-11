@@ -85,17 +85,8 @@ function addSong(title, album, artist, duration, id) {
     const song = player.songs[i];
     if(song.id > id)
       id = song.id +1;
-  }/*
-  if(songById(id)!=-1){
-    let num=1;
-    
-  while(songById(num)==-1)
-  {
-    num++;
   }
-  id=num;
 
-}*/
 player.songs.forEach(song => {
   if(song.id == id)
     throw "exception";
@@ -146,14 +137,57 @@ function playPlaylist(id) {
     throw " id does not exist";
   }
 }
-
+//found the index of the playlist and the song
 function editPlaylist(playlistId, songId) {
+  let songIndex;
+  let playlistIndex;
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (player.playlists[i].id == playlistId) {
+      playlistIndex = i;
+      for (let j = 0; j < player.playlists[i].songs.length; j++) {
+          if (player.playlists[i].songs[j] == songId) {
+            songIndex = j;
+          } 
+          
+      }
+      
+    }
+    
+  }
+  if(songIndex != undefined){ // if the song exsist in the playlist and there is no more song remove the playlist
+    if(player.playlists[playlistIndex].songs.length == 1){
+      player.playlists.splice(playlistIndex,1);
+
+    }
+    else{
+      player.playlists[playlistIndex].songs.splice(songIndex,1);// if the song exsist in the plqylist remove the song
+    }
+  }
+  else{
+    player.playlists[playlistIndex].songs.push(songId);// if the song dosent exsist in the playlist add the song 
+  }
+  songById(songId);
+  
 }
+// function that gets id of playlist and returns the sum of duration of all the songs in the playlist
 function playlistDuration(id) {
-  // your code here
+  let countDuration = 0;
+  let playlistIndex;
+  for (let i = 0; i< player.playlists.length; i++) {
+  if(player.playlists[i].id == id)
+    playlistIndex = i;
+  }
+
+  for (let i = 0; i < player.playlists[playlistIndex].songs.length; i++) {
+    for (let j = 0; j < player.songs.length; j++) {
+      if(player.songs[j].id == player.playlists[playlistIndex].songs[i])
+        countDuration += player.songs[j].duration;
+  }
+}
+return countDuration;
 }
 
-function searchByQuery(query) {
+function searchByQuery(query){
   // your code here
 }
 
@@ -180,7 +214,7 @@ function songById(idT)
     if(player.songs[i].id==idT)
       return i;
   }
-  return -1;
+  throw ("non-existent song ID");
 }
 // get duration and return it in min:sec format
 function songDuration(duration){
