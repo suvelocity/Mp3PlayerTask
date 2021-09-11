@@ -152,9 +152,24 @@ function addSong(title, album, artist, duration, id) {
   player.songs.push(newSong)
   return newSong["id"];
 }
+function GetPlaylistById(id) //return playlist object by id
+{
+  let playObj= player.playlists.find(x=> x["id"]===id);
+  return playObj;
+}
 
 function removePlaylist(id) {
-  // your code here
+  if(GetPlaylistById(id)===undefined)
+  {
+    throw "playlist ID not defined"
+  }
+  for(let i=0; i< player.playlists.length; i++)
+  {
+      if(player.playlists[i]["id"]===id)
+      {
+        player.playlists.splice(i,1);
+      }
+  }
 }
 
 function createPlaylist(name, id) {
