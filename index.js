@@ -107,7 +107,7 @@ function addSong(title, album, artist, duration, id) {
       title: title,
       album: album,
       artist: artist,
-      duration: reverseDurationConvertor(duration)
+      duration: reverseDurationConvertor(duration) // making sure the duration gets in with the right format
     };
     
     player.songs.push(addedSong);
@@ -115,7 +115,6 @@ function addSong(title, album, artist, duration, id) {
     console.log(player.songs);
     return addedSong["id"];
 }
-
 
 function removePlaylist(id) {
     let isExist=false;  
@@ -147,7 +146,7 @@ function createPlaylist(name, id) {
       id= Math.floor(Math.random()*50);
     }
   }
-  const newPlaylist = {
+  const newPlaylist = {   // creates a new playlist with the arguments given
     id:id,
     name:name,
     songs:[]
@@ -157,7 +156,6 @@ function createPlaylist(name, id) {
   console.log(newPlaylist);
   return newPlaylist["id"];
 }
-
 
 function playPlaylist(id) {
   if(findPlaylistById(id)===undefined)
@@ -199,7 +197,6 @@ function editPlaylist(playlistId, songId) {
   
 }
 
-
 function playlistDuration(id) {
   let currentPlaylist = findPlaylistById(id);
   let sum = 0;
@@ -211,7 +208,6 @@ function playlistDuration(id) {
   console.log(sum);
   return sum;
 }
-
 
 function searchByQuery(query) { 
 
@@ -232,8 +228,9 @@ player.playlists.forEach(playlist => {
     queryThings.playlists.push(playlist)
   }
 });
-queryThings.songs.sort((a, b) => (a.title > b.title) * 2 - 1)
 
+queryThings.songs.sort((a, b) => (a.title > b.title) * 2 - 1)
+console.log(queryThings);
 return queryThings;
 }
 
@@ -243,7 +240,7 @@ function searchByDuration(duration) {
   let closestPlaylist;
   let lowestGapSong = 1000000;
   let lowestGapPlaylist = 1000000;
-    for (let i in player.songs) 
+    for (let i in player.songs) // checks which songs is the closest to the given duration by comparing it to a "gap" variable.
     {
       if (Math.abs(songDuration - player.songs[i].duration) < lowestGapSong) 
       {
@@ -251,7 +248,7 @@ function searchByDuration(duration) {
         closestSong = player.songs[i];
       }
     }
-    for (let j of player.playlists) {
+    for (let j of player.playlists) { 
       if (Math.abs(songDuration - playlistDuration(j.id)) < lowestGapPlaylist) 
       {
         lowestGapPlaylist = Math.abs(songDuration - playlistDuration(j.id));
@@ -259,7 +256,7 @@ function searchByDuration(duration) {
       }
     }
 
-    if (lowestGapPlaylist < lowestGapSong)
+    if (lowestGapPlaylist < lowestGapSong) // checks if the gap between the songs is lower or greater then the gap between the playlist
     { 
      return closestPlaylist;
     }
@@ -270,8 +267,8 @@ function searchByDuration(duration) {
 
 }
 
-
 //#region ALL THE EXTRA FUNCTIONS
+
 function findSongById (id)
 {
   let idToSongConvertor= player["songs"].find(finder=> finder["id"]===id);
@@ -295,7 +292,7 @@ function isSongInPlaylist (songId, playlistId) // checks if there is a spesific 
   }
 }
 
-function durationConvertor (duration)
+function durationConvertor (duration) // convert duration format from seconds to MM:SS format
 {
   let min="";
   let sec="";
@@ -324,7 +321,7 @@ function durationConvertor (duration)
 
 }
 
-function reverseDurationConvertor (duration)
+function reverseDurationConvertor (duration) // convert duration format from MM:SS to seconds format
 {
   duration = duration.split(':')
   let minutes = parseInt(duration[0]) * 60
@@ -337,18 +334,19 @@ function findPlaylistById(id) //return playlist object by id
   let idToPlaylistConvertor= player.playlists.find(x=> x["id"]===id);
   return idToPlaylistConvertor;
 }
+
 //#endregion
 
 //#region checking the functions
+
 // addSong("New title", "New album", "New Album", 250, 10)
 // playlistDuration(1)
 // playPlaylist(1)
 // createPlaylist("the Kazma playlist", 3)
 // searchByDuration(200)
-// searchByQuery("stone");
+// searchByQuery("TAL");
+
 //#endregion
-
-
 
 module.exports = {
   player,
