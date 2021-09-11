@@ -170,6 +170,11 @@ function searchByDuration(duration) {
   return closestItem;
 }
 
+function shufflePlaylist(id) {
+  // This function puts the songs array of a given playlist in a random order.
+  player.playlists[checkIdFindIndex(id, player.playlists, 'does not')].songs.sort(() => Math.random() - .5)
+}
+
 module.exports = {
   player,
   playSong,
