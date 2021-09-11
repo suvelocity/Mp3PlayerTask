@@ -47,11 +47,15 @@ const player = {
     { id: 1, name: 'Metal', songs: [1, 7, 4] },
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
-  playSong(song) {},
+  playSong(song) {
+    console.log(
+      'Playing {songs.title} from {songs.album} by {songs.artist} | {convertDuration(player.songs[0].duration)}.'
+    )
+  },
 }
 
 function playSong(id) {
-  for (let x of player) {
+  for (let x of player.songs) {
     id = player.songs[x]
     return id
   }
@@ -84,7 +88,7 @@ function convertDuration(time) {
   } else if (time % 60 === 0 && time / 60 > 10) {
     finalTime = time / 60 + `:00`
   } else if (time % 60 !== 0 && min < 10) {
-    finalTime = `0` + min + `:` + (time % 60)
+    finalTime = `0` + min + `:0` + (time % 60)
   } else if (time % 60 !== 0 && min > 10) {
     finalTime = min + `:` + (time % 60)
   } else if (time % 60 !== 0) {
@@ -93,7 +97,15 @@ function convertDuration(time) {
   return finalTime
 }
 function idGen(id) {
-  return (id = player.songs.length + 2)
+  if (id === undefined) {
+    let maxId = 0
+    for (let i = 0; i < player.songs.length; i++) {
+      if (maxId < player.songs[i].id) {
+        maxId = player.songs[i].id
+      }
+    }
+    return maxId + 1
+  }
 }
 function addSong(title, album, artist, duration, id = idGen()) {
   for (let i = 0; i < player.songs.length; i++) {
@@ -102,15 +114,13 @@ function addSong(title, album, artist, duration, id = idGen()) {
     }
   }
 
-  let song = {
+  player.songs.push({
     id: id,
     title: title,
     album: album,
     artist: artist,
     duration: convertDuration(duration),
-  }
-
-  player.songs.push(song)
+  })
   return id
 }
 
@@ -118,12 +128,40 @@ function removePlaylist(id) {
   for (let i = 0; i < player.playlists.length; i++) {
     if (player.playlists[i].id === id) {
       player.playlists.splice(i, 1)
+    } else if (player.playlists[i].id !== id) {
+      throw 'non-existent ID'
     }
   }
 }
+function idGenerotor(id) {
+  if (id === undefined) {
+    let maxIds = 0
+    for (let i = 0; i < player.playlists.length; i++) {
+      if (maxIds < player.playlists[i].id) {
+        maxIds = player.playlists[i].id
+      }
+    }
+    return maxIds + 1
+  }
+}
+function songsId(songs){
+songs=[]
+return 
+}
 
-function createPlaylist(name, id) {
-  player.playlists.push(createPlaylist())
+function createPlaylist(name, songs, id = idGenerotor()) {
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (id === player.playlists[i].id) {
+      throw `The ID is taken`
+    }
+    
+  }
+
+  player.playlists.push({
+    id: id,
+    name: name,
+    songs: [songs],
+  })
 }
 
 function playPlaylist(id) {
