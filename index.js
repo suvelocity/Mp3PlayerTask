@@ -152,6 +152,13 @@ function newId(arr){
     return max+1;
 }
 
+function oppDuration(duration){
+  duration = duration.split(':')
+  let minutes = parseInt(duration[0]) * 60
+  let seconds = parseInt(duration[1])
+  return minutes + seconds
+}
+
 }
 
 function searchByQuery(query) {
