@@ -70,7 +70,7 @@ function checkIdFindIndex(id ,location, exists) {
 }
 
 function playSong(id) {
-  player.playSong(player.songs.filter(song => song.id === id)[0]);
+  player.playSong(player.songs[checkIdFindIndex(id, player.songs, 'does not')]);
 }
 
 function removeSong(id) {
@@ -114,8 +114,8 @@ function editPlaylist(playlistId, songId) {
 
 function playlistDuration(id) {
   let totalDuration = 0;
-  const playlist = player.playlists.filter(playlist => playlist.id === id)[0];
-  playlist.songs.forEach(songId => totalDuration += player.songs.filter(song => song.id === songId)[0].duration);
+  const playlist = player.playlists[checkIdFindIndex(id, player.playlists)];
+  playlist.songs.forEach(songId => totalDuration += player.songs[checkIdFindIndex(songId, player.songs)].duration);
   return totalDuration;
 }
 
