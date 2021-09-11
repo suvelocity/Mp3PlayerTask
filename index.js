@@ -49,7 +49,8 @@ const player = {
   ],
 }
 
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////My Functions////////////////////////////////////////////////////////////////////
 function getBiggestSongID() {
   let biggestID = 0;
   for (let key of player.songs) {
@@ -59,6 +60,17 @@ function getBiggestSongID() {
   }
   return biggestID;
 }
+
+function getBiggestPlaylistID() {
+  let biggestID = 0;
+  for (let key of player.playlists) {
+    if (key.id > biggestID) {
+      biggestID = key.id;
+    }
+  }
+  return biggestID;
+}
+
 function durationToMMSS(duration) {
   let mm = Math.floor(duration / 60);
   let ss = duration % 60;
@@ -67,6 +79,7 @@ function durationToMMSS(duration) {
   }
   return `${mm}:${ss}`
 }
+
 function getPlaylistIndexFromID(playlistId) {
   for (let i = 0; i < player.playlists.length; i++) {
     if (player.playlists[i].id === playlistId) {
@@ -75,17 +88,18 @@ function getPlaylistIndexFromID(playlistId) {
   }
   throw 'Enter valid id';
 }
+
 function durationToSeconds(duration) {
+  const checkDuration = /[^0-9:]/; //check for number and ":" only
+  if (checkDuration.test(duration)) {
+    throw 'Enter Valid duration';
+  }
   let mm = duration[0] + duration[1];
   let ss = duration[3] + duration[4];
   return secondDuration = (+mm * 60 + +ss);
 }
 
-function playSong(id) {
-  getSongFromID(id);
-  console.log(`Playing ${title} from ${album} by ${artist} | ${durationToMMSS(duration)}.`)
-}
-function getSongFromID(id) {
+function getSongValuesFronId(id) {
   for (let i = 0; i < player.songs.length; i++) {
     if (player.songs[i].id === id) {
       return { title, album, artist, duration, } = player.songs[i], songArrIndex = i;
@@ -94,8 +108,28 @@ function getSongFromID(id) {
   throw 'Please enter valid id';
 }
 
+function TestArguments(title, album, artist, duration, id) {
+  if (!id) {
+    id = getBiggestSongID() + 1;
+  }
+  if (typeof (title) != 'string' || typeof (album) != 'string' || typeof (artist) != 'string' || typeof (id) != 'number' || id < 1 || id > getBiggestSongID() + 100) {
+    throw 'Please Enter Valid Data'
+  }
+  for (let key of player.songs) {
+    if (key.id === id) {
+      throw 'This ID is taken, pick another ID';
+    }
+  }
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////Test Functions////////////////////////////////////////////////////////
+function playSong(id) {
+  getSongValuesFronId(id);
+  console.log(`Playing ${title} from ${album} by ${artist} | ${durationToMMSS(duration)}.`)
+}
+
 function removeSong(id) {
-  getSongFromID(id);
+  getSongValuesFronId(id);
   player.songs.splice(songArrIndex, 1);
   for (let key of player.playlists) {
     let indexInList = key.songs.indexOf(id);
@@ -105,16 +139,13 @@ function removeSong(id) {
   }
 }
 
-
 function addSong(title, album, artist, duration, id) {
-  if (!id) {
-    id = getBiggestSongID() + 1;
+  if (typeof (duration) === 'string') {
+    durationToSeconds(duration);
+    duration = secondDuration;
   }
-  for (let key of player.songs) {
-    if (key.id === id) {
-      throw 'This ID is taken, pick another ID';
-    }
-  }
+  TestArguments(title, album, artist, duration, id);
+  console.log(duration)
   player.songs.push({
     'id': id,
     'title': title,
@@ -134,24 +165,12 @@ function removePlaylist(id) {
   throw 'Enter valid id';
 }
 
-function getBiggestPlaylistID() {
-  let biggestID = 0;
-  for (let key of player.playlists) {
-    if (key.id > biggestID) {
-      biggestID = key.id;
-    }
-  }
-  return biggestID;
-}
-
 function createPlaylist(name, id) {
   if (!id) {
     id = getBiggestPlaylistID() + 1;
   }
-  for (let key of player.playlists) {
-    if (key.id === id) {
-      throw 'This ID is taken, pick another ID';
-    }
+  if (player.playlists.some(currentValue => currentValue.id == id)) {
+    throw 'This ID is taken, pick another ID';
   }
   let newArr = {
     'id': id,
@@ -174,10 +193,8 @@ function playPlaylist(id) {
   throw 'Enter valid playlist id';
 }
 
-
-
 function editPlaylist(playlistId, songId) {
-  getSongFromID(songId);
+  getSongValuesFronId(songId);
   getPlaylistIndexFromID(playlistId);
   indexOfSongInPlaylist = player.playlists[playlistArrplace].songs.indexOf(songId);
   if (indexOfSongInPlaylist < 0) {
@@ -195,7 +212,7 @@ function playlistDuration(id) {
   let sum = 0;
   getPlaylistIndexFromID(id);
   for (let i = 0; i < player.playlists[playlistArrplace].songs.length; i++) {
-    getSongFromID(player.playlists[playlistArrplace].songs[i]);
+    getSongValuesFronId(player.playlists[playlistArrplace].songs[i]);
     sum += player.songs[songArrIndex].duration;
   }
   return sum;
@@ -203,14 +220,14 @@ function playlistDuration(id) {
 
 function searchByQuery(query) {
   const queryRegex = new RegExp(`${query}`, 'i');
-  let answer = {
+  let resultObj = {
     playlists: [],
     songs: []
   };
   for (let i = 0; i < player.songs.length; i++) {
     for (let prop in player.songs[i]) {
       if (queryRegex.test(player.songs[i][prop])) {
-        answer.songs.push(player.songs[i]);
+        resultObj.songs.push(player.songs[i]);
         break;
       }
     }
@@ -218,19 +235,19 @@ function searchByQuery(query) {
   for (let i = 0; i < player.playlists.length; i++) {
     for (let prop in player.playlists[i]) {
       if (queryRegex.test(player.playlists[i][prop])) {
-        answer.playlists.push(player.playlists[i]);
+        resultObj.playlists.push(player.playlists[i]);
         break;
       }
     }
   }
-  answer.songs.sort(function (a, b) {
+  resultObj.songs.sort(function (a, b) {
     let x = a.title.toLowerCase();
     let y = b.title.toLowerCase();
     if (x < y) { return -1; }
     if (x > y) { return 1; }
     return 0;
   })
-  return answer;
+  return resultObj;
 }
 
 function searchByDuration(duration) {
@@ -253,7 +270,7 @@ function searchByDuration(duration) {
   if ((Math.abs(savedSongDuration - secondDuration) < Math.abs(savedPlaylistDuration - secondDuration))) {
     return closestSong;
   }
-    return closestPlaylist;
+  return closestPlaylist;
 }
 
 module.exports = {
