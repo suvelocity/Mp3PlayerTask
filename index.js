@@ -42,6 +42,7 @@ const player = {
       artist: 'Full Trunk',
       duration: 259,
     },
+  
   ],
   playlists: [
     { id: 1, name: 'Metal', songs: [1, 7, 4] },
@@ -100,19 +101,19 @@ function addSong(title, album, artist, duration, id) {
     }
   }
 
-    const newSong = // making a new song to push to the array
+    const addedSong = // making a new song to push to the array
     {
       id: id,
       title: title,
       album: album,
       artist: artist,
-      duration: duration
+      duration: reverseDurationConvertor(duration)
     };
     
-    player.songs.push(newSong);
-    console.log(newSong);
+    player.songs.push(addedSong);
+    console.log(addedSong);
     console.log(player.songs);
-    return newSong["id"];
+    return addedSong["id"];
 }
 
 
@@ -213,7 +214,8 @@ function playlistDuration(id) {
 
 
 function searchByQuery(query) {
-  // your code here
+let queryThings = {songs: songs, playlists: playlists};
+
 }
 
 function searchByDuration(duration) {
