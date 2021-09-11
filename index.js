@@ -49,6 +49,13 @@ const player = {
   ],
   playSong(song) {
     console.log(/* your code here */)
+    console.log(
+      "Playing " + song.title 
+      +" from " + song.album 
+      + " by " + song.artist 
+      + " | " 
+      + durationFormat(song.duration) 
+      +".")
   },
 }
 
