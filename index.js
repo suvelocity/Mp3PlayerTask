@@ -168,12 +168,21 @@ function playPlaylist(id) {
   }
 }
 
-function editPlaylist(playlistId, songId) {
-  // your code here
+function editPlaylist(playlistId, songId) { 
+
 }
 
 function playlistDuration(id) {
-  // your code here
+  let currentPlaylist = findPlaylistById(id);
+  let sum = 0;
+
+  for(let num in currentPlaylist.songs)
+  {
+    sum += findSongById(currentPlaylist.songs[num]).duration;
+  }
+  console.log(sum);
+  return sum;
+ 
 }
 
 function searchByQuery(query) {
@@ -197,7 +206,7 @@ function durationConvertor (duration)
 {
   let min="";
   let sec="";
-  if (typeof(duration) !== "number" || typeof(duration) === undefined)
+  if (typeof(duration) !== "number")
   {
     throw "Please Enter a number"
   }
