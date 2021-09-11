@@ -360,4 +360,4 @@ module.exports = {
   playlistDuration,
   searchByQuery,
   searchByDuration,
-}
+} 
