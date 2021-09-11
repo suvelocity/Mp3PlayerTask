@@ -133,7 +133,7 @@ function generateId(arr) {  //If the user does not give Id, the function produce
 
 //The basic functions that affect MP3:
 function playSong(id) {
-  errorSongExists();
+  songIdDoesNotExist(id);
   player.playSong(getSongById(id));
 }
 
