@@ -47,9 +47,9 @@ const player = {
     { id: 1, name: 'Metal', songs: [1, 7, 4] },
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
-  playSong(song){
-    console.log(`"Playing ${song.title} from ${song.album} by ${song.artist} | ${convertDuration1(song.duration)}."`);
-    }
+  playSong(song) {
+    console.log(`Playing ${song.title} from ${song.album} by ${song.artist} | ${durationConvert(song.duration)}.`)
+  },
   }
 
 
@@ -207,28 +207,38 @@ catch{ throw ("non-existent playlist Id please try another")}
 }
 
 function searchByQuery(query) {
-  query=query.toLowerCase()
-  let results={Playlists:[],
-              Songs:[]}
-  for (let x=0 ; x<player.songs.length ; x++){
-    if (player.songs[x].title.toLowerCase().includes(query)||
-        player.songs[x].album.toLowerCase().includes(query)||
-        player.songs[x].artist.toLowerCase().includes(query)){
-          results.Songs.push(player.songs[x].title)
+  query=query.toLowerCase();
+  let obj={
+    songs:[],
+    playlists:[]
+  };
+  for (let song of player.songs)
+  {
+    if( (song.title.toLowerCase().includes(query)) || 
+        (song.album.toLowerCase().includes(query)) || 
+        (song.artist.toLowerCase().includes(query)) )
+    {
+      obj.songs.push(song);
     }
   }
-  for (let i=0 ; i<player.playlists.length ; i++){
-    if (player.playlists[i].name.toLowerCase().includes(query)){
-      results.Playlists.push(player.playlists[i].name)
+
+  for (let playlist of player.playlists)
+  {
+    if (playlist.name.toLowerCase().includes(query))
+    {
+      obj.playlists.push(playlist);
     }
   }
-  results.Playlists.sort(function(a, b){
-    if(a.name < b.name) { return -1; }
-    if(a.name > b.name) { return 1; }
+  obj.songs.sort(function (a, b) {
+    if (a.title < b.title){
+       return -1; }
+    else if (a.title > b.title){
+       return 1; }
     return 0;
-})
-  return results;
+  })
+  return obj;
 }
+
 function close(goal,counts){
   var closest = counts.reduce(function(prev, curr) {
     return (Math.abs(curr - goal) < Math.abs(prev - goal) ? curr : prev);
