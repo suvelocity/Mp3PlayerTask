@@ -79,22 +79,22 @@ function songIdDoesNotExist(id) { //A function that throws an error if the ID is
 
 //Second-to-minute conversions and vice versa:
 function mmssToSeconds(mmss) { //Convert MM:SS string to seconds
-  let splitMmSs = mmss.split(':')
-  let seconds = (+splitMmSs[0]) * 60 + (+splitMmSs[1])
-  return seconds
+  let splitMmSs = mmss.split(':');
+  let seconds = (+splitMmSs[0]) * 60 + (+splitMmSs[1]);
+  return seconds;
 }
 
 function convertDuration(num) { //Converts seconds to MM:SS format
-  let mins = Math.floor(num / 60)
-  let sec = num % 60
-  return mins.toString().padStart(2, '0') + ':' + sec.toString().padStart(2, '0')
+  let mins = Math.floor(num / 60);
+  let sec = num % 60;
+  return mins.toString().padStart(2, '0') + ':' + sec.toString().padStart(2, '0');
 } 
 
 //Functions that receive an ID and return the relevant array
 function getSongById(id) { //Gets an ID and provides the details about the relevant song
   for (let key of player.songs) {
     if (key.id === id) {
-      return key
+      return key;
     }
   }
 }
@@ -102,7 +102,7 @@ function getSongById(id) { //Gets an ID and provides the details about the relev
 function getPlaylistById(id) { //Gets an ID and provides the details about the relevant playlist
   for (let key of player.playlists) {
     if (key.id === id) {
-      return key
+      return key;
     }
   }
 }
@@ -126,15 +126,15 @@ function getListOfIdPlaylist() { //Provides an array of all the IDs of the playl
 
 //A function that generates an ID if not provided by the user:
 function generateId(arr) {  //If the user does not give Id, the function produces independently.
-  newArrId = arr.slice()
-  newArrId.sort((a,b) => a-b)
-  return newArrId[newArrId.length - 1] + 1
+  newArrId = arr.slice();
+  newArrId.sort((a,b) => a-b);
+  return newArrId[newArrId.length - 1] + 1;
 }
 
 //The basic functions that affect MP3:
 function playSong(id) {
   errorSongExists();
-  player.playSong(getSongById(id))
+  player.playSong(getSongById(id));
 }
 
 function removeSong(id) { //Deletes song from songs and playlists
@@ -151,8 +151,8 @@ function removeSong(id) { //Deletes song from songs and playlists
 
 function addSong(title, album, artist, duration, id = generateId(getListOfIdSongs())) { //Adds an object-shaped song to an array of songs
   let dueationToSeconds = mmssToSeconds(duration)
-  let newSong = {id: id, title: title, album: album, artist: artist,duration: dueationToSeconds} //Creates a new object
-  errorSongExists(id)
+  let newSong = {id: id, title: title, album: album, artist: artist,duration: dueationToSeconds};//Creates a new object
+  errorSongExists(id);
   player.songs.push(newSong);
   return newSong.id;
 }
@@ -164,10 +164,10 @@ function removePlaylist(id) { //Gets a playlist ID and deletes it from the playl
 }
 
 function createPlaylist(name, id = generateId(getListOfIdPlaylist())) { //A function that creates a new playlist
-  let newPlaylist = {id: id, name: name, songs: []}
-  errorPlaylistExists(id)
+  let newPlaylist = {id: id, name: name, songs: []};
+  errorPlaylistExists(id);
   player.playlists.push(newPlaylist);
-  return newPlaylist.id
+  return newPlaylist.id;
 }
 
 function playPlaylist(id) {  //A function that receives a playlist Id and plays all the songs in it
@@ -175,7 +175,7 @@ function playPlaylist(id) {  //A function that receives a playlist Id and plays 
   for (let playlist of player.playlists){
       if (playlist["id"] === id) {
         for (let song of playlist["songs"]) {
-          playSong(song)
+          playSong(song);
         }
     }
   }
@@ -186,14 +186,14 @@ function editPlaylist(playlistId, songId) {
   songIdDoesNotExist(songId);
   for (let i of player.playlists){
     if (i["id"] === playlistId) {
-        index = i["songs"].indexOf(songId)
+        index = i["songs"].indexOf(songId);
         if (index === -1) {
-          i["songs"].push(songId)
+          i["songs"].push(songId);
         }else if (index >= 0) {
           if (i["songs"].length === 1) {
-            removePlaylist(playlistId)
+            removePlaylist(playlistId);
           }else {
-          i["songs"].splice(index,1)
+          i["songs"].splice(index,1);
           }
         }
     }
@@ -202,14 +202,14 @@ function editPlaylist(playlistId, songId) {
   
 function playlistDuration(id) {  // A function that returns the duration of all the songs in the playlist it receives
   playlistIdDoesNotExist(id);
-  count = 0 
+  count = 0 ;
   for (let song of player.playlists) {
     if (song["id"] === id) {
       for(let i of song["songs"])
-        count += getSongById(i)["duration"]
+        count += getSongById(i)["duration"];
     }
   }
-  return count
+  return count;
 }
 
 function searchByQuery(query) {  //A function that is like (ctrl + F). Gets a string and returns all the songs or playlists that contain the same string
@@ -235,14 +235,14 @@ function searchByQuery(query) {  //A function that is like (ctrl + F). Gets a st
 }
 
 function searchByDuration(duration) { //A function that takes the duration of the user and returns the song or playlist whose duration is closest to the duration entered
-  let seconds = mmssToSeconds(duration)
-  let arrayOfDuration = []
+  let seconds = mmssToSeconds(duration);
+  let arrayOfDuration = [];
   //Creates an array of arrays that each has its own duration, id and whether it is a playlist or a song
   for(let songsInner of player.songs) {
-    arrayOfDuration.push([songsInner["duration"],songsInner["id"],"s"])
+    arrayOfDuration.push([songsInner["duration"],songsInner["id"],"s"]);
   }
   for (let playlistInner of player.playlists) {
-    arrayOfDuration.push(([playlistDuration(playlistInner["id"]),playlistInner.id,"p"]))
+    arrayOfDuration.push(([playlistDuration(playlistInner["id"]),playlistInner.id,"p"]));
   }
   
   //Create a const that contains the absolute value of the subtraction between the length of the first song and the length entered by the user
@@ -264,9 +264,9 @@ function searchByDuration(duration) { //A function that takes the duration of th
   }
   //Checks if it is a playlist or a song(index 2), and returns the song using ID (index 1)
   if (numId[2] === 'p') {
-    return getPlaylistById(numId[1])
+    return getPlaylistById(numId[1]);
   }
-  return getSongById(numId[1])
+  return getSongById(numId[1]);
 }
 
 module.exports = {
