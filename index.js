@@ -48,8 +48,23 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    console.log(/* your code here */)
+    console.log("Playing "+song.title+ " from " +song.album+" by "+song.artist+"|"+durationConvert(song.duration)+".");
   },
+}
+function durationConvert(duration) // converts duration value to mm/ss
+{
+  let durationArr=[];
+  while(duration>=1)
+  {
+    if(durationArr.length===2)
+    {
+      durationArr.unshift(":");
+    }
+    durationArr.unshift(duration%10);
+    duration=Math.floor(duration/10);
+  }
+  durationArr.unshift(0);
+  return durationArr.join("");
 }
 
 function playSong(id) {
