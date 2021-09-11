@@ -134,6 +134,45 @@ import { songById,songIndexById,isIdExsistInSongs,removeSong,addSong} from './fu
       addToPlayList(songId, playlistId)
     }
   }
+
+
+function renamePlayList(id,newName){
+  //gets: PLAYLIST ID & NEW NAME
+  //--> RENAME THE PLAYLIST
+
+    playListById(id).name=newName;
+}
+
+function albumPlaylist(album){
+  //gets: ALBUM NAME 
+  //--> CEATE A PLAYLIST FOR ALL THE SONGS FROM THAT ALBUM
+  //returns: NEW PLAYLIST ID.
+
+  playlistId=createPlaylist(album);
+  for(let i = 0; i < player.songs.length; i++){
+    if(player.songs[i].album===album)
+      {
+        addToPlayList(player.songs[i].id,playlistId)
+      }
+  }
+  return playlistId;
+}
+
+function artistPlaylist(artist){
+  //gets: ARTIST NAME 
+  //--> CEATE A PLAYLIST FOR ALL THE SONGS OF THAT ARTIST.
+  //returns: NEW PLAYLIST ID.
+  
+  playlistId=createPlaylist(artist);
+  for(let i = 0; i < player.songs.length; i++){
+    if(player.songs[i].artist===artist)
+      {
+        addToPlayList(player.songs[i].id,playlistId)
+      }
+  }
+  return playlistId;
+}
+
   
   
       //calculations

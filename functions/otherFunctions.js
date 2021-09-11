@@ -1,5 +1,5 @@
 'use strict'
-import { isIdExsistInPlayLists,playListById,playListIndexById,addToPlayList,removeFromPlayLists,removeFromPlayList,removePlaylist,createPlaylist,editPlaylist,playlistDuration} from './functions/playlistsFunctions';
+import { isIdExsistInPlayLists,playListById,playListIndexById,addToPlayList,removeFromPlayLists,removeFromPlayList,removePlaylist,createPlaylist,editPlaylist,playlistDuration,renamePlayList,artistPlaylist,albumPlaylist} from './functions/playlistsFunctions';
 import { songById,songIndexById,isIdExsistInSongs,removeSong,addSong} from './functions/songsFunctions';
 
 

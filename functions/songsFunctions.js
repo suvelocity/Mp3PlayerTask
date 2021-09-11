@@ -1,6 +1,6 @@
 'use strict'
 import { playSong, playPlaylist,sTOmmss,mmssTOs,comparepl,compares,searchByQuery,searchByDuration } from './functions/otherFunctions';
-import { isIdExsistInPlayLists,playListById,playListIndexById,addToPlayList,removeFromPlayLists,removeFromPlayList,removePlaylist,createPlaylist,editPlaylist,playlistDuration} from './functions/playlistsFunctions';
+import { isIdExsistInPlayLists,playListById,playListIndexById,addToPlayList,removeFromPlayLists,removeFromPlayList,removePlaylist,createPlaylist,editPlaylist,playlistDuration,renamePlayList,artistPlaylist,albumPlaylist} from './functions/playlistsFunctions';
 
 
 //SONGS FUNCTIONS: GETING & EDITING SONGS.

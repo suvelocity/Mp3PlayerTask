@@ -32,7 +32,7 @@ IMPORTANT!     IMPORTANT!     IMPORTANT!     IMPORTANT!     IMPORTANT!     IMPOR
 this project is basicly an mp3 player , which have songs and playlist. 
 although it can do a little more than a ragular mp3.
 
- it can search a song or a playlist by it's douration.
+( it can search a song or a playlist by it's douration.)
 
  this are the functions you can use:
     - `playSong` - play the song.
@@ -44,6 +44,11 @@ although it can do a little more than a ragular mp3.
     - `playlistDuration` -total duration of the entire playlist.
     - `searchByQuery` -search a song or a playlist by a word.
     - `searchByDuration` -search a song or a playlist by a duration.
+    .
+    - `renamePlayList` - rename a exsisting playlist.
+    - `albumPlaylist` - create a new playlist, containig all the songs ftom this album.
+    - `artistPlaylist` - create a new playlist, containig all the songs ftom this artist.
+    it to the end of the playlist
     - `editPlaylist` - If the song ID exists in the playlist, removes it. If it was the only song in the playlist, also deletes the playlist. If the song ID does not exist in the playlist, adds
     it to the end of the playlist.
 
