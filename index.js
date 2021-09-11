@@ -210,18 +210,23 @@ function searchByQuery(query) {
   query=query.toLowerCase()
   let results={Playlists:[],
               Songs:[]}
-  for (let x=0;x<player.songs.length;x++){
+  for (let x=0 ; x<player.songs.length ; x++){
     if (player.songs[x].title.toLowerCase().includes(query)||
-        player.songs[x].album.toLowerCase().includes(query)==true||
-        player.songs[x].artist.toLowerCase().includes(query)==true){
-          results.Songs.push(player.songs[x])
+        player.songs[x].album.toLowerCase().includes(query)||
+        player.songs[x].artist.toLowerCase().includes(query)){
+          results.Songs.push(player.songs[x].title)
     }
   }
-  for (let i=0 ;i<player.playlists.length;i++){
+  for (let i=0 ; i<player.playlists.length ; i++){
     if (player.playlists[i].name.toLowerCase().includes(query)){
-      results.Playlists.push(player.playlists[i])
+      results.Playlists.push(player.playlists[i].name)
     }
   }
+  results.Playlists.sort(function(a, b){
+    if(a.name < b.name) { return -1; }
+    if(a.name > b.name) { return 1; }
+    return 0;
+})
   return results;
 }
 function close(goal,counts){
@@ -233,31 +238,28 @@ function close(goal,counts){
   }
   
 function searchByDuration(duration) {
-  function searchByDuration(duration) {
-    let arr=duration.split(":")
-    var c = parseInt(arr[0])
-    var b = parseInt(arr[1])
-    duration =(c*60 + b)
-    let durArr=[];
-    let min;
-    for (let i=0;i<player.songs.length;i++){
+  let arr=duration.split(":")
+  var c = parseInt(arr[0])
+  var b = parseInt(arr[1])
+  duration =(c*60 + b)
+  let durArr=[];
+  let min;
+  for (let i=0 ; i<player.songs.length ; i++){
     durArr.push(player.songs[i].duration)
-    }
-    for (let x=0;x<player.playlists.length;x++){
+  }
+  for (let x=0 ; x<player.playlists.length ; x++){
     durArr.push(playlistDuration(player.playlists[x].id))}
-    min=close(duration,durArr)
-    for (let j=0 ;j<player.songs.length;j++){
+  min=close(duration,durArr)
+    for (let j=0 ; j<player.songs.length ; j++){
       if (player.songs[j].duration===min)
-      return player.songs[j]
+        return player.songs[j]
     }
-      for (let n=0 ;n<player.playlists.length;n++){
+      for (let n=0 ; n<player.playlists.length ; n++){
         if (playlistDuration(player.playlists[n].id)===min)
         return player.playlists[n]
       }
     }
 
-
-}
 
 module.exports = {
   player,
