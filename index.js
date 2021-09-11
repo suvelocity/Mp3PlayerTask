@@ -69,22 +69,34 @@ const player = {
        
       let songId = id;
       let obj = player.songs.find(obj => obj.id === songId);
-      return 'Play ' + obj.title;
+      return 'Playing ' + obj.title + ' from ' + obj.album + ' by ' + obj.artist + ' | ' + obj.duration + '.';
     }
-   
     }
-      
-  
-
-console.log(playSong(3));
+    console.log(playSong(3));
 
 
 
   
   function removeSong(id) {
- 
-     }
+    if (typeof id === 'undefined') {
+      return 'ID is invalid';
+  }
 
+  else {
+    let songId2 = id;
+    let obj2 = player.songs.find(obj2 => obj2.id === songId2);
+    obj2.id = 'Removed';
+    obj2.title = 'Removed';
+    obj2.album = 'Removed';
+    obj2.artist = 'Removed';
+    obj2.duration = 'Removed';
+    return player;
+   }
+  }
+  console.log(removeSong(5));
+     
+
+    
      
     
    
