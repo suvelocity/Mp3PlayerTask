@@ -51,14 +51,13 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    
     console.log("Playing "+song.title +" from " + song.album + " by " +song.artist + " | " +durationConverter(song.duration) + ".");
   }
 }
 
 function playSong(id) {
-  
   let indexId=player.songs.findIndex(i=>i.id===id);
+  // if the index isnt exist we throw , else we call the player.playsong function
   if(indexId===-1){
     throw("non-existent ID");
   }else{
@@ -85,7 +84,7 @@ function durationConverter(dur){
 
 
 function removeSong(id) {
-  // removes the song from the songs list\
+  // removes the chosen song from the songs list
   let found=false;
   for(let i=0 ; i<player.songs.length ; i++){
     if(player.songs[i].id===id){
@@ -110,7 +109,8 @@ function removeSong(id) {
 
 
 function addSong(title, album, artist, duration, id=-1) {
-  // auto generate func for original and reasonable id for the new song.
+  // add a song to the player songs list
+  // the first part auto generates func for original and reasonable id for the new song.
   let idSet= new Set();
   for(let song of player.songs){
     idSet.add(song.id);
@@ -145,6 +145,7 @@ function addSong(title, album, artist, duration, id=-1) {
 
 
 function removePlaylist(id) {
+  // removes chosen playlist from the player playlists list.
   let found=false
   for(let i = 0 ; i<player.playlists.length ; i++){
     if (player.playlists[i].id===id){
@@ -160,6 +161,7 @@ function removePlaylist(id) {
 
 
 function createPlaylist(name, id=-1) {
+  // creates a new playlist and insert it to the player playlists list.
   let idSet= new Set();
   for(let playlist of player.playlists){
     idSet.add(playlist.id);
@@ -195,6 +197,7 @@ function createPlaylist(name, id=-1) {
 
 
 function playPlaylist(id) {
+  // shows (plays) all the songs in the chosen playlist .
   let songsId=[];
   let songsIdSet = new Set();
   let found=false;
@@ -221,7 +224,7 @@ function playPlaylist(id) {
 
 function editPlaylist(playlistId, songId) {
  
-//  defining two sets , one for the songs id and one for the playlist id
+//  defining two variables , one for the songs id and one for the playlist id
  let songsArrId=player.songs.map(x => x.id);
  let playlistArrId=player.playlists.map(x => x.id);
 // throw area for non existing id's
@@ -251,7 +254,7 @@ function editPlaylist(playlistId, songId) {
 }
  
 function playlistDuration(id) {
-  // 
+  // function that calculates the total duration of the playlist
     let songsId=[];
     let plSongsId=new Set();
     totalDuration=0;
@@ -353,19 +356,5 @@ module.exports = {
   searchByDuration,
 }
 
-// a func to find closest num in array
-
-//   var inputArr = [150, 5, 200, 50, 30];
-
-// var min = Math.min();
-// var result = 0;
-// for(i=0;i<inputArr.length;i++) {
-//   let absVal = Math.abs(duration - inputArr[i])
-//   if(min > absVal) {
-//     min=absVal;
-//     result = inputArr[i];
-//   }
-// }
-// console.log(result);
 
 
