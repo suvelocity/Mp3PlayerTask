@@ -78,6 +78,12 @@ function addSong(title, album, artist, duration, id) {
 
 function removePlaylist(id) {
   // your code here
+function checkId(songs,id){
+  for (let i = 0 ; i < songs.length ; i ++){
+    if (id === songs[i].id)
+      return true;
+  }
+  return false;
 }
 
 function createPlaylist(name, id) {
