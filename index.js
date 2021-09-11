@@ -1,51 +1,57 @@
 const player = {
-  songs: [
-    {
-      id: 1,
-      title: 'Vortex',
-      album: 'Wallflowers',
-      artist: 'Jinjer',
-      duration: 242,
-    },
-    {
-      id: 2,
-      title: 'Vinda',
-      album: 'Godtfolk',
-      artist: 'Songleikr',
-      duration: 160,
-    },
-    {
-      id: 7,
-      title: 'Shiroyama',
-      album: 'The Last Stand',
-      artist: 'Sabaton',
-      duration: 213,
-    },
-    {
-      id: 3,
-      title: 'Thunderstruck',
-      album: 'The Razors Edge',
-      artist: 'AC/DC',
-      duration: 292,
-    },
-    {
-      id: 4,
-      title: 'All is One',
-      album: 'All is One',
-      artist: 'Orphaned Land',
-      duration: 270,
-    },
-    {
-      id: 5,
-      title: 'As a Stone',
-      album: 'Show Us What You Got',
-      artist: 'Full Trunk',
-      duration: 259,
-    },
+  songs: [{
+    id: 1,
+    title: 'Vortex',
+    album: 'Wallflowers',
+    artist: 'Jinjer',
+    duration: 242,
+  },
+  {
+    id: 2,
+    title: 'Vinda',
+    album: 'Godtfolk',
+    artist: 'Songleikr',
+    duration: 160,
+  },
+  {
+    id: 7,
+    title: 'Shiroyama',
+    album: 'The Last Stand',
+    artist: 'Sabaton',
+    duration: 213,
+  },
+  {
+    id: 3,
+    title: 'Thunderstruck',
+    album: 'The Razors Edge',
+    artist: 'AC/DC',
+    duration: 292,
+  },
+  {
+    id: 4,
+    title: 'All is One',
+    album: 'All is One',
+    artist: 'Orphaned Land',
+    duration: 270,
+  },
+  {
+    id: 5,
+    title: 'As a Stone',
+    album: 'Show Us What You Got',
+    artist: 'Full Trunk',
+    duration: 259,
+  },
   ],
-  playlists: [
-    { id: 1, name: 'Metal', songs: [1, 7, 4] },
-    { id: 5, name: 'Israeli', songs: [4, 5] },
+  playlists: [{
+    id: 1,
+    name: 'Metal',
+    songs: [1, 7, 4]
+  },
+  {
+    id: 5,
+    name: 'Israeli',
+    songs: [4, 5]
+  },
   ],
   playSong(song) {
     console.log(`Playing ${song.title} from ${song.album} by ${song.artist} | ${secToMmSs(song.duration)}.`)
@@ -109,8 +115,7 @@ function playPlaylist(id) {
         }
       }
       return
-    }
-    else {
+    } else {
       throw new Error('There is a problem');
     }
   }
@@ -146,7 +151,10 @@ function playlistDuration(id) {
 
 function searchByQuery(query) {
   let caseIn = query.toLowerCase();
-  let returnObj = { songs: [], playlists: [] }
+  let returnObj = {
+    songs: [],
+    playlists: []
+  }
 
   for (let i of player.songs) {
     if (i.title.toLowerCase().includes(caseIn) ||
@@ -160,8 +168,12 @@ function searchByQuery(query) {
       returnObj.playlists.push(j);
     }
     //sorting songs & playlists
-    returnObj.songs.sort((a, b) => { if (a.title < b.title) return -1 });
-    returnObj.playlists.sort((a, b) => { if (a.name < b.name) return -1 });
+    returnObj.songs.sort((a, b) => {
+      if (a.title < b.title) return -1
+    });
+    returnObj.playlists.sort((a, b) => {
+      if (a.name < b.name) return -1
+    });
     return returnObj;
   }
 }
@@ -170,10 +182,42 @@ function searchByQuery(query) {
 
 
 
-
 function searchByDuration(duration) {
-  // your code here
+  let convertedToSec = mmToSec(duration)
+  let checkMinSong = Math.abs(player.songs[0].duration - convertedToSec);
+  let checkMinPl = Math.abs(player.playlists[0].id - convertedToSec);
+  let songIn = 0;
+  let plIn = 0;
+
+
+
+  for (let i = 0; i < player.songs.length; i++) {
+    if (Math.abs(player.songs[i].duration - convertedToSec) < checkMinSong) {
+      songIn = i;
+      checkMinSong = Math.abs(player.songs[i].duration - convertedToSec);
+
+    }
+  }
+  for (let j = 0; j < player.playlists.length; j++) {
+    let playlistduration = playlistDuration(player.playlists[j].id);
+    if (Math.abs(playlistduration - convertedToSec) < checkMinPl) {
+      plIn = j;
+      checkMinPl = Math.abs(playlistduration - convertedToSec);
+
+    }
+  }
+  if (checkMinSong < checkMinPl) {
+    return player.songs[songIn];
+    console.log(`the closest song's duration to what you requested is ${player.songs[songIn]}.`)
+  } else {
+    return player.playlists[plIn];
+    console.log(`the closest Playlist's duration to what you requested is ${player.playlists[plIn]}.`)
+
+  }
+
 }
+
+
 
 
 // help functions 
@@ -233,6 +277,7 @@ function checkIdAvilablePl(id) {
     return false;
   }
 }
+
 function mmToSec(duration) {
   let get = duration.split(':');
   let min = parseInt(get[0]) * 60;
