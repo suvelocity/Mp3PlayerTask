@@ -111,6 +111,12 @@ function playlistDuration(id) {
 
 function playPlaylist(id) {
   // your code here
+function findPlaylistById(id) {
+  let correctPlaylist
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (id === player.playlists[i].id) correctPlaylist = player.playlists[i]
+  }
+  return correctPlaylist
 }
 
 function editPlaylist(playlistId, songId) {
