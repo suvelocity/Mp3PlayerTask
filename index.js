@@ -65,6 +65,11 @@ function playSong(id) {
 
 function removeSong(id) {
   // your code here
+  if (!(checkId(player.songs,id))) throw "ERROR: id doesn't exict.";
+  else for(let i = 0 ; i < player.songs.length ; i ++){
+    if (player.songs[i].id === id)
+      return player.playSong(player.songs[i]);
+  } 
 }
 
 function addSong(title, album, artist, duration, id) {
