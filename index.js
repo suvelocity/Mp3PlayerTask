@@ -207,6 +207,21 @@ function createPlaylist(name, id = newId(player.playlists)) {
   return id;
 }
 
+function playPlaylist(id) {
+  if (!checkId(player.playlists, id)){
+    throw "ID dont exist"
+  }
+  for (let i = 0; i < player.playlists.length; i++) {
+    if(id === player.playlists[i].id){
+      for (let x = 0; x < player.playlists[i].songs.length; x++) {
+          playSong(player.playlists[i].songs[x]);
+      }
+    }
+  }
+  return id;
+}
+
+
 function searchByQuery(query) {
   // your code here
 }
