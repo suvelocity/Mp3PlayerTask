@@ -169,6 +169,24 @@ function addSong(title, album, artist, duration,  id = newId(player.songs)) {
   return id;
 }
 
+function removeSong(id) {
+  if (!checkId(player.songs, id)){
+    throw "ID doesn't exist.";
+  }
+  for (let i = 0; i<player.songs.length; i++){
+    if (player.songs[i].id === id){
+      player.songs.splice(i,1)
+    }
+  }
+  for (let j = 0; j<player.playlists.length; j++){
+    for(let x = 0; x<player.playlists[j].songs.length; x++){
+      if (player.playlists[j].songs[x] === id){
+        player.playlists[j].songs.splice(x, 1);
+      }
+    }
+  }
+}
+
 }
 
 function searchByQuery(query) {
