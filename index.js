@@ -63,7 +63,11 @@ function convertToSec(minutes) {
 }
 
 function checkIdFindIndex(id ,location, exists) {
+  // This finds the index of the given id in the specific location given.
   const songOrPlaylist = location.findIndex(listElement => listElement.id === id);
+
+  /* This checks if the id 'already' exists or 'does not' exist dependent on the exists arguement. 
+  if the exists arguement is omitted when the function is called it will not check the id.*/
   if (songOrPlaylist > -1 && exists === 'already') throw new Error('That id already exists.');
   if (songOrPlaylist === -1 && exists === 'does not') throw new Error('That id does not exist.');
   return songOrPlaylist;
@@ -73,6 +77,7 @@ function playSong(id) {
   player.playSong(player.songs[checkIdFindIndex(id, player.songs, 'does not')]);
 }
 
+// This function removes a song from the player.songs array. Also, it removes that song from all playlists. 
 function removeSong(id) {
   player.songs.splice(checkIdFindIndex(id, player.songs, 'does not'), 1)
   player.playlists.forEach(playlist => playlist.songs = playlist.songs.filter(songId => !(songId === id)));
@@ -80,9 +85,11 @@ function removeSong(id) {
 
 function addSong(title, album, artist, duration, id) {
   checkIdFindIndex(id, player.songs, 'already')
+  // If there is no id given the while loop will create one that does not already exist.
   while (id === undefined || checkIdFindIndex(id, player.songs) > -1) {
     id = (Math.floor(Math.random()*1000));
   }
+  // This adds a song object to player.songs. It uses the arguements to do so.
   player.songs.push({title, album, artist, duration: convertToSec(duration), id});
   return id;
 }
@@ -100,6 +107,8 @@ function createPlaylist(name, id) {
   return id;
 }
 
+/* This function calls the playSong function for each song id in the songs array of the given playlist.
+This ultimately plays every song in the playlist.*/
 function playPlaylist(id) {
   player.playlists[checkIdFindIndex(id, player.playlists, 'does not')].songs.forEach(songId => playSong(songId));
 }
@@ -107,8 +116,10 @@ function playPlaylist(id) {
 function editPlaylist(playlistId, songId) {
   checkIdFindIndex(songId, player.songs, 'does not');
   const playlist = player.playlists[checkIdFindIndex(playlistId, player.playlists, 'does not')];
+  // removes or adds a song dependent on wether or not the playlist has the song or not.
   if (playlist.songs.includes(songId)) playlist.songs = playlist.songs.filter(song => song !== songId);
   else playlist.songs.push(songId);
+  // if the playlist is left empty it will be removed from the player.
   if (playlist.songs.length === 0) removePlaylist(playlistId);
 }
 
@@ -134,6 +145,7 @@ function searchByQuery(query) {
       queryMatch.playlists.push(playlist);
     }
   }
+  // localeCompare allows you to sort the array of objects by object attributes.
   queryMatch.playlists.sort((a, b) => a.name.localeCompare(b.name));
   queryMatch.songs.sort((a, b) => a.title.localeCompare(b.title));
   return queryMatch;
