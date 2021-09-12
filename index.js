@@ -139,8 +139,12 @@ function playPlaylist(id) {
   player.playlists[playlistIndex].songs.forEach(element => playSong(element));
  }
 
-function editPlaylist(playlistId, songId) {
-  // your code here
+ function editPlaylist(playlistId, songId) {
+  let playlistIndex = getPlaylistIdIndex(playlistId); //index of the playlist with the specific ID in the playlits array
+  let songIndex = player["playlists"][playlistIndex].songs.indexOf(songId); // index of the song with the specific ID in the songs array
+  if((player.playlists[playlistIndex].songs.length > 1) && (player.playlists[playlistIndex].songs.indexOf(songId) !== -1)) /*player.playlists[playlistIndex].songs.splice(songIndex,1);  or*/ removeSong(songId);
+  else if((player.playlists[playlistIndex].songs.length === 1) && (player.playlists[playlistIndex].songs.indexOf(songId)) !== -1) removePlaylist(playlistId);
+  else player.playlists[playlistIndex].songs.push(songId);
 }
 
 function sstomm(seconds){ //converts seconds durationg to mm:ss format!
