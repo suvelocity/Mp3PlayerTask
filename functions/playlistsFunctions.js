@@ -136,14 +136,14 @@ import { songById,songIndexById,isIdExsistInSongs,removeSong,addSong} from './fu
   }
 
 
-function renamePlayList(id,newName){
+export function renamePlayList(id,newName){
   //gets: PLAYLIST ID & NEW NAME
   //--> RENAME THE PLAYLIST
 
     playListById(id).name=newName;
 }
 
-function albumPlaylist(album){
+export function albumPlaylist(album){
   //gets: ALBUM NAME 
   //--> CEATE A PLAYLIST FOR ALL THE SONGS FROM THAT ALBUM
   //returns: NEW PLAYLIST ID.
@@ -158,7 +158,7 @@ function albumPlaylist(album){
   return playlistId;
 }
 
-function artistPlaylist(artist){
+export function artistPlaylist(artist){
   //gets: ARTIST NAME 
   //--> CEATE A PLAYLIST FOR ALL THE SONGS OF THAT ARTIST.
   //returns: NEW PLAYLIST ID.
