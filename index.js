@@ -79,7 +79,8 @@ function queryArr(query, objArr, keyArr) {
   const queryArr = [];
   for(let obj of objArr) {
     for(let i = 0; i < keyArr.length; i++) {
-      if(obj[keyArr[i]].includes(query)) {
+      console.log(obj[keyArr[i]]);
+      if(obj[keyArr[i]].toLowerCase().includes(query.toLowerCase())) {
         queryArr.push(obj);
         i = keyArr.length;
       }
@@ -173,6 +174,7 @@ const player = {
     return `Playing ${song.title} from ${song.album} by ${song.artist} | ${toMinutes(song.duration)}.`;
   },
 }
+
 
 function playSong(id) {
   if(!isIdExist(player.songs, id)) notExistError();
