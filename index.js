@@ -178,7 +178,7 @@ else {
             removePlaylist(playlistId);
           }
         } else{
-          player.obj6[index].songs.push(songId5);
+          player[index].songs.push(songId5);
         }
       }
     }
@@ -212,10 +212,44 @@ else {
 playlistDuration(1)
   
   
-  function searchByQuery(query) {
-    // your code here
-  }
+ 
+    function searchByQuery(query) {
+      let ObjSong = [
+          {
+            id: 0,
+            title: '',
+            album: '',
+            artist: '',
+            duration: 0,
+          },];
+          ObjSong.pop();
   
+          let ObjPlaylist =[
+          { id: 0, name: '', songs: [0, 1, 2, 3, 4, 5]},];
+          ObjPlaylist.pop();
+  
+          for (let index = 0; index < player.songs.length; index++) {
+          if (player.songs[index].title.includes(query)) {
+              ObjSong.push(player.songs[index]);
+          }
+          else if (player.songs[index].album.includes(query)) {
+              ObjSong.push(player.songs[index]); 
+          }
+          else if (player.songs[index].artist.includes(query)) {
+              ObjSong.push(player.songs[index]); 
+          }
+          for (let i = 0; i < ObjSong.length; i++) {
+            player.playSong(ObjSong[i])
+          }
+          }
+          for (let t = 0; t < player.playlists.length; t++) {
+          if (player.playlists[t].name) {
+          }  
+        }
+      }
+  
+  
+
   function searchByDuration(duration) {
     // your code here
   }
