@@ -47,20 +47,30 @@ const player = {
     { id: 1, name: 'Metal', songs: [1, 7, 4] },
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
-  playSong(song) {
-    console.log(
-      'Playing {songs.title} from {songs.album} by {songs.artist} | {convertDuration(player.songs[0].duration)}.'
-    )
-  },
+  // playSong(song) {
+
+  // },
 }
 
 function playSong(id) {
-  for (let x of player.songs) {
-    id = player.songs[x]
-    return id
-  }
+  getSongFromId(id)
+  console.log(
+    `playing ${title} from ${album} by ${artist} | ${convertDuration(
+      duration
+    )}.`
+  )
 }
-
+function getSongFromId(id) {
+  for (let i = 0; i < player.songss.length; i++) {
+    if (player.songs[i].id === id) {
+      return (
+        ({ title, album, artist, duration } = player.songs[i]),
+        (songArrinedx = i)
+      )
+    }
+  }
+  throw `please enter valid id`
+}
 function removeSong(id) {
   for (let i = 0; i < player.songs.length; i++) {
     if (player.songs[i].id === id) {
@@ -144,28 +154,30 @@ function idGenerotor(id) {
     return maxIds + 1
   }
 }
-function songsId(songs){
-songs=[]
-return 
-}
 
-function createPlaylist(name, songs, id = idGenerotor()) {
+function createPlaylist(name, id = idGenerotor(), newSongs) {
   for (let i = 0; i < player.playlists.length; i++) {
     if (id === player.playlists[i].id) {
       throw `The ID is taken`
     }
-    
   }
-
+  let arry = []
   player.playlists.push({
     id: id,
     name: name,
-    songs: [songs],
+    songs: arry.push([newSongs]),
   })
 }
 
 function playPlaylist(id) {
-  // your code here
+  for (let i = 0; i <= player.playlists.length; i++) {
+    if (player.playlists[i].id !== id) {
+      throw 'non-existent ID'
+    }
+    if (player.playlists[i].id === id) {
+    }
+    return player.playlists[i].songs
+  }
 }
 
 function editPlaylist(playlistId, songId) {
