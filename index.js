@@ -259,6 +259,7 @@ function songIdExist(id) {
   }
   return false
 }
+
 function playlistIdExist(id) {
   for (let i = 0; i < player.playlists.length; i++) {
     if (player.playlists[i].id == id)
