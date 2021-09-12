@@ -206,6 +206,8 @@ function searchByDuration(duration) {
   //minSongArr = Math.min(...minSongArr);
   
 
+  if(Math.min(...minPlaylistArr) > Math.min(...minSongArr)) return findSongByDuration(Math.min(...minSongArr)+seconds); //output the original song by his original duration by adding the missing "seconds" which we substract earlier!
+  return findPlaylistByDuration(Math.min(...minPlaylistArr)+seconds); //output the original playlist by his original duration by adding the missing "seconds" which we substract earlier!
 } 
 
 
@@ -217,7 +219,22 @@ function songDuration(id){ // gets song id and return its duration in mm:ss
   return sstomm(songDur);
 }
 
+function findSongByDuration(songDur){ //get song duration (IN SECONDS!) and return the song which its duration is equal to the inserted one! if there are more than 1 song same duration then it outputs all songs with this duration!
+  let songArr = []; //array of all songs with the given duration!
+ /* for(let i=0; i<player["songs"].length; i++)
+  {
+   if(player["songs"][i]["duration"] === songDur) songArr.push(player["songs"][i])
+  } */
+  songArr = player["songs"].filter(song => (song.duration === songDur));
+  return songArr;
+}
 
+
+function findPlaylistByDuration(playlistDur){ //get playlist duration (IN SECONDS!) and return the playlist which its duration is equal to the inserted one! if there are more than 1 playlist same duration then it outputs all playlists with this duration!
+  let playlistArr = []; 
+  playlistArr = player.playlists.filter(playlist => (mmtoss(playlistDuration(playlist.id)) === playlistDur));
+  return playlistArr;
+}
 
 module.exports = {
   player,
