@@ -241,12 +241,13 @@ function playlistDuration(id) {
 }
 
 function searchByQuery(query) {
-  const resultObj = {songs: [], playlists: []};
-  resultObj.songs = queryArr(query, player.songs, ['title', 'album', 'artist']);
-  resultObj.playlists = queryArr(query, player.playlists, ['name']);
-  resultObj.songs = sortObjectsArray(resultObj.songs, 'title');
-  resultObj.playlists = sortObjectsArray(resultObj.playlists, 'name');
-  return resultObj;
+  let songs = [];
+  let playlists = [];
+  songs = queryArr(query, player.songs, ['title', 'album', 'artist']);
+  playlists = queryArr(query, player.playlists, ['name']);
+  songs = sortObjectsArray(songs, 'title');
+  playlists = sortObjectsArray(playlists, 'name');
+  return {songs, playlists};
 }
 
 function searchByDuration(duration) {
