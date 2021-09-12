@@ -71,8 +71,13 @@ for(let i=0; i<player["playlists"].length; i++)
 }
 }
 
-function removeSong(id) {
-  // your code here
+function removeSong(id) { //delete a song from the mp3!
+  if(getSongIdIndex(id) === undefined) throw("song id not found in list");
+  player.songs.splice(getSongIdIndex(id),1); //removed song from songs list. if id exists.
+  for(let i=0; i<player.playlists.length;i++) //go over the playlists.
+  {
+    if(player.playlists[i].songs.includes(id))  player.playlists[i].songs.splice(player.playlists[i].songs.indexOf(id), 1); // removes the id from the playlist, if exists.
+  }
 }
 
 function addSong(title, album, artist, duration, id) {
