@@ -1,3 +1,5 @@
+const { pipelinePrimaryTopicReference } = require("@babel/types");
+
 const player = {
   songs: [
     {
@@ -48,48 +50,255 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    console.log(/* your code here */)
+    return ("Playing "+song.title+ " from " +song.album+" by "+song.artist+" | "+durationConvert(song.duration)+"."); 
   },
 }
+function durationConvert(duration) // converts duration value to mm/ss
+{
+
+  if(typeof(duration)!=="number")  //if duration is not a suitable number
+    {
+
+    throw "not a suitable number"; // an error leading to catch
+    }
+  else
+    {
+      let min = "";
+      if (Math.floor(duration/60)>=10) min = `${Math.floor(duration/60)}`;
+      if (Math.floor(duration/60)>=1 && Math.floor(duration/60)<10) min = `0${Math.floor(duration/60)}`;
+      if (Math.floor(duration/60)==0) min = "00";
+      let sec = "";
+      if ((duration%60)>=10) sec = `${duration%60}`;
+      if ((duration%60)>=1 && (duration%60)<10) sec = `0${duration%60}`;
+      if ((duration%60)==0) sec = `00`;
+      return min+":"+sec; 
+}}
+function GetsongById(id) //return song object by id
+{
+  let songObj= player.songs.find(x=> x["id"]===id);
+  return songObj;
+}
+function GetSongIndexById(id) //get index of song in songs array
+{
+  let songIndex= player.songs.indexOf(GetsongById(id));
+  return songIndex;
+}
+ function GetsongfromplaylistBysongId(id) //return playlist songs object by id- not used!
+ {
+   let songObj= player.playlists.find(x=>x["songs"].find(d=> d===id)===id);
+   return songObj;
+ }
+
+  function FilterfromPlaylistByID(id) //filters the array from the song - not used!
+  {
+     let songObj= GetsongfromplaylistBysongId(id);
+     let indexPlaySong=songObj["songs"].filter(x=> x!=id);
+     return indexPlaySong;
+  }
 
 function playSong(id) {
-  // your code here
+  {
+    let songObj= GetsongById(id);
+    if(songObj===undefined) // if id is not found in the player an error will be thrown
+    {
+      throw "Not a Valid ID"
+    }
+    console.log((player.playSong(songObj)));
+  }
 }
 
 function removeSong(id) {
-  // your code here
+  if(GetsongById(id)===undefined)
+  {
+    throw "invalid ID";
+  }
+  else{
+    let songIndex= GetSongIndexById(id); //get index of song in songs array
+    player.songs.splice(songIndex,1); // removed song from songs array
+    // let songObj= GetsongfromplaylistBysongId(id);  //get object of song from playlist by id
+    // let filteredPlayilst= FilterfromPlaylistByID(id); // filtered array of the songs in playlist
+    // songObj["songs"]=filteredPlayilst;
+    for(let i of player.playlists) //filter playlist from songs with id
+      {
+        for(let j=0;j< i.songs.length; j++)
+        {
+          if(i.songs[j]===id){
+            i.songs.splice(j,1);
+          }
+        }
+      }
+    return player;
+  }
 }
 
 function addSong(title, album, artist, duration, id) {
-  // your code here
+  if(GetsongById(id) !==undefined) //if the id already exists throw an error
+  {
+    throw "this is an existing ID";
+  }
+  if(id===undefined)
+  { 
+    id= Math.floor(Math.random()*100); //a random id to the song
+    while(id === GetsongById(id)) // if the id exists generate a new one
+    {
+      id= Math.floor(Math.random()*100);
+    }
+  duration = parseInt(duration.slice(0,Math.floor(duration.length/2)))*60+parseInt(duration.slice(Math.ceil(duration.length/2)))
+  const newSong = {id,title, album ,artist, duration};
+  player.songs.push(newSong)
+  return newSong["id"];
+}
+function GetPlaylistById(id) //return playlist object by id
+{
+  let playObj= player.playlists.find(x=> x["id"]===id);
+  return playObj;
 }
 
 function removePlaylist(id) {
-  // your code here
+  if(GetPlaylistById(id)===undefined)
+  {
+    throw "playlist ID not defined"
+  }
+  for(let i=0; i< player.playlists.length; i++)
+  {
+      if(player.playlists[i]["id"]===id)
+      {
+        player.playlists.splice(i,1);
+      }
+  }
 }
 
 function createPlaylist(name, id) {
-  // your code here
+  if(GetPlaylistById(id) !==undefined) // id already exists throw an error
+  {
+    throw "this is an existing ID";
+  }
+  if(id===undefined)
+  { 
+    id= Math.floor(Math.random()*100); //create a random id to the playlist
+    while(id === GetPlaylistById(id)) // if the id exists generate a new one
+    {
+      id= Math.floor(Math.random()*100);
+    }
+  }
+  const newPlaylist = {id, name, songs:[]}; //create new playlist object
+  player.playlists.push(newPlaylist);
+  return newPlaylist["id"];
 }
 
 function playPlaylist(id) {
-  // your code here
+  if(GetPlaylistById(id)===undefined)
+  {
+    throw "playlist id doesn't exist";
+  }
+  const playlistObj=GetPlaylistById(id);
+  for(let i=0; i<playlistObj["songs"].length; i++)
+  {
+    playSong(playlistObj["songs"][i]);
+  }
 }
 
 function editPlaylist(playlistId, songId) {
-  // your code here
+  if(GetPlaylistById(playlistId)===undefined || GetsongById(songId) ===undefined) //checks if the id exists
+  {
+    throw "the given id doesn't exist";
+  }
+const playli= GetPlaylistById(playlistId) //a shortcut for later in the function
+const playliSongs= GetPlaylistById(playlistId)["songs"]; // the songs array in playlists 
+const song=GetsongById(songId)["id"]; //finds the song id in songsId
+if(!playliSongs.includes(song))  //if song doesnt exist in playlist
+{
+  playliSongs.push(song);
+}
+else{
+  for(let i=0; i<playliSongs.length; i++)
+  {
+    if(playliSongs[i]===song)
+    {
+      if(playliSongs.length===1)
+      {
+        const indexVal= player.playlists.indexOf(playli);
+        player.playlists.splice(indexVal,1);
+      }
+      else{
+        playliSongs.splice(i,1);
+      }
+    }
+  }
+} 
 }
 
 function playlistDuration(id) {
-  // your code here
+  let sum=0;
+const playlistSongs=GetPlaylistById(id)["songs"]; //indicates songs array
+for(let i of playlistSongs) //search  song id in array
+{
+  let songduration= GetsongById(i)["duration"]; //gets the songs duration 
+  sum+=songduration;
+}
+
+  return sum;
 }
 
 function searchByQuery(query) {
-  // your code here
+  const results={songs:[], playlists:[]};
+  let query2=query.toLowerCase(); //be case insensitive
+  for(let i of player.songs) //go through all the songs and see if the query contains the different keys
+  {
+    if(i["album"].toLowerCase().includes(query2)||i["artist"].toLowerCase().includes(query2) || i["title"].toLowerCase().includes(query2))
+    {
+      results.songs.push(i);
+      results.songs.sort((a,b)=> {if(a["title"].toLowerCase()<b["title"].toLowerCase()) return -1;}); //sort by title
+    }
+  }
+
+  for(let j of player.playlists) //search through all playlists
+  {
+    if((j["name"].toLowerCase()).includes(query2))
+    {
+      results.playlists.push(j);
+      results.playlists.sort((a,b)=> {if(a["name"].toLowerCase()<b["name"].toLowerCase()) return -1;}); 
+    }
+  }
+  return results;
+}
+
+console.log(searchByQuery("full trunk, israeli, metal, all is one, thunderstruck"))
 }
 
 function searchByDuration(duration) {
-  // your code here
+
+  let durationConverted = parseInt(duration.slice(0,Math.floor(duration.length/2)))*60+parseInt(duration.slice(Math.ceil(duration.length/2))); //duration string converted to a number
+  let closestsong=100000;
+  let closestplaylist=10000;
+  let closestIndexSong=0;
+  let closestIndexPlaylist=0;
+  const songs= player.songs;
+  const playlist= player.playlists;
+  for(let i =0; i<songs.length; i++) //runs on songs to find each duration
+  {
+    if(Math.abs(songs[i]["duration"]-durationConverted)<closestsong)   //find the min margin to find closest song
+    {
+      closestsong=Math.abs(songs[i]["duration"]-durationConverted);
+      closestIndexSong=i;
+    }
+  }
+  for(let j=0; j<playlist.length; j++) // runs on all playlist to find the closest range
+  {
+    let playlistduration= playlistDuration(playlist[j]["id"]);
+    if(Math.abs(playlistduration-durationConverted)<closestplaylist)  //find the min margin to find closest playlist
+    {
+      closestplaylist=Math.abs(playlistduration-durationConverted);
+      closestIndexPlaylist=j;
+    }
+  }
+  if(closestsong<closestplaylist)
+  {
+    return songs[closestIndexSong];
+  }
+  else{
+    return playlist[closestIndexPlaylist];
+  }
 }
 
 module.exports = {
