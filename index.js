@@ -8,7 +8,7 @@ const player = {
       duration: 242,
     },
     {
-      id: 2,
+      id: 9,
       title: 'Vinda',
       album: 'Godtfolk',
       artist: 'Songleikr',
@@ -48,50 +48,247 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    console.log(/* your code here */)
+    return `Playing ${song.title} from ${song.album} by ${song.artist} | ${convertTime(song.duration)}.`;
   },
 }
 
 function playSong(id) {
-  // your code here
+  if (findID(id) === false) {
+    throw 'non-existent ID';
+  }
+  else {
+    song = {};
+    for (let obj of player.songs) {
+      if (obj.id === id) {
+        song = obj;
+        break;
+      }
+    }
+    console.log(player.playSong(song))
+  }
 }
 
 function removeSong(id) {
-  // your code here
+  if (findID(id) === false) {
+    throw 'non-existent ID';
+  }
+  for (let i = 0; i < player.songs.length; i++) {
+    if (player.songs[i].id === id) {
+      player.songs.splice(i, 1)
+      break;
+    }
+
+  }
+  for (let k = 0; k < player.playlists.length; k++) {
+    for (let j = 0; j < player.playlists[k].songs.length; j++) {
+      if (player.playlists[k].songs[j] === id)
+        player.playlists[k].songs.splice(j, 1);
+      break;
+    }
+  }
+
+
+  for (let k = 0; k < player.playlists.length; k++) {
+    for (let j = 0; j < player.playlists[k].songs.length; j++) {
+      if (player.playlists[k].songs[j] === id)
+        player.playlists[k].songs.splice(j, 1);
+      break;
+    }
+  }
 }
 
-function addSong(title, album, artist, duration, id) {
-  // your code here
+
+
+function addSong(title, album, artist, duration, id = 15) {
+  if (findID(id) === true) {
+    throw 'ID is already taken';
+  }
+  let time = convertSeconds(duration);
+
+  let song = {
+    id: id,
+    title: title,
+    album: album,
+    artist: artist,
+    duration: time,
+  }
+
+
+  player.songs.push(song);
+  return id;
+
 }
 
 function removePlaylist(id) {
-  // your code here
+  if (findIdPlaylist(id) === false) {
+    throw 'non-existent ID';
+  }
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (player.playlists[i].id === id) {
+      delete player.playlists[i];
+      player.playlists.length--;
+    }
+  }
 }
 
-function createPlaylist(name, id) {
-  // your code here
+function createPlaylist(name, id = 20) {
+  if (findIdPlaylist(id) === true) {
+    throw 'ID is already taken';
+  }
+  let newPlayList = {
+    id: id,
+    name: name,
+    songs: [],
+  }
+  player.playlists.push(newPlayList);
+  return id;
 }
 
 function playPlaylist(id) {
-  // your code here
+  if (findIdPlaylist(id) === false) {
+    throw 'non-existent ID';
+  }
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (player.playlists[i].id === id) {
+      for (let j = 0; j < player.playlists[i].songs.length; j++) {
+        playSong(player.playlists[i].songs[j])
+      }
+    }
+  }
 }
 
 function editPlaylist(playlistId, songId) {
-  // your code here
+  if (findIdPlaylist(playlistId) === false) {
+    throw 'non-existent ID';
+  }
+  if (findID(songId) === false) {
+    throw 'non-existent ID';
+  }
+  for (var j = 0; j < player.playlists.length; j++) {
+    if (player.playlists[j].id === playlistId) {
+      for (var i = 0; i < player.playlists[j].songs.length; i++) {
+        if (player.playlists[j].songs.length === 1 && player.playlists[j].songs[0] === songId) {
+          player.playlists.splice(j, 1);
+          break;
+        }
+        else
+          if (player.playlists[j].songs[i] === songId) {
+            player.playlists[j].songs.splice(i, 1);
+            break;
+          }
+          else
+            if (i === player.playlists[j].songs.length - 2) {
+              player.playlists[j].songs.push(songId);
+            }
+
+      }
+
+
+
+    }
+  }
 }
 
 function playlistDuration(id) {
-  // your code here
+  let sum = 0;
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (player.playlists[i].id === id) {
+      for (let j = 0; j < player.playlists[i].songs.length; j++) {
+        for (let k = 0; k < player.songs.length; k++) {
+          if (player.playlists[i].songs[j] === player.songs[k].id) {
+            sum += player.songs[k].duration;
+          }
+        }
+
+      }
+    } return sum;
+  }
 }
 
-function searchByQuery(query) {
-  // your code here
+function searchByQuery(query) { /*this function has 2 central processes */
+  const player1 = {
+    songs: [],
+    playlists: [],
+  }
+    ;
+  for (let i = 0; i < player.songs.length; i++) {/*here I gave the player object all the right songs and playlists */
+    if (player.songs[i].title.toLowerCase().includes(query.toLowerCase()) || player.songs[i].artist.toLowerCase().includes(query.toLowerCase()) || player.songs[i].album.toLowerCase().includes(query.toLowerCase())) {
+      player1.songs.push(player.songs[i]);
+    }
+  }
+  for (let j = 0; j < player.playlists.length; j++) {
+    if (player.playlists[j].name.toLowerCase().includes(query.toLowerCase())) {
+      player1.playlists.push(player.playlists[j]);
+
+    }/*here I arranged the player arrays in alphanumeric order */
+  }
+  player1.songs.sort((a, b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0));
+  player1.playlists.sort((c, d) => (c.name > d.name) ? 1 : ((c.name > d.name) ? -1 : 0));
+  return player1;
+
 }
 
-function searchByDuration(duration) {
-  // your code here
+function searchByDuration(duration) {/* to make this function work I created 2 arrays that each one is 
+  an object that have 3 keys:a specific song from player, the range between a song duration and the given duration
+  and a specific song duration */
+  let time = convertSeconds(duration);
+  let songDurationList = [];
+  for (let i = 0; i < player.songs.length; i++) {/* here is the first array that has songs */
+    var obj = {
+      songDuration: player.songs[i].duration,
+      songRange: Math.abs(time - player.songs[i].duration),
+      song: player.songs[i]
+    }
+    songDurationList.push(obj);
+  }
+  songDurationList.sort(function (a, b) { return a.songRange - b.songRange; })
+  let playListDurationList = [];
+  for (let k = 0; k < player.playlists.length; k++) {/* here is the second array that has playlists */
+    var obj2 = {
+      playListDuration: playlistDuration(player.playlists[k].id),
+      playListRange: Math.abs(time - (playlistDuration(player.playlists[k].id))),
+      playList: player.playlists[k]
+    }
+    playListDurationList.push(obj2);
+  }
+  playListDurationList.sort(function (c, d) { return c.playListRange - d.playListRange; });
+  if (songDurationList[0].songRange > playListDurationList[0].playListRange) {
+    return playListDurationList[0].playList;
+  }
+  else {
+    return songDurationList[0].song;
+  }
+}
+function convertTime(duration) {
+  let seconds = duration % 60;
+  let minutes = (duration - seconds) / 60;
+  minutes = `0${minutes}`;
+  return `${minutes}:${seconds}`;
 }
 
+function findID(id) {
+  for (let song of player.songs) {
+    if (song.id === id)
+      return true;
+  }
+  return false;
+
+}
+function convertSeconds(duration) {
+  let array = duration.split(":");
+  let minutes = parseInt(array[0]);
+  let seconds = parseInt(array[1]);
+  return minutes * 60 + seconds;
+
+
+}
+function findIdPlaylist(id) {
+  for (let newPlay of player.playlists) {
+    if (newPlay.id === id)
+      return true
+  }
+  return false
+}
 module.exports = {
   player,
   playSong,
@@ -105,3 +302,4 @@ module.exports = {
   searchByQuery,
   searchByDuration,
 }
+//wrote this just to make a commit so i can authorize actions in github
