@@ -153,8 +153,12 @@ function sstomm(seconds){ //converts seconds durationg to mm:ss format!
 }
 
 function playlistDuration(id) {
-  // your code here
+  let playlistIndex = getPlaylistIdIndex(id), songIndex; //index of the playlist with the specific ID in the playlits array
+  let durationSum = 0; //sums up the total duration of all songs in the playlist
+  player.playlists[playlistIndex].songs.forEach(element => durationSum += player['songs'][getSongIdIndex(element)].duration);
+  return (sstomm(durationSum));
 }
+
 
 function searchByQuery(query) {
   // your code here
