@@ -161,7 +161,31 @@ function playlistDuration(id) {
 
 
 function searchByQuery(query) {
-  // your code here
+  if(query.length === 1) throw("a word is more than 1 letter!");
+  let songsQuery = [], playlistQuery = [];
+
+  songsQuery = player.songs.filter(song => hasQuery(song.title, query)  || hasQuery(song.album, query) || hasQuery(song.artist, query) );
+  songsQuery.sort((a,b) => a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1);
+
+  playlistQuery = player.playlists.filter(playlist => hasQuery(playlist.name,query));
+  playlistQuery.sort((a,b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1);
+
+  return {songs: songsQuery, playlists: playlistQuery};
+}
+
+function hasQuery(word, query){ //function gets word and a query and return true if the query included in the word... even partially.(but in a row)
+  let wordSplitter = word.toLowerCase().split(' ');
+  let querySplitter = query.toLowerCase().split(' ');
+  let flagTrue;
+
+  for(let i in wordSplitter) //runs each word at a time
+  {
+    for(let t in querySplitter){ //runs all query/ies tests on each word at a time. to che all options.
+      if(wordSplitter[i].includes(querySplitter[t])) flagTrue = true; //if query included in word then flagtrue is true which means its included...
+    } 
+ } 
+ if(flagTrue !== undefined && flagTrue === true) return flagTrue; //if the flagtrue got assigned a value(in this case always true). return true(means included)
+ return false; // else return false.(no matter the case)
 }
 
 function searchByDuration(duration) {
