@@ -181,22 +181,22 @@ function playlistDuration(id) {
 
 function searchByQuery(query) {
   const result={songs:[],playlists:[]}
-  let str=query.toLowerCase();
-  for(let i of player.songs){
-    if(i.album.toLowerCase().includes(str)||i.artist.toLowerCase().includes(str) || i.title.toLowerCase().includes(str))
+  let queryLowercase=query.toLowerCase();
+  for(let song of player.songs){
+    if(song.album.toLowerCase().includes(queryLowercase)||song.artist.toLowerCase().includes(queryLowercase) || song.title.toLowerCase().includes(queryLowercase))
     {
-      result.songs.push(i);
-      result.songs.sort((a,b)=> {if(a.title.toLowerCase()<b.title.toLowerCase()) return -1;});
+      result.songs.push(song);
     }
   }
-  for(let j of player.playlists)
+  result.songs.sort((a,b)=> {if(a.title.toLowerCase()<b.title.toLowerCase()) return -1;});
+  for(let playlist of player.playlists)
   {
-    if((j.name.toLowerCase()).includes(str))
+    if((playlist.name.toLowerCase()).includes(queryLowercase))
     {
-      result.playlists.push(j);
-      result.playlists.sort((a,b)=> {if(a.name.toLowerCase()<b.name.toLowerCase()) return -1;});
+      result.playlists.push(playlist);
     }
   }
+  result.playlists.sort((a,b)=> {if(a.name.toLowerCase()<b.name.toLowerCase()) return -1;});
   return result;
 }
 
