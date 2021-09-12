@@ -220,7 +220,7 @@ function searchByDuration(duration) {
 
 
 
-// help functions 
+// help functions:
 
 function songById(id) {
   for (let i = 0; i < player.songs.length; i++) {
