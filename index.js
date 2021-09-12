@@ -84,6 +84,20 @@ function addSong(title, album, artist, duration, id) {
   // your code here
 }
 
+function mmtoss(minutes) // translate mm:ss to ss 
+{
+ const mmtoss = minutes.split(':'); //seperates between minutes and seconds and puts it inside a new array.
+ return parseInt(mmtoss[0]) * 60 + parseInt(mmtoss[1]); //converts to seconds. and adds up.
+}
+
+function freeSongID(){ // func return the free id which not yet registered to any song in the list.
+  let free=1;
+  
+  while(typeof(getSongIdIndex(free)) === 'number'){
+    free++;
+  } return free;
+}
+
 function removePlaylist(id) {
   // your code here
 }
@@ -98,6 +112,11 @@ function playPlaylist(id) {
 
 function editPlaylist(playlistId, songId) {
   // your code here
+}
+
+function sstomm(seconds){ //converts seconds durationg to mm:ss format!
+  console.log(seconds)
+  return (Math.floor(seconds/60) + ":"  + (seconds%60)); //check how many minutes "enter" in it and rounding it to the max tries which it has no remainder. then adds up the remainder of the seconds left.
 }
 
 function playlistDuration(id) {
