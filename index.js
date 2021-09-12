@@ -117,8 +117,20 @@ function removePlaylist(id) {
 
 }
 
+function freeListID(){ // func return the free id which not yet registered to any playlist in the playlists.
+  let free=1;
+  for(let i in player["playlists"])
+  {
+    if(player["playlists"][i].id !== free) return free; 
+    ++free;
+  }
+  return free;
+}
+
 function createPlaylist(name, id) {
-  // your code here
+  let elementID = freeListID();
+  player.playlists.push({id: id || elementID, name: name, songs: []}) //if id inserted then it gettin assigned. else, a free one gettin assigned.
+  return elementID;
 }
 
 function playPlaylist(id) {
