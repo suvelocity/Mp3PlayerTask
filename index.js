@@ -339,6 +339,7 @@ let secNum = sec*1;
 let durationNum =minNum+secNum;
 return (durationNum);
 }
+// 
 
 
 
