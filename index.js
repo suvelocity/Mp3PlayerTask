@@ -167,10 +167,28 @@ else {
 
 
 
-  function editPlaylist(playlistId, songId) {
-    // your code here
-  }
+    function editPlaylist(playlistId, songId5) {
+      let obj7 = player.songs.find(obj7 => obj7.id === songId5);
+      let obj6 = player.playlists.find(obj6 => obj6.id === playlistId);
+      let index = obj6.id;
+      for (let i = 0; i < obj6.songs.length; i++) {
+        if (obj6.songs[i] === songId5){
+          player.playlists[index].songs.splice(i, 1)
+          if(player.playlists[index].songs.length === 0) {
+            removePlaylist(playlistId);
+          }
+        } else{
+          player.obj6[index].songs.push(songId5);
+        }
+      }
+    }
+    
+   console.log(editPlaylist(5, 1)); 
   
+
+
+
+
   function playlistDuration(id) {
     if (typeof id === 'undefined') {
       return 'ID is invalid';
