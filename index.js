@@ -208,7 +208,6 @@ function playPlaylist(id) {
   return id;
 }
 
-
 function searchByQuery(query) {
   let tempQuery = query.toUpperCase()
   const results = { songs: [], playlists: [] }
@@ -290,4 +289,4 @@ module.exports = {
   playlistDuration,
   searchByQuery,
   searchByDuration,
-}
+} 
