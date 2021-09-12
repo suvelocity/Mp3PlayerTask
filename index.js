@@ -250,9 +250,12 @@ playlistDuration(1)
   
   
 
-  function searchByDuration(duration) {
-    // your code here
-  }
+ 
+    function searchByDuration(duration) {
+      let  playlistDuration === duration
+      let objDuration = player.songs.find(objDuration => objDuration.duration === playlistDuration);
+      return objDuration.closest()
+      }  
   
   module.exports = {
     player,
