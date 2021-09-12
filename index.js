@@ -2,7 +2,7 @@
 
 const { pipelinePrimaryTopicReference } = require("@babel/types");
 
-//converts seconds to the required minute fomat
+//converts seconds to the required minute format
 function secondsToMinutesConvertor(songDuration){
   let durationInMinutes = songDuration / 60;
   let minutes = 0;
@@ -256,7 +256,7 @@ function createPlaylist(name, id) {
   player.playlists.push(newPlaylist);
   return playListId
 }
-
+// playPLaylist function
 function playPlaylist(id) {
   let PlaylsitById = player.playlists.filter(playlist =>{
     if(playlist.id === id){
