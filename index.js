@@ -172,8 +172,27 @@ else {
   }
   
   function playlistDuration(id) {
-    // your code here
+    if (typeof id === 'undefined') {
+      return 'ID is invalid';
   }
+
+  else {
+  let playlistId3 = id;
+  let obj5 = player.playlists.find(obj5 => obj5.id === playlistId3); 
+
+  for (let i = 0; i < obj5.songs.length; i++) {
+      var obj6 = player.songs.find(obj6 => obj6.id === obj5.songs[i]);
+      // const sum =  [Object.values(obj6.duration)].reduce((partial_sum, a) => partial_sum + a,0);
+      // console.log(sum);
+     const sum = [obj6.duration].reduce((a, b) => a + b, 0)
+     console.log(sum);
+      console.log(obj6.duration);
+
+    }     
+ }  
+}
+playlistDuration(1)
+  
   
   function searchByQuery(query) {
     // your code here
