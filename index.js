@@ -93,7 +93,7 @@ player.songs.forEach(song => {
 player.songs.push({id:id,title:title,album:album,artist:artist,duration:ssduration});
 return id;
 }
-//check if the id exsist and remove it from the playlists
+//check if the id exsist and remove it from the playlists.
 function removePlaylist(id) {
   let found = false;
   for (let i = 0; i < player.playlists.length && !found; i++) {
@@ -105,7 +105,7 @@ function removePlaylist(id) {
   if(!found){
     throw "ID does not exist";
   }
-} //check if the id exsist and add new playlist to the playlists 
+} //check if the id exsist and add new playlist to the playlists.
 function createPlaylist(name, id){
   if(id==undefined) {
     id = uniqueId();
@@ -135,7 +135,7 @@ function playPlaylist(id) {
     throw " id does not exist";
   }
 }
-//found the index of the playlist and the song
+//found the index of the playlist and the song.
 function editPlaylist(playlistId, songId) {
   let songIndex;
   let playlistIndex;
@@ -167,7 +167,7 @@ function editPlaylist(playlistId, songId) {
   songById(songId);
   
 }
-// function that gets id of playlist and returns the sum of duration of all the songs in the playlist
+// function that gets id of a playlist and returns the sum of the duration of all the songs in the playlist.
 function playlistDuration(id) {
   let countDuration = 0;
   let playlistIndex;
@@ -184,7 +184,7 @@ function playlistDuration(id) {
 }
 return countDuration;
 }
-//function that get a query and return object with all the songs and the playlists that include the query
+//function that get a string and return an object with all the songs and the playlists that include the string.
 function searchByQuery(query){
   let obj = {
     songs:[],
@@ -232,7 +232,7 @@ function searchByQuery(query){
   return obj;
 
 }
-//function that get a duration and check what is the closest duration in the songs and playlists and return the closest one. 
+//function that get a duration and check which playlist's/song's duration is closest to the duration picked.
 function searchByDuration(duration) {
  let time = duration.split(":");
  let min = time[0]* 60;
@@ -257,7 +257,7 @@ function searchByDuration(duration) {
 
  return obj; 
 }
-//check the id and give the max id +1
+//check the id and returns a new unused id.
 function uniqueId(){
 let id =1;
 player.playlists.forEach(playlist => {
