@@ -81,8 +81,14 @@ function removeSong(id) { //delete a song from the mp3!
 }
 
 function addSong(title, album, artist, duration, id) {
-  // your code here
+  let elementID= freeSongID(); //assign it a unused id identifier!
+  if((id !== undefined)&&(typeOf(getSongIdIndex(id)) !== 'number')) player["songs"].push({id: id, title: title, album: album, artist: artist, duration: mmtoss(duration)});
+  else player["songs"].push({id: elementID , title: title, album: album, artist: artist, duration: mmtoss(duration)});
+  return elementID;
 }
+
+//console.log(addSong("love","kaki","kiki","3:15"))
+//console.log(player.songs)
 
 function mmtoss(minutes) // translate mm:ss to ss 
 {
