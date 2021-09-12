@@ -189,8 +189,35 @@ function hasQuery(word, query){ //function gets word and a query and return true
 }
 
 function searchByDuration(duration) {
-  // your code here
+
+  let seconds = mmtoss(duration);                                                                  
+  let songsDurationsArr =[], playlistDurationsArr = [], minPlaylistArr = [], minSongArr = [];
+
+    playlistDurationArr = player.playlists.map(playlist => mmtoss(playlistDuration(playlist.id))); //inserts & converts song duration mm:ss form to ss form to an array representing each playlit duration!
+    
+    songsDurationsArr = player.songs.map(song => mmtoss(songDuration(song.id))); //inserts & converts song duration mm:ss form to ss form to ss form to an array representing each song duration!
+    
+  //playlistDuration.forEach(element => mmtoss(element)); //converts playlist duration mm:ss form to ss form!
+  //songDuration.forEach(element => mmtoss(element)); //converts song duration mm:ss form to ss form!
+
+  minPlaylistArr = playlistDurationArr.map(length => Math.abs(seconds - length));
+   //minPlaylistArr = Math.min(...minPlaylistArr);
+  minSongArr = songsDurationsArr.map(length => Math.abs(seconds - length));
+  //minSongArr = Math.min(...minSongArr);
+  
+
+} 
+
+
+function songDuration(id){ // gets song id and return its duration in mm:ss
+  if(getSongIdIndex(id) === undefined) throw("song id not found in list");
+  //let durArr= player.songs.filter(element => (element.id === id));
+  //let songDur = durArr[0].duration;
+  let songDur = player.songs[getSongIdIndex(id)].duration 
+  return sstomm(songDur);
 }
+
+
 
 module.exports = {
   player,
