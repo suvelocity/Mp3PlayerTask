@@ -134,8 +134,10 @@ function createPlaylist(name, id) {
 }
 
 function playPlaylist(id) {
-  // your code here
-}
+  if(getPlaylistIdIndex(id) === undefined) throw("playlist like this, leads to, error like this, leads to, try again...!");
+  let playlistIndex = getPlaylistIdIndex(id); //index of the playlist with the specific ID in the playlits array
+  player.playlists[playlistIndex].songs.forEach(element => playSong(element));
+ }
 
 function editPlaylist(playlistId, songId) {
   // your code here
