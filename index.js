@@ -105,7 +105,16 @@ function freeSongID(){ // func return the free id which not yet registered to an
 }
 
 function removePlaylist(id) {
-  // your code here
+    
+  if(getPlaylistIdIndex(id) === undefined) throw("mannn, there is no playlist like this exist!!! Dont you see?!?"); // checks if the functions returns something it means the id exists in playlist. else, it's an error.
+
+  let i=0;
+  while(i < player.playlists.length)
+  {
+    if(player.playlists[i].id === id) {player.playlists.splice(i,1); break;}
+    i++;
+  }
+
 }
 
 function createPlaylist(name, id) {
