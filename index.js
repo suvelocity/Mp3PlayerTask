@@ -48,48 +48,175 @@ const player = {
     { id: 5, name: 'Israeli', songs: [4, 5] },
   ],
   playSong(song) {
-    console.log(/* your code here */)
+    console.log("Playing "+song.title+" from "+song.album+" by "+song.artist+" | "+toCorrectDuration(song.duration)+".")
   },
 }
 
+function toCorrectDuration(seconds){ //transform duration for people
+  let mm;
+  if(Math.floor(seconds/60)<10) mm=`0${Math.floor(seconds/60)}`;
+  else mm=`${Math.floor(seconds/60)}`;
+  let ss;
+  if(Math.floor(seconds%60)<10) ss=`0${Math.floor(seconds%60)}`;
+  else ss=`${Math.floor(seconds%60)}`;
+  return mm+":"+ss;
+}
+
+function songById(id){
+  let songObj=player.songs.find(x=> x.id===id);
+  if (songObj===undefined){
+    throw "Not a Valid ID"
+  }
+  return songObj;
+}
+
+function playlistById(id){
+  let playlistObj=player.playlists.find(x=> x.id===id);
+  if (playlistObj===undefined){
+    throw "Not a Valid ID"
+  }
+  return playlistObj;
+}
+
+function songIndex(song){
+  let index=player.songs.indexOf(song);
+  return index
+}
+
+function playlistIndex(playlist){
+  let index=player.playlists.indexOf(playlist);
+  return index;
+}
+
+function newId(obj){ //I take the next max id
+  let maxId=0;
+  for (let i of obj){
+    if(i.id>maxId) maxId=i.id;
+  }
+  return maxId+1;
+}
+
+function durationToSeconds(str){
+  let duration=(parseInt(str.slice(0,2))*60)+parseInt(str.slice((str.length-2),(str.length)));
+  return duration;
+}
+
 function playSong(id) {
-  // your code here
+  let songObj=songById(id);
+  player.playSong(songObj);
 }
 
 function removeSong(id) {
-  // your code here
+  let songId=songIndex(songById(id));
+  player.songs.splice(songId,1)
+  for(let list of player.playlists){
+    list.songs.splice(list.songs.indexOf(id),1)
+  }
 }
 
-function addSong(title, album, artist, duration, id) {
-  // your code here
+function addSong(title, album, artist, duration, id=newId(player.songs)) {
+  if(player.songs.find(x=> x.id===id)){
+    throw "ID is taken"
+  }
+  let obj={
+    id: id,
+    title: title,
+    album: album,
+    artist: artist,
+    duration: durationToSeconds(duration) ,
+  }
+  player.songs.push(obj)
+  return id;
 }
 
 function removePlaylist(id) {
-  // your code here
+  let playlistId=playlistIndex(playlistById(id));
+  player.playlists.splice(playlistId,1)
 }
 
-function createPlaylist(name, id) {
-  // your code here
+function createPlaylist(name, id=newId(player.playlists)) {
+  if(player.playlists.find(x=> x.id===id)){
+    throw "ID is taken"
+  }
+  let obj={
+    id: id,
+    name: name,
+    songs: []
+  }
+  player.playlists.push(obj)
+  return id;
 }
 
 function playPlaylist(id) {
-  // your code here
+  let playlist=playlistById(id);
+  for(let id of playlist.songs){
+    playSong(id)
+  }
 }
 
 function editPlaylist(playlistId, songId) {
-  // your code here
+  songById(songId);
+  let playlist=playlistById(playlistId);
+  let index=playlistIndex(playlist);
+  for(let i=0;i<playlist.songs.length;i++){
+    if (playlist.songs[i]===songId){
+      player.playlists[index].songs.splice(i,1)
+      if(player.playlists[index].songs.length===0){
+        removePlaylist(playlistId);
+      }
+    } else{
+      player.playlists[index].songs.push(songId)
+    }
+  }
 }
 
 function playlistDuration(id) {
-  // your code here
+  let sumDuration=0;
+  let playlist=playlistById(id);
+  for(let i=0;i<playlist.songs.length;i++){
+    sumDuration+=player.songs[songIndex(songById(playlist.songs[i]))].duration;
+  }
+  return sumDuration;
 }
 
 function searchByQuery(query) {
-  // your code here
+  const result={songs:[],playlists:[]}
+  let queryLowercase=query.toLowerCase();
+  for(let song of player.songs){
+    if(song.album.toLowerCase().includes(queryLowercase)||song.artist.toLowerCase().includes(queryLowercase) || song.title.toLowerCase().includes(queryLowercase))
+    {
+      result.songs.push(song);
+    }
+  }
+  result.songs.sort((a,b)=> {if(a.title.toLowerCase()<b.title.toLowerCase()) return -1;});
+  for(let playlist of player.playlists)
+  {
+    if((playlist.name.toLowerCase()).includes(queryLowercase))
+    {
+      result.playlists.push(playlist);
+    }
+  }
+  result.playlists.sort((a,b)=> {if(a.name.toLowerCase()<b.name.toLowerCase()) return -1;});
+  return result;
 }
 
 function searchByDuration(duration) {
-  // your code here
+  let durationDifference=10000; //first value 
+  let durationInSeconds=durationToSeconds(duration);
+  let result={};
+  for(let i in player.songs){
+    if(Math.abs(player.songs[i].duration-durationInSeconds)<durationDifference){
+      durationDifference=Math.abs(player.songs[i].duration-durationInSeconds);
+      result=player.songs[i] //I check module of differnce between duration of song and arguments duration
+    }
+  }
+  for(let j in player.playlists){
+    if(Math.abs(playlistDuration(player.playlists[j].id)-durationInSeconds)<durationDifference){
+      durationDifference=Math.abs(playlistDuration(player.playlists[j].id)-durationInSeconds);
+      result=player.playlists[j] //I check module of differnce between duration of playlist(using function) and arguments duration
+    }
+  }
+  return result;
 }
 
 module.exports = {
