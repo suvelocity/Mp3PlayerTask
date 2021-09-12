@@ -1,95 +1,298 @@
 const player = {
-  songs: [
-    {
-      id: 1,
-      title: 'Vortex',
-      album: 'Wallflowers',
-      artist: 'Jinjer',
-      duration: 242,
-    },
-    {
-      id: 2,
-      title: 'Vinda',
-      album: 'Godtfolk',
-      artist: 'Songleikr',
-      duration: 160,
-    },
-    {
-      id: 7,
-      title: 'Shiroyama',
-      album: 'The Last Stand',
-      artist: 'Sabaton',
-      duration: 213,
-    },
-    {
-      id: 3,
-      title: 'Thunderstruck',
-      album: 'The Razors Edge',
-      artist: 'AC/DC',
-      duration: 292,
-    },
-    {
-      id: 4,
-      title: 'All is One',
-      album: 'All is One',
-      artist: 'Orphaned Land',
-      duration: 270,
-    },
-    {
-      id: 5,
-      title: 'As a Stone',
-      album: 'Show Us What You Got',
-      artist: 'Full Trunk',
-      duration: 259,
-    },
+  songs: [{
+    id: 1,
+    title: 'Vortex',
+    album: 'Wallflowers',
+    artist: 'Jinjer',
+    duration: 242,
+  },
+  {
+    id: 2,
+    title: 'Vinda',
+    album: 'Godtfolk',
+    artist: 'Songleikr',
+    duration: 160,
+  },
+  {
+    id: 7,
+    title: 'Shiroyama',
+    album: 'The Last Stand',
+    artist: 'Sabaton',
+    duration: 213,
+  },
+  {
+    id: 3,
+    title: 'Thunderstruck',
+    album: 'The Razors Edge',
+    artist: 'AC/DC',
+    duration: 292,
+  },
+  {
+    id: 4,
+    title: 'All is One',
+    album: 'All is One',
+    artist: 'Orphaned Land',
+    duration: 270,
+  },
+  {
+    id: 5,
+    title: 'As a Stone',
+    album: 'Show Us What You Got',
+    artist: 'Full Trunk',
+    duration: 259,
+  },
   ],
-  playlists: [
-    { id: 1, name: 'Metal', songs: [1, 7, 4] },
-    { id: 5, name: 'Israeli', songs: [4, 5] },
+  playlists: [{
+    id: 1,
+    name: 'Metal',
+    songs: [1, 7, 4]
+  },
+  {
+    id: 5,
+    name: 'Israeli',
+    songs: [4, 5]
+  },
   ],
   playSong(song) {
-    console.log(/* your code here */)
+    console.log(`Playing ${song.title} from ${song.album} by ${song.artist} | ${secToMmSs(song.duration)}.`)
   },
 }
 
 function playSong(id) {
-  // your code here
+
+  return player.playSong(songById(id));
 }
 
 function removeSong(id) {
-  // your code here
+  let indexSong = player.songs.indexOf(songById(id))
+  player.songs.splice(indexSong, 1);
+
+  for (let i = 0; i < player.playlists.length; i++)
+    player.playlists[i].songs.splice(i, 1);
 }
 
 function addSong(title, album, artist, duration, id) {
-  // your code here
+  if (checkIdAvilable(id) == false) throw ("This ID is in use!");
+  if (id == undefined) id = generateId(id);
+
+  player.songs.push({
+    title: title,
+    album: album,
+    artist: artist,
+    duration: mmToSec(duration),
+    id: id
+  })
+  return id
 }
 
+
 function removePlaylist(id) {
-  // your code here
+  let indexPl = player.playlists.indexOf(getIndexPl(id))
+  player.playlists.splice(indexPl, 1)
 }
 
 function createPlaylist(name, id) {
-  // your code here
+  if (checkIdAvilablePl(id) == false) throw ("This ID is in use!");
+  if (id == undefined) id = generateId(id);
+  player.playlists.push({
+    id: id,
+    name: name,
+    songs: []
+  })
+  return id;
 }
 
+
+
 function playPlaylist(id) {
-  // your code here
+  for (let i of player.playlists) {
+    if (i.id === id) {
+      for (let j of i.songs) {
+        for (let i in player.songs) {
+          if (player.songs[i].id === j) {
+            player.playSong(player.songs[i])
+          }
+        }
+      }
+      return
+    } else {
+      throw new Error('There is a problem');
+    }
+  }
 }
 
 function editPlaylist(playlistId, songId) {
-  // your code here
+  songById(songId);
+  let playlist = getIndexPl(playlistId);
+  let index = player.playlists.indexOf(playlist);
+  for (let i = 0; i < playlist.songs.length; i++) {
+    if (playlist.songs[i] === songId) {
+      player.playlists[index].songs.splice(i, 1)
+      if (player.playlists[index].songs.length === 0) {
+        removePlaylist(playlistId);
+      }
+    } else {
+      player.playlists[index].songs.push(songId);
+    }
+  }
 }
 
+
 function playlistDuration(id) {
-  // your code here
+  let sumDuration = 0;
+  let playlist = getIndexPl(id);
+
+  for (let i = 0; i < playlist.songs.length; i++) {
+    sumDuration += songById(playlist.songs[i]).duration;
+
+  }
+  return sumDuration;
 }
 
 function searchByQuery(query) {
-  // your code here
+  let caseIn = query.toLowerCase();
+  let returnObj = {
+    songs: [],
+    playlists: []
+  }
+
+  for (let i of player.songs) {
+    if (i.title.toLowerCase().includes(caseIn) ||
+      i.album.toLowerCase().includes(caseIn) ||
+      i.artist.toLowerCase().includes(caseIn)) {
+      returnObj.songs.push(i);
+    }
+  }
+  for (let j of player.playlists) {
+    if (j.name.toLowerCase().includes(caseIn)) {
+      returnObj.playlists.push(j);
+    }
+    //sorting songs & playlists
+    returnObj.songs.sort((a, b) => {
+      if (a.title < b.title) return -1
+    });
+    returnObj.playlists.sort((a, b) => {
+      if (a.name < b.name) return -1
+    });
+    return returnObj;
+  }
 }
 
+
+
+
+
 function searchByDuration(duration) {
-  // your code here
+  let convertedToSec = mmToSec(duration)
+  let checkMinSong = Math.abs(player.songs[0].duration - convertedToSec);
+  let checkMinPl = Math.abs(player.playlists[0].id - convertedToSec);
+  let songIn = 0;
+  let plIn = 0;
+
+
+
+  for (let i = 0; i < player.songs.length; i++) {
+    if (Math.abs(player.songs[i].duration - convertedToSec) < checkMinSong) {
+      songIn = i;
+      checkMinSong = Math.abs(player.songs[i].duration - convertedToSec);
+
+    }
+  }
+  for (let j = 0; j < player.playlists.length; j++) {
+    let playlistduration = playlistDuration(player.playlists[j].id);
+    if (Math.abs(playlistduration - convertedToSec) < checkMinPl) {
+      plIn = j;
+      checkMinPl = Math.abs(playlistduration - convertedToSec);
+
+    }
+  }
+  if (checkMinSong < checkMinPl) {
+    return player.songs[songIn];
+    console.log(`the closest song's duration to what you requested is ${player.songs[songIn]}.`)
+  } else {
+    return player.playlists[plIn];
+    console.log(`the closest Playlist's duration to what you requested is ${player.playlists[plIn]}.`)
+
+  }
+
+}
+
+
+
+
+// help functions:
+
+function songById(id) {
+  for (let i = 0; i < player.songs.length; i++) {
+    if (player.songs[i].id == id) {
+      return player.songs[i]
+    }
+  }
+  throw new Error("There is no song with such an Id");
+}
+
+
+function getIndexPl(id) {
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (player.playlists[i].id == id)
+      return player.playlists[i];
+  }
+  throw ("No playlist with that ID!");
+
+}
+
+
+
+
+function secToMmSs(duration) {
+  let min = Math.floor(duration / 60);
+  let sec = duration - (min * 60);
+
+  if (min < 10) {
+    min = "0" + String(min);
+  }
+  if (sec < 10) {
+    sec = "0" + String(sec);
+  }
+
+  return min + ':' + sec
+}
+
+
+function checkIdAvilable(id) {
+  for (let i = 0; i < player.songs.length; i++) {
+    if (player.songs[i].id != id) {
+      return true;
+    }
+    return false;
+  }
+
+}
+
+function checkIdAvilablePl(id) {
+  for (let i = 0; i < player.playlists.length; i++) {
+    if (player.playlists[i].id != id) {
+      return true;
+    }
+    return false;
+  }
+}
+
+function mmToSec(duration) {
+  let get = duration.split(':');
+  let min = parseInt(get[0]) * 60;
+  let sec = parseInt(get[1]);
+  let totalSec = min + sec;
+  return totalSec;
+}
+
+function generateId() {
+  id = Math.floor(Math.random() * 1000) + 1;
+  for (let i = 0; i < player.songs.length; i++) {
+    if (id !== player.songs[i].id) {
+      return id;
+    }
+  }
 }
 
 module.exports = {
