@@ -69,6 +69,7 @@ const player = {
 //===============================================
 // ============ Player Functions ================
 //===============================================
+//
 
 function playSong(id) {
   player.playSong(id);
@@ -311,6 +312,7 @@ function calcPlayTime(durationTime) {
   const numberAsString2 = (sec < 10) ? "0" : "";
   return numberAsString1 + min + ":" + numberAsString2 + sec;
 }
+
 function generateSongID(){
   for (i=1; i < player.MAX_SONGS; i++) {
     const songObj = player.findSongByID(i);    
